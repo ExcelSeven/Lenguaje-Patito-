@@ -37,7 +37,11 @@ tokens = [
     'RL',  # }
     'PUNTO',  # .
     'DOSPUNTOS',  # :
-    'NIGUAL'  # !=
+    'NIGUAL',  # !=
+    'CTE_I',
+    'CTE_F',
+    'CTE_C',
+    'CTE_S'
 ]
 
 palabrasReservadas = {
@@ -102,6 +106,8 @@ def t_CTE_F(t):
 
 def t_CTE_I(t):
     r'[0-9]+'
+    #r'\d+'
+    #t.value = int(t.value)
     return t
 
 
@@ -126,56 +132,11 @@ def t_newline(t):
 
 
 lexer = lex.lex()
-tok = lexer.input("1+4")
-#print(tok)
 
-
-# while True:
-#    tok = lexer.token()
-#    if not tok:
-#        break
-#    print(tok)
-
-
-def buscarArchivos(dir):
-    ficheros = []
-    numArchivo = ''
-    respuesta = False
-    cont = 1
-
-    for base, dirs, files in os.walk(dir):
-        ficheros.append(files)
-
-    for file in files:
-        print
-        "{0}. {1}".format(str(cont), file)
-        cont = cont + 1
-
-    while respuesta == False:
-        numArchivo = raw_input('\nNumero del test:')
-        for file in files:
-            if file == files[int(numArchivo) - 1]:
-                respuesta = True
-                break
-
-    print("Has escogido \"%s\" \n" % files[int(numArchivo) - 1])
-
-    return files[int(numArchivo) - 1]
-
-
-# Build the lexer
-
-
-dir = 'C:/Users/mosqu/Desktop/MI CARPETA/Hakio/Semestre 8/Diseño de Compiladores/Proyecto/Proyecto-Patito'
-archivo = buscarArchivos(dir)
-test = dir + archivo
-fp = codecs.open(test, "r", "utf-8")
-cadena = fp.read()
-fp.close()
-analizador = lex.lex()
-analizador.input(cadena)
+lexer.input("(aa1")
 
 while True:
-    tok = analizador.token()
-    if not tok: break
-    print(tok)
+   tok = lexer.token()
+   if not tok:
+       break
+   print(tok)

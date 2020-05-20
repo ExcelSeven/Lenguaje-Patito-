@@ -46,12 +46,12 @@ def p_expression_int_float(p):
 def p_expression_var(p):
     '''
     expression : ID
+               | ID[expression]
     '''
     p[0] = ('var', p[1])
 
 def p_error(p):
     print("Syntax error found!")
-
 
 def p_empty(p):
     '''

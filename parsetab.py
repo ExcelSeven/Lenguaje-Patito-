@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftSUMARESTAleftMULTDIVAND BEGIN BOOL CHAR COMA COMILLA COMILLAS CONST CTE_C CTE_F CTE_I CTE_S DETERMATRIZ DIV DO DOSPUNTOS ELIF ELSE END EOF FALSE FLOAT GIG GT ID IF IGIG IGUAL INT INVERMATRIZ LC LIG LL LP LT MULT NIGUAL NOT OR PRINT PUNTO PYCOMA RC RESTA RETURN RL RP SELECT SUMA SWITCH THEN TRANSMATRIZ TRUE VOID WHILE\n    calc : expression\n         | var_assign\n         | empty\n    \n    var_assign : ID IGUAL expression\n    \n    expression : expression MULT expression\n               | expression DIV expression\n               | expression SUMA expression\n               | expression RESTA expression\n    \n    expression : CTE_I\n               | CTE_F\n               | CTE_C\n    \n    expression : ID\n    \n    empty :\n    '
+_lr_signature = "leftSUMARESTAleftMULTDIVAND BEGIN BOOL CHAR COMA COMILLA COMILLAS CONST CTE_C CTE_F CTE_I CTE_S DETERMATRIZ DIV DO DOSPUNTOS ELIF ELSE END EOF FALSE FLOAT GIG GT ID IF IGIG IGUAL INT INVERMATRIZ LC LIG LL LP LT MULT NIGUAL NOT OR PRINT PUNTO PYCOMA RC RESTA RETURN RL RP SELECT SUMA SWITCH THEN TRANSMATRIZ TRUE VOID WHILE\n    calc : expression\n         | var_assign\n         | empty\n    \n    var_assign : ID IGUAL expression\n    \n    expression : expression MULT expression\n               | expression DIV expression\n               | expression SUMA expression\n               | expression RESTA expression\n    \n    expression : CTE_I\n               | CTE_F\n               | CTE_C\n    \n    expression : ID\n    \n    value_list : expression\n    row_list   : row\n    \n    value_list : expression ',' value_list\n    row_list   : row ';' row_list\n    \n    row       : '[' value_list ']'\n    \n    matrix    : '[' row_list ']'\n    \n    empty :\n    "
     
-_lr_action_items = {'CTE_I':([0,9,10,11,12,13,],[5,5,5,5,5,5,]),'CTE_F':([0,9,10,11,12,13,],[6,6,6,6,6,6,]),'CTE_C':([0,9,10,11,12,13,],[7,7,7,7,7,7,]),'ID':([0,9,10,11,12,13,],[8,15,15,15,15,15,]),'$end':([0,1,2,3,4,5,6,7,8,14,15,16,17,18,19,],[-13,0,-1,-2,-3,-9,-10,-11,-12,-5,-12,-6,-7,-8,-4,]),'MULT':([2,5,6,7,8,14,15,16,17,18,19,],[9,-9,-10,-11,-12,-5,-12,-6,9,9,9,]),'DIV':([2,5,6,7,8,14,15,16,17,18,19,],[10,-9,-10,-11,-12,-5,-12,-6,10,10,10,]),'SUMA':([2,5,6,7,8,14,15,16,17,18,19,],[11,-9,-10,-11,-12,-5,-12,-6,-7,-8,11,]),'RESTA':([2,5,6,7,8,14,15,16,17,18,19,],[12,-9,-10,-11,-12,-5,-12,-6,-7,-8,12,]),'IGUAL':([8,],[13,]),}
+_lr_action_items = {'CTE_I':([0,9,10,11,12,13,],[5,5,5,5,5,5,]),'CTE_F':([0,9,10,11,12,13,],[6,6,6,6,6,6,]),'CTE_C':([0,9,10,11,12,13,],[7,7,7,7,7,7,]),'ID':([0,9,10,11,12,13,],[8,15,15,15,15,15,]),'$end':([0,1,2,3,4,5,6,7,8,14,15,16,17,18,19,],[-19,0,-1,-2,-3,-9,-10,-11,-12,-5,-12,-6,-7,-8,-4,]),'MULT':([2,5,6,7,8,14,15,16,17,18,19,],[9,-9,-10,-11,-12,-5,-12,-6,9,9,9,]),'DIV':([2,5,6,7,8,14,15,16,17,18,19,],[10,-9,-10,-11,-12,-5,-12,-6,10,10,10,]),'SUMA':([2,5,6,7,8,14,15,16,17,18,19,],[11,-9,-10,-11,-12,-5,-12,-6,-7,-8,11,]),'RESTA':([2,5,6,7,8,14,15,16,17,18,19,],[12,-9,-10,-11,-12,-5,-12,-6,-7,-8,12,]),'IGUAL':([8,],[13,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -39,5 +39,11 @@ _lr_productions = [
   ('expression -> CTE_F','expression',1,'p_expression_int_float','parser.py',41),
   ('expression -> CTE_C','expression',1,'p_expression_int_float','parser.py',42),
   ('expression -> ID','expression',1,'p_expression_var','parser.py',48),
-  ('empty -> <empty>','empty',0,'p_empty','parser.py',58),
+  ('value_list -> expression','value_list',1,'p_list_first','parser.py',55),
+  ('row_list -> row','row_list',1,'p_list_first','parser.py',56),
+  ('value_list -> expression , value_list','value_list',3,'p_list_extend','parser.py',62),
+  ('row_list -> row ; row_list','row_list',3,'p_list_extend','parser.py',63),
+  ('row -> [ value_list ]','row',3,'p_row','parser.py',69),
+  ('matrix -> [ row_list ]','matrix',3,'p_matrix','parser.py',75),
+  ('empty -> <empty>','empty',0,'p_empty','parser.py',84),
 ]

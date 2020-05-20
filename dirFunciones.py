@@ -35,5 +35,5 @@ df = DirFunciones()
 df.__set__(0, func1)
 
 
-print('Segundo Print >> ', df.__getitem__(0)) ## Imprime direccion, no su contenido.
+print('Segundo Print >> ', df.__getitem__(0)) ## Imprime direccion de objeto, no su contenido.
                                               ## FALTA: que imprima el nombre(?)

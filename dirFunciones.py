@@ -34,8 +34,8 @@ class DirFunciones:
 
 
 df = DirFunciones()
-df.__set__(0, func1)
-df.__set__(1, func2)
+df.__set__('func1', func1)
+df.__set__('func2', func2)
 
-print('Segundo Print >> ', vars(df.__getitem__(0)))
-print('Segundo Print >> ', vars(df.__getitem__(1)))
+print('Segundo Print >> ', vars(df.__getitem__('func1')))
+print('Segundo Print >> ', vars(df.__getitem__('func2')))

@@ -131,8 +131,8 @@ class SemanticCube:
 		self.cube[("/", "Char", "Char")]    = "Error"
 		self.cube[("=", "Char", "Char")]    = "Char"
 
-	def checkResult(self, op1, op2, operator):
-		key = (op1, op2, operator)
+	def checkResult(self, operator, op1, op2):
+		key = (operator, op1, op2)
 		if key in self.cube:
 			return self.cube[key]
 		else:

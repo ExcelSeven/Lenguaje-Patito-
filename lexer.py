@@ -1,5 +1,3 @@
-from pip._vendor.distlib.compat import raw_input
-
 import ply.lex as lex
 import ply.yacc as yacc
 import re

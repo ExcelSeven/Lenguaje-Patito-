@@ -7,8 +7,10 @@ class Funciones:
 
 
 tablaVars = ["nomVar", "intV", "localV"]
+tablaVars2 = ["Variable2", "Float", "LOCAL"]
 
 func1 = Funciones("nombreF", "int", "global", tablaVars)
+func2 = Funciones("Funcion2", "float", "global", tablaVars2)
 
 print('Primer Print >> ', func1.name, func1.type, func1.scope, func1.vars)
 
@@ -28,12 +30,12 @@ class DirFunciones:
         return num in self.directorio
 
     def __repr__(self):
-        return str(self.directorio)
+        return self.directorio
 
 
 df = DirFunciones()
 df.__set__(0, func1)
+df.__set__(1, func2)
 
-
-print('Segundo Print >> ', df.__getitem__(0)) ## Imprime direccion de objeto, no su contenido.
-                                              ## FALTA: que imprima el nombre(?)
+print('Segundo Print >> ', vars(df.__getitem__(0)))
+print('Segundo Print >> ', vars(df.__getitem__(1)))

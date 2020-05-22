@@ -13,14 +13,14 @@ class DirFunciones:
     def __init__(self):
         self.directorio = dict()
 
-    def __set__(self, num, funcion):
-        self.directorio[num] = funcion
+    def __set__(self, key, funcion):
+        self.directorio[key] = funcion
 
-    def __getitem__(self, num):
-        return self.directorio[num]
+    def __getitem__(self, key):
+        return self.directorio[key]
 
-    def __contains__(self, num, funcion):
-        return num in self.directorio
+    def __contains__(self, key, funcion):
+        return key in self.directorio
 
     def __repr__(self):
         return self.directorio

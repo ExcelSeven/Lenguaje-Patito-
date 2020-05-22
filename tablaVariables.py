@@ -22,7 +22,6 @@ class TablaVariables:
         self.directorio[key] = var
 
 
-
 # var1 = Variables('a', 'int', 1)
 # var2 = Variables('b', 'float', 2.5)
 # var3 = Variables('c', 'chr', 'c')

@@ -50,7 +50,7 @@ def p_expression_var(p):
                | ID matrix
     '''
     p[0] = ('var', p[1])
-    print('hola')
+    #print('hola')
 
 
 def p_list_first(p):
@@ -94,6 +94,7 @@ env = {}
 def run(p):
     global env
 
+# FALTA: Otros operadores como < > != & | ..... y quizas otras cosas mas
     if type(p) == tuple:
         if p[0] == '+':
             return run(p[1]) + run(p[2])

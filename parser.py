@@ -46,8 +46,11 @@ def p_expression_int_float(p):
 def p_expression_var(p):
     '''
     expression : ID
+               | ID row
+               | ID matrix
     '''
     p[0] = ('var', p[1])
+    print('hola')
 
 
 def p_list_first(p):
@@ -59,22 +62,21 @@ def p_list_first(p):
 
 def p_list_extend(p):
     """
-    value_list : expression ',' value_list
-    row_list   : row ';' row_list
+    row_list   : expression PYCOMA expression
     """
-    p[0] = p[1] + [p[3]]
+    #p[0] = p[1] + [p[3]]
 
 def p_row(p):
     """
-    row       : '[' value_list ']'
+    row       : LC expression RC
     """
     p[0] = p[2]
 
 def p_matrix(p):
     """
-    matrix    : '[' row_list ']'
+    matrix    : row row
     """
-    p[0] = p[2]
+    #p[0] = p[2]
 
 def p_error(p):
     print("Syntax error found!")

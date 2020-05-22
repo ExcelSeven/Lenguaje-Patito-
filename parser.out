@@ -26,7 +26,6 @@ Unused terminals:
     IGIG
     INT
     INVERMATRIZ
-    LC
     LIG
     LL
     LP
@@ -36,8 +35,6 @@ Unused terminals:
     OR
     PRINT
     PUNTO
-    PYCOMA
-    RC
     RETURN
     RL
     RP
@@ -64,18 +61,17 @@ Rule 9     expression -> CTE_I
 Rule 10    expression -> CTE_F
 Rule 11    expression -> CTE_C
 Rule 12    expression -> ID
-Rule 13    value_list -> expression
-Rule 14    row_list -> row
-Rule 15    value_list -> expression , value_list
-Rule 16    row_list -> row ; row_list
-Rule 17    row -> [ value_list ]
-Rule 18    matrix -> [ row_list ]
-Rule 19    empty -> <empty>
+Rule 13    expression -> ID row
+Rule 14    expression -> ID matrix
+Rule 15    value_list -> expression
+Rule 16    row_list -> row
+Rule 17    row_list -> expression PYCOMA expression
+Rule 18    row -> LC expression RC
+Rule 19    matrix -> row row
+Rule 20    empty -> <empty>
 
 Terminals, with rules where they appear
 
-,                    : 15
-;                    : 16
 AND                  : 
 BEGIN                : 
 BOOL                 : 
@@ -100,13 +96,13 @@ FALSE                :
 FLOAT                : 
 GIG                  : 
 GT                   : 
-ID                   : 4 12
+ID                   : 4 12 13 14
 IF                   : 
 IGIG                 : 
 IGUAL                : 4
 INT                  : 
 INVERMATRIZ          : 
-LC                   : 
+LC                   : 18
 LIG                  : 
 LL                   : 
 LP                   : 
@@ -117,8 +113,8 @@ NOT                  :
 OR                   : 
 PRINT                : 
 PUNTO                : 
-PYCOMA               : 
-RC                   : 
+PYCOMA               : 17
+RC                   : 18
 RESTA                : 8
 RETURN               : 
 RL                   : 
@@ -131,19 +127,17 @@ TRANSMATRIZ          :
 TRUE                 : 
 VOID                 : 
 WHILE                : 
-[                    : 17 18
-]                    : 17 18
 error                : 
 
 Nonterminals, with rules where they appear
 
 calc                 : 0
 empty                : 3
-expression           : 1 4 5 5 6 6 7 7 8 8 13 15
-matrix               : 
-row                  : 14 16
-row_list             : 16 18
-value_list           : 15 17
+expression           : 1 4 5 5 6 6 7 7 8 8 15 17 17 18
+matrix               : 14
+row                  : 13 16 19 19
+row_list             : 
+value_list           : 
 var_assign           : 2
 
 Parsing method: LALR
@@ -162,14 +156,16 @@ state 0
     (10) expression -> . CTE_F
     (11) expression -> . CTE_C
     (12) expression -> . ID
+    (13) expression -> . ID row
+    (14) expression -> . ID matrix
     (4) var_assign -> . ID IGUAL expression
-    (19) empty -> .
+    (20) empty -> .
 
     CTE_I           shift and go to state 5
     CTE_F           shift and go to state 6
     CTE_C           shift and go to state 7
     ID              shift and go to state 8
-    $end            reduce using rule 19 (empty -> .)
+    $end            reduce using rule 20 (empty -> .)
 
     calc                           shift and go to state 1
     expression                     shift and go to state 2
@@ -220,6 +216,7 @@ state 5
     SUMA            reduce using rule 9 (expression -> CTE_I .)
     RESTA           reduce using rule 9 (expression -> CTE_I .)
     $end            reduce using rule 9 (expression -> CTE_I .)
+    RC              reduce using rule 9 (expression -> CTE_I .)
 
 
 state 6
@@ -231,6 +228,7 @@ state 6
     SUMA            reduce using rule 10 (expression -> CTE_F .)
     RESTA           reduce using rule 10 (expression -> CTE_F .)
     $end            reduce using rule 10 (expression -> CTE_F .)
+    RC              reduce using rule 10 (expression -> CTE_F .)
 
 
 state 7
@@ -242,20 +240,28 @@ state 7
     SUMA            reduce using rule 11 (expression -> CTE_C .)
     RESTA           reduce using rule 11 (expression -> CTE_C .)
     $end            reduce using rule 11 (expression -> CTE_C .)
+    RC              reduce using rule 11 (expression -> CTE_C .)
 
 
 state 8
 
     (12) expression -> ID .
+    (13) expression -> ID . row
+    (14) expression -> ID . matrix
     (4) var_assign -> ID . IGUAL expression
+    (18) row -> . LC expression RC
+    (19) matrix -> . row row
 
     MULT            reduce using rule 12 (expression -> ID .)
     DIV             reduce using rule 12 (expression -> ID .)
     SUMA            reduce using rule 12 (expression -> ID .)
     RESTA           reduce using rule 12 (expression -> ID .)
     $end            reduce using rule 12 (expression -> ID .)
-    IGUAL           shift and go to state 13
+    IGUAL           shift and go to state 15
+    LC              shift and go to state 16
 
+    row                            shift and go to state 13
+    matrix                         shift and go to state 14
 
 state 9
 
@@ -268,13 +274,15 @@ state 9
     (10) expression -> . CTE_F
     (11) expression -> . CTE_C
     (12) expression -> . ID
+    (13) expression -> . ID row
+    (14) expression -> . ID matrix
 
     CTE_I           shift and go to state 5
     CTE_F           shift and go to state 6
     CTE_C           shift and go to state 7
-    ID              shift and go to state 15
+    ID              shift and go to state 18
 
-    expression                     shift and go to state 14
+    expression                     shift and go to state 17
 
 state 10
 
@@ -287,13 +295,15 @@ state 10
     (10) expression -> . CTE_F
     (11) expression -> . CTE_C
     (12) expression -> . ID
+    (13) expression -> . ID row
+    (14) expression -> . ID matrix
 
     CTE_I           shift and go to state 5
     CTE_F           shift and go to state 6
     CTE_C           shift and go to state 7
-    ID              shift and go to state 15
+    ID              shift and go to state 18
 
-    expression                     shift and go to state 16
+    expression                     shift and go to state 19
 
 state 11
 
@@ -306,13 +316,15 @@ state 11
     (10) expression -> . CTE_F
     (11) expression -> . CTE_C
     (12) expression -> . ID
+    (13) expression -> . ID row
+    (14) expression -> . ID matrix
 
     CTE_I           shift and go to state 5
     CTE_F           shift and go to state 6
     CTE_C           shift and go to state 7
-    ID              shift and go to state 15
+    ID              shift and go to state 18
 
-    expression                     shift and go to state 17
+    expression                     shift and go to state 20
 
 state 12
 
@@ -325,15 +337,45 @@ state 12
     (10) expression -> . CTE_F
     (11) expression -> . CTE_C
     (12) expression -> . ID
+    (13) expression -> . ID row
+    (14) expression -> . ID matrix
 
     CTE_I           shift and go to state 5
     CTE_F           shift and go to state 6
     CTE_C           shift and go to state 7
-    ID              shift and go to state 15
+    ID              shift and go to state 18
 
-    expression                     shift and go to state 18
+    expression                     shift and go to state 21
 
 state 13
+
+    (13) expression -> ID row .
+    (19) matrix -> row . row
+    (18) row -> . LC expression RC
+
+    MULT            reduce using rule 13 (expression -> ID row .)
+    DIV             reduce using rule 13 (expression -> ID row .)
+    SUMA            reduce using rule 13 (expression -> ID row .)
+    RESTA           reduce using rule 13 (expression -> ID row .)
+    $end            reduce using rule 13 (expression -> ID row .)
+    RC              reduce using rule 13 (expression -> ID row .)
+    LC              shift and go to state 16
+
+    row                            shift and go to state 22
+
+state 14
+
+    (14) expression -> ID matrix .
+
+    MULT            reduce using rule 14 (expression -> ID matrix .)
+    DIV             reduce using rule 14 (expression -> ID matrix .)
+    SUMA            reduce using rule 14 (expression -> ID matrix .)
+    RESTA           reduce using rule 14 (expression -> ID matrix .)
+    $end            reduce using rule 14 (expression -> ID matrix .)
+    RC              reduce using rule 14 (expression -> ID matrix .)
+
+
+state 15
 
     (4) var_assign -> ID IGUAL . expression
     (5) expression -> . expression MULT expression
@@ -344,15 +386,38 @@ state 13
     (10) expression -> . CTE_F
     (11) expression -> . CTE_C
     (12) expression -> . ID
+    (13) expression -> . ID row
+    (14) expression -> . ID matrix
 
     CTE_I           shift and go to state 5
     CTE_F           shift and go to state 6
     CTE_C           shift and go to state 7
-    ID              shift and go to state 15
+    ID              shift and go to state 18
 
-    expression                     shift and go to state 19
+    expression                     shift and go to state 23
 
-state 14
+state 16
+
+    (18) row -> LC . expression RC
+    (5) expression -> . expression MULT expression
+    (6) expression -> . expression DIV expression
+    (7) expression -> . expression SUMA expression
+    (8) expression -> . expression RESTA expression
+    (9) expression -> . CTE_I
+    (10) expression -> . CTE_F
+    (11) expression -> . CTE_C
+    (12) expression -> . ID
+    (13) expression -> . ID row
+    (14) expression -> . ID matrix
+
+    CTE_I           shift and go to state 5
+    CTE_F           shift and go to state 6
+    CTE_C           shift and go to state 7
+    ID              shift and go to state 18
+
+    expression                     shift and go to state 24
+
+state 17
 
     (5) expression -> expression MULT expression .
     (5) expression -> expression . MULT expression
@@ -365,6 +430,7 @@ state 14
     SUMA            reduce using rule 5 (expression -> expression MULT expression .)
     RESTA           reduce using rule 5 (expression -> expression MULT expression .)
     $end            reduce using rule 5 (expression -> expression MULT expression .)
+    RC              reduce using rule 5 (expression -> expression MULT expression .)
 
   ! MULT            [ shift and go to state 9 ]
   ! DIV             [ shift and go to state 10 ]
@@ -372,18 +438,26 @@ state 14
   ! RESTA           [ shift and go to state 12 ]
 
 
-state 15
+state 18
 
     (12) expression -> ID .
+    (13) expression -> ID . row
+    (14) expression -> ID . matrix
+    (18) row -> . LC expression RC
+    (19) matrix -> . row row
 
     MULT            reduce using rule 12 (expression -> ID .)
     DIV             reduce using rule 12 (expression -> ID .)
     SUMA            reduce using rule 12 (expression -> ID .)
     RESTA           reduce using rule 12 (expression -> ID .)
     $end            reduce using rule 12 (expression -> ID .)
+    RC              reduce using rule 12 (expression -> ID .)
+    LC              shift and go to state 16
 
+    row                            shift and go to state 13
+    matrix                         shift and go to state 14
 
-state 16
+state 19
 
     (6) expression -> expression DIV expression .
     (5) expression -> expression . MULT expression
@@ -396,6 +470,7 @@ state 16
     SUMA            reduce using rule 6 (expression -> expression DIV expression .)
     RESTA           reduce using rule 6 (expression -> expression DIV expression .)
     $end            reduce using rule 6 (expression -> expression DIV expression .)
+    RC              reduce using rule 6 (expression -> expression DIV expression .)
 
   ! MULT            [ shift and go to state 9 ]
   ! DIV             [ shift and go to state 10 ]
@@ -403,7 +478,7 @@ state 16
   ! RESTA           [ shift and go to state 12 ]
 
 
-state 17
+state 20
 
     (7) expression -> expression SUMA expression .
     (5) expression -> expression . MULT expression
@@ -414,6 +489,7 @@ state 17
     SUMA            reduce using rule 7 (expression -> expression SUMA expression .)
     RESTA           reduce using rule 7 (expression -> expression SUMA expression .)
     $end            reduce using rule 7 (expression -> expression SUMA expression .)
+    RC              reduce using rule 7 (expression -> expression SUMA expression .)
     MULT            shift and go to state 9
     DIV             shift and go to state 10
 
@@ -423,7 +499,7 @@ state 17
   ! RESTA           [ shift and go to state 12 ]
 
 
-state 18
+state 21
 
     (8) expression -> expression RESTA expression .
     (5) expression -> expression . MULT expression
@@ -434,6 +510,7 @@ state 18
     SUMA            reduce using rule 8 (expression -> expression RESTA expression .)
     RESTA           reduce using rule 8 (expression -> expression RESTA expression .)
     $end            reduce using rule 8 (expression -> expression RESTA expression .)
+    RC              reduce using rule 8 (expression -> expression RESTA expression .)
     MULT            shift and go to state 9
     DIV             shift and go to state 10
 
@@ -443,7 +520,19 @@ state 18
   ! RESTA           [ shift and go to state 12 ]
 
 
-state 19
+state 22
+
+    (19) matrix -> row row .
+
+    MULT            reduce using rule 19 (matrix -> row row .)
+    DIV             reduce using rule 19 (matrix -> row row .)
+    SUMA            reduce using rule 19 (matrix -> row row .)
+    RESTA           reduce using rule 19 (matrix -> row row .)
+    $end            reduce using rule 19 (matrix -> row row .)
+    RC              reduce using rule 19 (matrix -> row row .)
+
+
+state 23
 
     (4) var_assign -> ID IGUAL expression .
     (5) expression -> expression . MULT expression
@@ -456,4 +545,32 @@ state 19
     DIV             shift and go to state 10
     SUMA            shift and go to state 11
     RESTA           shift and go to state 12
+
+
+state 24
+
+    (18) row -> LC expression . RC
+    (5) expression -> expression . MULT expression
+    (6) expression -> expression . DIV expression
+    (7) expression -> expression . SUMA expression
+    (8) expression -> expression . RESTA expression
+
+    RC              shift and go to state 25
+    MULT            shift and go to state 9
+    DIV             shift and go to state 10
+    SUMA            shift and go to state 11
+    RESTA           shift and go to state 12
+
+
+state 25
+
+    (18) row -> LC expression RC .
+
+    LC              reduce using rule 18 (row -> LC expression RC .)
+    MULT            reduce using rule 18 (row -> LC expression RC .)
+    DIV             reduce using rule 18 (row -> LC expression RC .)
+    SUMA            reduce using rule 18 (row -> LC expression RC .)
+    RESTA           reduce using rule 18 (row -> LC expression RC .)
+    $end            reduce using rule 18 (row -> LC expression RC .)
+    RC              reduce using rule 18 (row -> LC expression RC .)
 

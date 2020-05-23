@@ -8,9 +8,6 @@ class PatType:
     def type_key(self):
         return self.type + "," + str(self.col) + "," + str(self.row)
 
-    def is_object(self):
-        return self.type not in ["Int", "Bool", "Float"]
-
     def is_matrix(self):
         return self.col > 0
 

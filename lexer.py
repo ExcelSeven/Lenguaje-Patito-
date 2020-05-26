@@ -49,6 +49,7 @@ palabrasReservadas = {
     'if': 'IF',
     'else': 'ELSE',
     'elif': 'ELIF',
+    'elseif': 'ELSEIF',
     'then': 'THEN',
     'while': 'WHILE',
     'do': 'DO',
@@ -64,6 +65,9 @@ palabrasReservadas = {
     'false': 'FALSE',
     'bool': 'BOOL',
     'print': 'PRINT',
+    'main': 'MAIN',
+    'function': 'FUNCTION',
+    'class': 'CLASS'
 }
 
 tokens = tokens + list(palabrasReservadas.values())
@@ -118,8 +122,8 @@ def t_CTE_I(t):
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    #t.type = 'ID'
-    t.type = palabrasReservadas.get(t.value,'ID')    # Check for reserved words
+    # t.type = 'ID'
+    # t.type = palabrasReservadas.get(t.value,'ID')    # Check for reserved words
     return t
 
 def t_error(t):

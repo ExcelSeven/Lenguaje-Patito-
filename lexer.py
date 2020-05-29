@@ -7,39 +7,40 @@ import sys
 
 tokens = [
     'ID',
-    'SUMA',  # +
-    'RESTA',  # -
-    'MULT',  # *
+    'PLUS',  # +
+    'MINUS',  # -
+    'MUL',  # *
     'DIV',  # /
-    'IGUAL',  # =
+    'IS',  # =
     'AND',  # &&
     'OR',  # ||
     'NOT',  # !
     'GT',  # >
     'LT',  # <
-    'IGIG',  # ==
-    'GIG',  # =>
-    'LIG',  # =<
+    'EQUAL',  # ==
+    'GEQ',  # =>
+    'LEQ',  # =<
     'EOF',  # eof()
     'TRANSMATRIZ',
     'DETERMATRIZ',
     'INVERMATRIZ',
-    'PYCOMA',  # ;
-    'COMA',  # ,
+    'SEMICOL',  # ;
+    'COMMA',  # ,
     'COMILLA',  # ''
     'COMILLAS',  # ""
     'LP',  # (
     'RP',  # )
     'LC',  # [
     'RC',  # ]
-    'LL',  # {
-    'RL',  # }
-    'PUNTO',  # .
-    'DOSPUNTOS',  # :
-    'NIGUAL',  # !=
+    'LB',  # {
+    'RB',  # }
+    'DOT',  # .
+    'COL',  # :
+    'NEQ',  # !=
     'CTE_I',
     'CTE_F',
     'CTE_C',
+    'CTE_B',
     'CTE_S'
 ]
 
@@ -67,42 +68,48 @@ palabrasReservadas = {
     'print': 'PRINT',
     'main': 'MAIN',
     'function': 'FUNCTION',
-    'class': 'CLASS'
+    'var': 'VAR',
+    'let': 'LET',
+    'input': 'INPUT',
+    'program': 'PROGRAM'
 }
 
 tokens = tokens + list(palabrasReservadas.values())
 # Expresiones Regulares
-t_ignore = ' \t'  # espacios y tabs
+t_ignore = ' \t\n\r'  # espacios y tabs
 t_ignore_comment = '\/\/.*'
 
 
 
-t_SUMA = r'\+'
-t_RESTA = r'\-'
-t_MULT = r'\*'
+t_PLUS = r'\+'
+t_MINUS = r'\-'
+t_MUL = r'\*'
 t_DIV = r'\/'
 
 
-t_IGUAL = '='
-t_IGIG = '=='
+t_IS = '='
+t_EQUAL = '=='
 t_GT = '>'
 t_LT = '<'
-t_NIGUAL = '!='
+t_GEQ = '>='
+t_LEQ = '<='
+t_NEQ = '!='
 t_NOT = '!'
 t_AND = r'\&\&'
 t_OR = r'\|\|'
+
 
 t_LP = r'\('
 t_RP = r'\)'
 t_LC = r'\['
 t_RC = r'\]'
-t_LL = r'\{'
-t_RL = r'\}'
+t_LB = r'\{'
+t_RB = r'\}'
 
-t_COMA = ','
-t_DOSPUNTOS = ':'
-t_PYCOMA = ';'
-t_PUNTO = '.'
+t_COMMA = ','
+t_COL = ':'
+t_SEMICOL = ';'
+t_DOT = '.'
 
 # def t_CTE_C(t):
 #     r'[A-Za-z]'
@@ -120,11 +127,23 @@ def t_CTE_I(t):
     t.value = int(t.value)
     return t
 
+
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    # t.type = 'ID'
-    # t.type = palabrasReservadas.get(t.value,'ID')    # Check for reserved words
+    # print(t)
+    # print(t.type) # ID
+    # print(t.value) # if
+    # print(palabrasReservadas.get(t.value)) # IF
+    # print (str(palabrasReservadas.get(t.value)).lower()) # if
+    # if t.value in (str(palabrasReservadas.get(t.value)).lower()):
+    #     pass
+    #     # print("Palabra Reservada!")
+    # else:
+    #     return t
+    t.type = palabrasReservadas.get(t.value,'ID')    # Check for reserved words
+    print(t)
     return t
+
 
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])

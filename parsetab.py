@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftSUMARESTAleftMULTDIVAND BEGIN BOOL CHAR COMA COMILLA COMILLAS CONST CTE_C CTE_F CTE_I CTE_S DETERMATRIZ DIV DO DOSPUNTOS ELIF ELSE END EOF FALSE FLOAT GIG GT ID IF IGIG IGUAL INT INVERMATRIZ LC LIG LL LP LT MULT NIGUAL NOT OR PRINT PUNTO PYCOMA RC RESTA RETURN RL RP SELECT SUMA SWITCH THEN TRANSMATRIZ TRUE VOID WHILE\n    calc : expression\n         | var_assign\n         | empty\n    \n    var_assign : ID IGUAL expression\n    \n    expression : expression MULT expression\n               | expression DIV expression\n               | expression SUMA expression\n               | expression RESTA expression\n    \n    expression : CTE_I\n               | CTE_F\n               | CTE_C\n    \n    expression : ID\n               | ID row\n               | ID matrix\n    \n    value_list : expression\n    row_list   : row\n    \n    row_list   : expression PYCOMA expression\n    \n    row       : LC expression RC\n    \n    matrix    : row row\n    \n    empty :\n    '
+_lr_signature = 'leftPLUSMINUSleftMULDIVAND BEGIN BOOL CHAR COL COMILLA COMILLAS COMMA CONST CTE_B CTE_C CTE_F CTE_I CTE_S DETERMATRIZ DIV DO DOT ELIF ELSE ELSEIF END EOF EQUAL FALSE FLOAT FUNCTION GEQ GT ID IF INPUT INT INVERMATRIZ IS LB LC LEQ LET LP LT MAIN MINUS MUL NEQ NOT OR PLUS PRINT PROGRAM RB RC RETURN RP SELECT SEMICOL SWITCH THEN TRANSMATRIZ TRUE VAR VOID WHILE\n    programa : PROGRAM ID SEMICOL programa1\n    \n    programa1 : vars\n              | empty\n    \n    vars : VAR tipo vars1\n         | VAR tipo vars2\n         | VAR tipo vars3\n         | VAR tipo vars4\n         | vars5\n    \n    vars1 : ID SEMICOL\n          | ID SEMICOL vars\n    \n    vars2 : ID IS value check_type SEMICOL\n          | ID IS value check_type SEMICOL vars\n    \n    vars3 : ID COMMA vars3\n          | ID SEMICOL vars\n          | ID SEMICOL\n    \n    vars4 : ID IS value check_type COMMA vars4\n          | ID IS value check_type SEMICOL vars\n          | ID IS value check_type SEMICOL\n    \n    vars5 : ID IS value SEMICOL\n          | ID IS value SEMICOL vars\n    \n    tipo : INT\n        | FLOAT\n        | CHAR\n    \n    value : CTE_I\n          | CTE_F\n          | CTE_C\n          | ID\n          | empty\n    \n    check_type :\n    \n    calc : expr\n         | var_assign\n         | empty\n         | var_lt\n         | var_gt\n         | var_equal\n         | var_neq\n         | IF\n         | LP\n         | row\n         | matrix\n    \n    var_assign : ID IS expr\n\n    \n    var_lt : expr LT expr\n    \n    var_gt : expr GT expr\n    \n    var_equal : expr EQUAL expr\n    \n    var_neq : expr NEQ expr\n    \n    expr : expr MUL expr\n         | expr DIV expr\n         | expr PLUS expr\n         | expr MINUS expr\n    \n    expr : CTE_I\n         | CTE_F\n         | CTE_C\n    \n    expr : ID\n         | ID row\n         | ID matrix\n    \n    value_list : expr\n    row_list   : row\n    \n    row_list   : expr SEMICOL expr\n    \n    row       : LC expr RC\n    \n    matrix    : row row\n    \n    empty :\n    \n    elseif : ELSEIF LP expression RP check_bool LB statement RB guarda_salto elseif\n           | ELSEIF LP expression RP check_bool LB statement RB guarda_salto else\n    \n    else : ELSE LB statement RB guarda_salto\n    \n    expression :\n    \n    check_bool :\n    \n    statement :\n    \n    guarda_salto :\n    '
     
-_lr_action_items = {'CTE_I':([0,9,10,11,12,15,16,],[5,5,5,5,5,5,5,]),'CTE_F':([0,9,10,11,12,15,16,],[6,6,6,6,6,6,6,]),'CTE_C':([0,9,10,11,12,15,16,],[7,7,7,7,7,7,7,]),'ID':([0,9,10,11,12,15,16,],[8,18,18,18,18,18,18,]),'$end':([0,1,2,3,4,5,6,7,8,13,14,17,18,19,20,21,22,23,25,],[-20,0,-1,-2,-3,-9,-10,-11,-12,-13,-14,-5,-12,-6,-7,-8,-19,-4,-18,]),'MULT':([2,5,6,7,8,13,14,17,18,19,20,21,22,23,24,25,],[9,-9,-10,-11,-12,-13,-14,-5,-12,-6,9,9,-19,9,9,-18,]),'DIV':([2,5,6,7,8,13,14,17,18,19,20,21,22,23,24,25,],[10,-9,-10,-11,-12,-13,-14,-5,-12,-6,10,10,-19,10,10,-18,]),'SUMA':([2,5,6,7,8,13,14,17,18,19,20,21,22,23,24,25,],[11,-9,-10,-11,-12,-13,-14,-5,-12,-6,-7,-8,-19,11,11,-18,]),'RESTA':([2,5,6,7,8,13,14,17,18,19,20,21,22,23,24,25,],[12,-9,-10,-11,-12,-13,-14,-5,-12,-6,-7,-8,-19,12,12,-18,]),'RC':([5,6,7,13,14,17,18,19,20,21,22,24,25,],[-9,-10,-11,-13,-14,-5,-12,-6,-7,-8,-19,25,-18,]),'IGUAL':([8,],[15,]),'LC':([8,13,18,25,],[16,16,16,-18,]),}
+_lr_action_items = {'PROGRAM':([0,],[2,]),'$end':([1,4,6,7,8,10,22,23,24,25,27,28,31,32,35,37,38,40,41,43,47,48,],[0,-61,-1,-2,-3,-8,-4,-5,-6,-7,-19,-9,-20,-10,-13,-15,-11,-14,-12,-16,-18,-17,]),'ID':([2,4,11,12,13,14,15,27,28,29,30,37,38,39,44,47,],[3,5,16,26,-21,-22,-23,5,5,16,34,5,5,42,16,5,]),'SEMICOL':([3,11,16,17,18,19,20,21,26,29,33,34,36,44,45,46,],[4,-61,-27,27,-24,-25,-26,-28,28,-61,-29,37,38,-61,-29,47,]),'VAR':([4,27,28,37,38,47,],[9,9,9,9,9,9,]),'IS':([5,26,42,],[11,29,44,]),'INT':([9,],[13,]),'FLOAT':([9,],[14,]),'CHAR':([9,],[15,]),'CTE_I':([11,29,44,],[18,18,18,]),'CTE_F':([11,29,44,],[19,19,19,]),'CTE_C':([11,29,44,],[20,20,20,]),'COMMA':([16,18,19,20,21,26,29,33,34,36,44,45,46,],[-27,-24,-25,-26,-28,30,-61,-29,30,39,-61,-29,39,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,9,10,11,12,15,16,],[2,17,19,20,21,23,24,]),'var_assign':([0,],[3,]),'empty':([0,],[4,]),'row':([8,13,18,],[13,22,13,]),'matrix':([8,18,],[14,14,]),}
+_lr_goto_items = {'programa':([0,],[1,]),'programa1':([4,],[6,]),'vars':([4,27,28,37,38,47,],[7,31,32,40,41,48,]),'empty':([4,11,29,44,],[8,21,21,21,]),'vars5':([4,27,28,37,38,47,],[10,10,10,10,10,10,]),'tipo':([9,],[12,]),'value':([11,29,44,],[17,33,45,]),'vars1':([12,],[22,]),'vars2':([12,],[23,]),'vars3':([12,30,],[24,35,]),'vars4':([12,39,],[25,43,]),'check_type':([33,45,],[36,46,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,25 +26,73 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> calc","S'",1,None,None,None),
-  ('calc -> expression','calc',1,'p_calc','parser.py',15),
-  ('calc -> var_assign','calc',1,'p_calc','parser.py',16),
-  ('calc -> empty','calc',1,'p_calc','parser.py',17),
-  ('var_assign -> ID IGUAL expression','var_assign',3,'p_var_assign','parser.py',24),
-  ('expression -> expression MULT expression','expression',3,'p_expression','parser.py',31),
-  ('expression -> expression DIV expression','expression',3,'p_expression','parser.py',32),
-  ('expression -> expression SUMA expression','expression',3,'p_expression','parser.py',33),
-  ('expression -> expression RESTA expression','expression',3,'p_expression','parser.py',34),
-  ('expression -> CTE_I','expression',1,'p_expression_int_float','parser.py',40),
-  ('expression -> CTE_F','expression',1,'p_expression_int_float','parser.py',41),
-  ('expression -> CTE_C','expression',1,'p_expression_int_float','parser.py',42),
-  ('expression -> ID','expression',1,'p_expression_var','parser.py',48),
-  ('expression -> ID row','expression',2,'p_expression_var','parser.py',49),
-  ('expression -> ID matrix','expression',2,'p_expression_var','parser.py',50),
-  ('value_list -> expression','value_list',1,'p_list_first','parser.py',58),
-  ('row_list -> row','row_list',1,'p_list_first','parser.py',59),
-  ('row_list -> expression PYCOMA expression','row_list',3,'p_list_extend','parser.py',65),
-  ('row -> LC expression RC','row',3,'p_row','parser.py',71),
-  ('matrix -> row row','matrix',2,'p_matrix','parser.py',77),
-  ('empty -> <empty>','empty',0,'p_empty','parser.py',86),
+  ("S' -> programa","S'",1,None,None,None),
+  ('programa -> PROGRAM ID SEMICOL programa1','programa',4,'p_programa','parser.py',28),
+  ('programa1 -> vars','programa1',1,'p_programa1','parser.py',36),
+  ('programa1 -> empty','programa1',1,'p_programa1','parser.py',37),
+  ('vars -> VAR tipo vars1','vars',3,'p_vars','parser.py',44),
+  ('vars -> VAR tipo vars2','vars',3,'p_vars','parser.py',45),
+  ('vars -> VAR tipo vars3','vars',3,'p_vars','parser.py',46),
+  ('vars -> VAR tipo vars4','vars',3,'p_vars','parser.py',47),
+  ('vars -> vars5','vars',1,'p_vars','parser.py',48),
+  ('vars1 -> ID SEMICOL','vars1',2,'p_vars1','parser.py',54),
+  ('vars1 -> ID SEMICOL vars','vars1',3,'p_vars1','parser.py',55),
+  ('vars2 -> ID IS value check_type SEMICOL','vars2',5,'p_vars2','parser.py',64),
+  ('vars2 -> ID IS value check_type SEMICOL vars','vars2',6,'p_vars2','parser.py',65),
+  ('vars3 -> ID COMMA vars3','vars3',3,'p_vars3','parser.py',73),
+  ('vars3 -> ID SEMICOL vars','vars3',3,'p_vars3','parser.py',74),
+  ('vars3 -> ID SEMICOL','vars3',2,'p_vars3','parser.py',75),
+  ('vars4 -> ID IS value check_type COMMA vars4','vars4',6,'p_vars4','parser.py',83),
+  ('vars4 -> ID IS value check_type SEMICOL vars','vars4',6,'p_vars4','parser.py',84),
+  ('vars4 -> ID IS value check_type SEMICOL','vars4',5,'p_vars4','parser.py',85),
+  ('vars5 -> ID IS value SEMICOL','vars5',4,'p_vars5','parser.py',92),
+  ('vars5 -> ID IS value SEMICOL vars','vars5',5,'p_vars5','parser.py',93),
+  ('tipo -> INT','tipo',1,'p_tipo','parser.py',100),
+  ('tipo -> FLOAT','tipo',1,'p_tipo','parser.py',101),
+  ('tipo -> CHAR','tipo',1,'p_tipo','parser.py',102),
+  ('value -> CTE_I','value',1,'p_value','parser.py',112),
+  ('value -> CTE_F','value',1,'p_value','parser.py',113),
+  ('value -> CTE_C','value',1,'p_value','parser.py',114),
+  ('value -> ID','value',1,'p_value','parser.py',115),
+  ('value -> empty','value',1,'p_value','parser.py',116),
+  ('check_type -> <empty>','check_type',0,'p_check_type','parser.py',125),
+  ('calc -> expr','calc',1,'p_calc','parser.py',232),
+  ('calc -> var_assign','calc',1,'p_calc','parser.py',233),
+  ('calc -> empty','calc',1,'p_calc','parser.py',234),
+  ('calc -> var_lt','calc',1,'p_calc','parser.py',235),
+  ('calc -> var_gt','calc',1,'p_calc','parser.py',236),
+  ('calc -> var_equal','calc',1,'p_calc','parser.py',237),
+  ('calc -> var_neq','calc',1,'p_calc','parser.py',238),
+  ('calc -> IF','calc',1,'p_calc','parser.py',239),
+  ('calc -> LP','calc',1,'p_calc','parser.py',240),
+  ('calc -> row','calc',1,'p_calc','parser.py',241),
+  ('calc -> matrix','calc',1,'p_calc','parser.py',242),
+  ('var_assign -> ID IS expr','var_assign',3,'p_var_assign','parser.py',250),
+  ('var_lt -> expr LT expr','var_lt',3,'p_LT','parser.py',259),
+  ('var_gt -> expr GT expr','var_gt',3,'p_GT','parser.py',271),
+  ('var_equal -> expr EQUAL expr','var_equal',3,'p_EQUAL','parser.py',283),
+  ('var_neq -> expr NEQ expr','var_neq',3,'p_NEQ','parser.py',293),
+  ('expr -> expr MUL expr','expr',3,'p_expr','parser.py',304),
+  ('expr -> expr DIV expr','expr',3,'p_expr','parser.py',305),
+  ('expr -> expr PLUS expr','expr',3,'p_expr','parser.py',306),
+  ('expr -> expr MINUS expr','expr',3,'p_expr','parser.py',307),
+  ('expr -> CTE_I','expr',1,'p_expression_int_float','parser.py',314),
+  ('expr -> CTE_F','expr',1,'p_expression_int_float','parser.py',315),
+  ('expr -> CTE_C','expr',1,'p_expression_int_float','parser.py',316),
+  ('expr -> ID','expr',1,'p_expression_var','parser.py',322),
+  ('expr -> ID row','expr',2,'p_expression_var','parser.py',323),
+  ('expr -> ID matrix','expr',2,'p_expression_var','parser.py',324),
+  ('value_list -> expr','value_list',1,'p_list_first','parser.py',331),
+  ('row_list -> row','row_list',1,'p_list_first','parser.py',332),
+  ('row_list -> expr SEMICOL expr','row_list',3,'p_list_extend','parser.py',338),
+  ('row -> LC expr RC','row',3,'p_row','parser.py',344),
+  ('matrix -> row row','matrix',2,'p_matrix','parser.py',350),
+  ('empty -> <empty>','empty',0,'p_empty','parser.py',376),
+  ('elseif -> ELSEIF LP expression RP check_bool LB statement RB guarda_salto elseif','elseif',10,'p_elseif','parser.py',394),
+  ('elseif -> ELSEIF LP expression RP check_bool LB statement RB guarda_salto else','elseif',10,'p_elseif','parser.py',395),
+  ('else -> ELSE LB statement RB guarda_salto','else',5,'p_else','parser.py',400),
+  ('expression -> <empty>','expression',0,'p_expression','parser.py',405),
+  ('check_bool -> <empty>','check_bool',0,'p_check_bool','parser.py',411),
+  ('statement -> <empty>','statement',0,'p_statement','parser.py',418),
+  ('guarda_salto -> <empty>','guarda_salto',0,'p_guarda_salto','parser.py',424),
 ]

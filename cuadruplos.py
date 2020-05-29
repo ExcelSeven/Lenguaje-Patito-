@@ -1,4 +1,4 @@
-import tablaVariables
+import varTable
 import parser
 import lexer
 import re

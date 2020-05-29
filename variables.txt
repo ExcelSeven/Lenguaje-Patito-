@@ -1,0 +1,7 @@
+program patito;
+
+var int a;
+var int b = a;
+var int x,h,g;
+var float b = 55, r=66, t=77;
+a=0;

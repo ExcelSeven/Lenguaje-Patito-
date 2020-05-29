@@ -2,43 +2,34 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    AND
     BEGIN
     BOOL
-    CHAR
-    CLASS
-    COMA
+    COL
     COMILLA
     COMILLAS
     CONST
+    CTE_B
     CTE_S
     DETERMATRIZ
     DO
-    DOSPUNTOS
+    DOT
     ELIF
     END
     EOF
     FALSE
-    FLOAT
     FUNCTION
-    GIG
-    IGIG
-    INT
+    GEQ
+    INPUT
     INVERMATRIZ
-    LIG
-    LL
-    LP
+    LEQ
+    LET
     MAIN
-    MULT
-    NIGUAL
     NOT
+    OR
     PRINT
-    PUNTO
-    RESTA
     RETURN
-    RL
-    RP
     SELECT
-    SUMA
     SWITCH
     THEN
     TRANSMATRIZ
@@ -48,172 +39,744 @@ Unused terminals:
 
 Grammar
 
-Rule 0     S' -> calc
-Rule 1     calc -> expr
-Rule 2     calc -> var_assign
-Rule 3     calc -> empty
-Rule 4     var_assign -> ID IGUAL expr
-Rule 5     expr -> CTE_I
-Rule 6     expr -> CTE_F
-Rule 7     expr -> CTE_C
-Rule 8     expr -> ID
-Rule 9     expr -> ID row
-Rule 10    expr -> ID matrix
-Rule 11    value_list -> expr
-Rule 12    row_list -> row
-Rule 13    row_list -> expr PYCOMA expr
-Rule 14    row -> LC expr RC
-Rule 15    matrix -> row row
-Rule 16    empty -> <empty>
-Rule 17    condition -> IF expression condition1 block condition_a condition_b condition4
-Rule 18    condition_a -> elseif condition_a
-Rule 19    condition_a -> empty
-Rule 20    condition_b -> condition3 else
-Rule 21    condition_b -> empty
-Rule 22    condition1 -> <empty>
-Rule 23    condition2 -> <empty>
-Rule 24    condition3 -> <empty>
-Rule 25    condition4 -> <empty>
-Rule 26    condition5 -> <empty>
-Rule 27    elseif -> ELSEIF condition2 expression condition5 block
-Rule 28    else -> ELSE block
-Rule 29    expression -> comparison expression1 expression_a
-Rule 30    expression_a -> AND expression2 comparison expression1 expression_a
-Rule 31    expression_a -> OR expression2 comparison expression1 expression_a
-Rule 32    expression_a -> empty
-Rule 33    expression1 -> <empty>
-Rule 34    expression2 -> <empty>
-Rule 35    comparison -> exp comparison1 comparison_a
-Rule 36    comparison_a -> comparison_b exp comparison1 comparison_a
-Rule 37    comparison_a -> empty
-Rule 38    comparison_b -> GEQ comparison2
-Rule 39    comparison_b -> LEQ comparison2
-Rule 40    comparison_b -> GT comparison2
-Rule 41    comparison_b -> LT comparison2
-Rule 42    comparison_b -> EQUAL comparison2
-Rule 43    comparison_b -> NEQ comparison2
-Rule 44    comparison1 -> <empty>
-Rule 45    comparison2 -> <empty>
-Rule 46    exp -> term exp1 exp_a
-Rule 47    exp_a -> PLUS exp2 term exp1 exp_a
-Rule 48    exp_a -> MINUS exp2 term exp1 exp_a
-Rule 49    exp_a -> empty
-Rule 50    exp1 -> <empty>
-Rule 51    exp2 -> <empty>
-Rule 52    term -> factor term1 term_a
-Rule 53    term_a -> MUL term2 factor term1 term_a
-Rule 54    term_a -> DIV term2 factor term1 term_a
-Rule 55    term_a -> empty
-Rule 56    term1 -> <empty>
-Rule 57    term2 -> <empty>
+Rule 0     S' -> programa
+Rule 1     programa -> PROGRAM ID SEMICOL programa1
+Rule 2     programa1 -> vars
+Rule 3     programa1 -> empty
+Rule 4     vars -> VAR tipo vars1
+Rule 5     vars -> VAR tipo vars2
+Rule 6     vars -> VAR tipo vars3
+Rule 7     vars -> VAR tipo vars4
+Rule 8     vars -> vars5
+Rule 9     vars1 -> ID SEMICOL
+Rule 10    vars1 -> ID SEMICOL vars
+Rule 11    vars2 -> ID IS value check_type SEMICOL
+Rule 12    vars2 -> ID IS value check_type SEMICOL vars
+Rule 13    vars3 -> ID COMMA vars3
+Rule 14    vars3 -> ID SEMICOL vars
+Rule 15    vars3 -> ID SEMICOL
+Rule 16    vars4 -> ID IS value check_type COMMA vars4
+Rule 17    vars4 -> ID IS value check_type SEMICOL vars
+Rule 18    vars4 -> ID IS value check_type SEMICOL
+Rule 19    vars5 -> ID IS value SEMICOL
+Rule 20    vars5 -> ID IS value SEMICOL vars
+Rule 21    tipo -> INT
+Rule 22    tipo -> FLOAT
+Rule 23    tipo -> CHAR
+Rule 24    value -> CTE_I
+Rule 25    value -> CTE_F
+Rule 26    value -> CTE_C
+Rule 27    value -> ID
+Rule 28    value -> empty
+Rule 29    check_type -> <empty>
+Rule 30    calc -> expr
+Rule 31    calc -> var_assign
+Rule 32    calc -> empty
+Rule 33    calc -> var_lt
+Rule 34    calc -> var_gt
+Rule 35    calc -> var_equal
+Rule 36    calc -> var_neq
+Rule 37    calc -> IF
+Rule 38    calc -> LP
+Rule 39    calc -> row
+Rule 40    calc -> matrix
+Rule 41    var_assign -> ID IS expr
+Rule 42    var_lt -> expr LT expr
+Rule 43    var_gt -> expr GT expr
+Rule 44    var_equal -> expr EQUAL expr
+Rule 45    var_neq -> expr NEQ expr
+Rule 46    expr -> expr MUL expr
+Rule 47    expr -> expr DIV expr
+Rule 48    expr -> expr PLUS expr
+Rule 49    expr -> expr MINUS expr
+Rule 50    expr -> CTE_I
+Rule 51    expr -> CTE_F
+Rule 52    expr -> CTE_C
+Rule 53    expr -> ID
+Rule 54    expr -> ID row
+Rule 55    expr -> ID matrix
+Rule 56    value_list -> expr
+Rule 57    row_list -> row
+Rule 58    row_list -> expr SEMICOL expr
+Rule 59    row -> LC expr RC
+Rule 60    matrix -> row row
+Rule 61    empty -> <empty>
+Rule 62    elseif -> ELSEIF LP expression RP check_bool LB statement RB guarda_salto elseif
+Rule 63    elseif -> ELSEIF LP expression RP check_bool LB statement RB guarda_salto else
+Rule 64    else -> ELSE LB statement RB guarda_salto
+Rule 65    expression -> <empty>
+Rule 66    check_bool -> <empty>
+Rule 67    statement -> <empty>
+Rule 68    guarda_salto -> <empty>
 
 Terminals, with rules where they appear
 
-AND                  : 30
+AND                  : 
 BEGIN                : 
 BOOL                 : 
-CHAR                 : 
-CLASS                : 
-COMA                 : 
+CHAR                 : 23
+COL                  : 
 COMILLA              : 
 COMILLAS             : 
+COMMA                : 13 16
 CONST                : 
-CTE_C                : 7
-CTE_F                : 6
-CTE_I                : 5
+CTE_B                : 
+CTE_C                : 26 52
+CTE_F                : 25 51
+CTE_I                : 24 50
 CTE_S                : 
 DETERMATRIZ          : 
-DIV                  : 54
+DIV                  : 47
 DO                   : 
-DOSPUNTOS            : 
+DOT                  : 
 ELIF                 : 
-ELSE                 : 28
-ELSEIF               : 27
+ELSE                 : 64
+ELSEIF               : 62 63
 END                  : 
 EOF                  : 
+EQUAL                : 44
 FALSE                : 
-FLOAT                : 
+FLOAT                : 22
 FUNCTION             : 
-GIG                  : 
-GT                   : 40
-ID                   : 4 8 9 10
-IF                   : 17
-IGIG                 : 
-IGUAL                : 4
-INT                  : 
+GEQ                  : 
+GT                   : 43
+ID                   : 1 9 10 11 12 13 14 15 16 17 18 19 20 27 41 53 54 55
+IF                   : 37
+INPUT                : 
+INT                  : 21
 INVERMATRIZ          : 
-LC                   : 14
-LIG                  : 
-LL                   : 
-LP                   : 
-LT                   : 41
+IS                   : 11 12 16 17 18 19 20 41
+LB                   : 62 63 64
+LC                   : 59
+LEQ                  : 
+LET                  : 
+LP                   : 38 62 63
+LT                   : 42
 MAIN                 : 
-MULT                 : 
-NIGUAL               : 
+MINUS                : 49
+MUL                  : 46
+NEQ                  : 45
 NOT                  : 
-OR                   : 31
+OR                   : 
+PLUS                 : 48
 PRINT                : 
-PUNTO                : 
-PYCOMA               : 13
-RC                   : 14
-RESTA                : 
+PROGRAM              : 1
+RB                   : 62 63 64
+RC                   : 59
 RETURN               : 
-RL                   : 
-RP                   : 
+RP                   : 62 63
 SELECT               : 
-SUMA                 : 
+SEMICOL              : 1 9 10 11 12 14 15 17 18 19 20 58
 SWITCH               : 
 THEN                 : 
 TRANSMATRIZ          : 
 TRUE                 : 
+VAR                  : 4 5 6 7
 VOID                 : 
 WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-EQUAL                : 42
-GEQ                  : 38
-LEQ                  : 39
-MINUS                : 48
-MUL                  : 53
-NEQ                  : 43
-PLUS                 : 47
-block                : 17 27 28
-calc                 : 0
-comparison           : 29 30 31
-comparison1          : 35 36
-comparison2          : 38 39 40 41 42 43
-comparison_a         : 35 36
-comparison_b         : 36
-condition            : 
-condition1           : 17
-condition2           : 27
-condition3           : 20
-condition4           : 17
-condition5           : 27
-condition_a          : 17 18
-condition_b          : 17
-else                 : 20
-elseif               : 18
-empty                : 3 19 21 32 37 49 55
-exp                  : 35 36
-exp1                 : 46 47 48
-exp2                 : 47 48
-exp_a                : 46 47 48
-expr                 : 1 4 11 13 13 14
-expression           : 17 27
-expression1          : 29 30 31
-expression2          : 30 31
-expression_a         : 29 30 31
-factor               : 52 53 54
-matrix               : 10
-row                  : 9 12 15 15
+calc                 : 
+check_bool           : 62 63
+check_type           : 11 12 16 17 18
+else                 : 63
+elseif               : 62
+empty                : 3 28 32
+expr                 : 30 41 42 42 43 43 44 44 45 45 46 46 47 47 48 48 49 49 56 58 58 59
+expression           : 62 63
+guarda_salto         : 62 63 64
+matrix               : 40 55
+programa             : 0
+programa1            : 1
+row                  : 39 54 57 60 60
 row_list             : 
-term                 : 46 47 48
-term1                : 52 53 54
-term2                : 53 54
-term_a               : 52 53 54
+statement            : 62 63 64
+tipo                 : 4 5 6 7
+value                : 11 12 16 17 18 19 20
 value_list           : 
-var_assign           : 2
+var_assign           : 31
+var_equal            : 35
+var_gt               : 34
+var_lt               : 33
+var_neq              : 36
+vars                 : 2 10 12 14 17 20
+vars1                : 4
+vars2                : 5
+vars3                : 6 13
+vars4                : 7 16
+vars5                : 8
 
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . PROGRAM ID SEMICOL programa1
+
+    PROGRAM         shift and go to state 2
+
+    programa                       shift and go to state 1
+
+state 1
+
+    (0) S' -> programa .
+
+
+
+state 2
+
+    (1) programa -> PROGRAM . ID SEMICOL programa1
+
+    ID              shift and go to state 3
+
+
+state 3
+
+    (1) programa -> PROGRAM ID . SEMICOL programa1
+
+    SEMICOL         shift and go to state 4
+
+
+state 4
+
+    (1) programa -> PROGRAM ID SEMICOL . programa1
+    (2) programa1 -> . vars
+    (3) programa1 -> . empty
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (61) empty -> .
+    (19) vars5 -> . ID IS value SEMICOL
+    (20) vars5 -> . ID IS value SEMICOL vars
+
+    VAR             shift and go to state 9
+    $end            reduce using rule 61 (empty -> .)
+    ID              shift and go to state 5
+
+    programa1                      shift and go to state 6
+    vars                           shift and go to state 7
+    empty                          shift and go to state 8
+    vars5                          shift and go to state 10
+
+state 5
+
+    (19) vars5 -> ID . IS value SEMICOL
+    (20) vars5 -> ID . IS value SEMICOL vars
+
+    IS              shift and go to state 11
+
+
+state 6
+
+    (1) programa -> PROGRAM ID SEMICOL programa1 .
+
+    $end            reduce using rule 1 (programa -> PROGRAM ID SEMICOL programa1 .)
+
+
+state 7
+
+    (2) programa1 -> vars .
+
+    $end            reduce using rule 2 (programa1 -> vars .)
+
+
+state 8
+
+    (3) programa1 -> empty .
+
+    $end            reduce using rule 3 (programa1 -> empty .)
+
+
+state 9
+
+    (4) vars -> VAR . tipo vars1
+    (5) vars -> VAR . tipo vars2
+    (6) vars -> VAR . tipo vars3
+    (7) vars -> VAR . tipo vars4
+    (21) tipo -> . INT
+    (22) tipo -> . FLOAT
+    (23) tipo -> . CHAR
+
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 14
+    CHAR            shift and go to state 15
+
+    tipo                           shift and go to state 12
+
+state 10
+
+    (8) vars -> vars5 .
+
+    $end            reduce using rule 8 (vars -> vars5 .)
+
+
+state 11
+
+    (19) vars5 -> ID IS . value SEMICOL
+    (20) vars5 -> ID IS . value SEMICOL vars
+    (24) value -> . CTE_I
+    (25) value -> . CTE_F
+    (26) value -> . CTE_C
+    (27) value -> . ID
+    (28) value -> . empty
+    (61) empty -> .
+
+    CTE_I           shift and go to state 18
+    CTE_F           shift and go to state 19
+    CTE_C           shift and go to state 20
+    ID              shift and go to state 16
+    SEMICOL         reduce using rule 61 (empty -> .)
+
+    value                          shift and go to state 17
+    empty                          shift and go to state 21
+
+state 12
+
+    (4) vars -> VAR tipo . vars1
+    (5) vars -> VAR tipo . vars2
+    (6) vars -> VAR tipo . vars3
+    (7) vars -> VAR tipo . vars4
+    (9) vars1 -> . ID SEMICOL
+    (10) vars1 -> . ID SEMICOL vars
+    (11) vars2 -> . ID IS value check_type SEMICOL
+    (12) vars2 -> . ID IS value check_type SEMICOL vars
+    (13) vars3 -> . ID COMMA vars3
+    (14) vars3 -> . ID SEMICOL vars
+    (15) vars3 -> . ID SEMICOL
+    (16) vars4 -> . ID IS value check_type COMMA vars4
+    (17) vars4 -> . ID IS value check_type SEMICOL vars
+    (18) vars4 -> . ID IS value check_type SEMICOL
+
+    ID              shift and go to state 26
+
+    vars1                          shift and go to state 22
+    vars2                          shift and go to state 23
+    vars3                          shift and go to state 24
+    vars4                          shift and go to state 25
+
+state 13
+
+    (21) tipo -> INT .
+
+    ID              reduce using rule 21 (tipo -> INT .)
+
+
+state 14
+
+    (22) tipo -> FLOAT .
+
+    ID              reduce using rule 22 (tipo -> FLOAT .)
+
+
+state 15
+
+    (23) tipo -> CHAR .
+
+    ID              reduce using rule 23 (tipo -> CHAR .)
+
+
+state 16
+
+    (27) value -> ID .
+
+    SEMICOL         reduce using rule 27 (value -> ID .)
+    COMMA           reduce using rule 27 (value -> ID .)
+
+
+state 17
+
+    (19) vars5 -> ID IS value . SEMICOL
+    (20) vars5 -> ID IS value . SEMICOL vars
+
+    SEMICOL         shift and go to state 27
+
+
+state 18
+
+    (24) value -> CTE_I .
+
+    SEMICOL         reduce using rule 24 (value -> CTE_I .)
+    COMMA           reduce using rule 24 (value -> CTE_I .)
+
+
+state 19
+
+    (25) value -> CTE_F .
+
+    SEMICOL         reduce using rule 25 (value -> CTE_F .)
+    COMMA           reduce using rule 25 (value -> CTE_F .)
+
+
+state 20
+
+    (26) value -> CTE_C .
+
+    SEMICOL         reduce using rule 26 (value -> CTE_C .)
+    COMMA           reduce using rule 26 (value -> CTE_C .)
+
+
+state 21
+
+    (28) value -> empty .
+
+    SEMICOL         reduce using rule 28 (value -> empty .)
+    COMMA           reduce using rule 28 (value -> empty .)
+
+
+state 22
+
+    (4) vars -> VAR tipo vars1 .
+
+    $end            reduce using rule 4 (vars -> VAR tipo vars1 .)
+
+
+state 23
+
+    (5) vars -> VAR tipo vars2 .
+
+    $end            reduce using rule 5 (vars -> VAR tipo vars2 .)
+
+
+state 24
+
+    (6) vars -> VAR tipo vars3 .
+
+    $end            reduce using rule 6 (vars -> VAR tipo vars3 .)
+
+
+state 25
+
+    (7) vars -> VAR tipo vars4 .
+
+    $end            reduce using rule 7 (vars -> VAR tipo vars4 .)
+
+
+state 26
+
+    (9) vars1 -> ID . SEMICOL
+    (10) vars1 -> ID . SEMICOL vars
+    (11) vars2 -> ID . IS value check_type SEMICOL
+    (12) vars2 -> ID . IS value check_type SEMICOL vars
+    (13) vars3 -> ID . COMMA vars3
+    (14) vars3 -> ID . SEMICOL vars
+    (15) vars3 -> ID . SEMICOL
+    (16) vars4 -> ID . IS value check_type COMMA vars4
+    (17) vars4 -> ID . IS value check_type SEMICOL vars
+    (18) vars4 -> ID . IS value check_type SEMICOL
+
+    SEMICOL         shift and go to state 28
+    IS              shift and go to state 29
+    COMMA           shift and go to state 30
+
+
+state 27
+
+    (19) vars5 -> ID IS value SEMICOL .
+    (20) vars5 -> ID IS value SEMICOL . vars
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (19) vars5 -> . ID IS value SEMICOL
+    (20) vars5 -> . ID IS value SEMICOL vars
+
+    $end            reduce using rule 19 (vars5 -> ID IS value SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+    vars                           shift and go to state 31
+    vars5                          shift and go to state 10
+
+state 28
+
+    (9) vars1 -> ID SEMICOL .
+    (10) vars1 -> ID SEMICOL . vars
+    (14) vars3 -> ID SEMICOL . vars
+    (15) vars3 -> ID SEMICOL .
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (19) vars5 -> . ID IS value SEMICOL
+    (20) vars5 -> . ID IS value SEMICOL vars
+
+  ! reduce/reduce conflict for $end resolved using rule 9 (vars1 -> ID SEMICOL .)
+    $end            reduce using rule 9 (vars1 -> ID SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+  ! $end            [ reduce using rule 15 (vars3 -> ID SEMICOL .) ]
+
+    vars                           shift and go to state 32
+    vars5                          shift and go to state 10
+
+state 29
+
+    (11) vars2 -> ID IS . value check_type SEMICOL
+    (12) vars2 -> ID IS . value check_type SEMICOL vars
+    (16) vars4 -> ID IS . value check_type COMMA vars4
+    (17) vars4 -> ID IS . value check_type SEMICOL vars
+    (18) vars4 -> ID IS . value check_type SEMICOL
+    (24) value -> . CTE_I
+    (25) value -> . CTE_F
+    (26) value -> . CTE_C
+    (27) value -> . ID
+    (28) value -> . empty
+    (61) empty -> .
+
+    CTE_I           shift and go to state 18
+    CTE_F           shift and go to state 19
+    CTE_C           shift and go to state 20
+    ID              shift and go to state 16
+    SEMICOL         reduce using rule 61 (empty -> .)
+    COMMA           reduce using rule 61 (empty -> .)
+
+    value                          shift and go to state 33
+    empty                          shift and go to state 21
+
+state 30
+
+    (13) vars3 -> ID COMMA . vars3
+    (13) vars3 -> . ID COMMA vars3
+    (14) vars3 -> . ID SEMICOL vars
+    (15) vars3 -> . ID SEMICOL
+
+    ID              shift and go to state 34
+
+    vars3                          shift and go to state 35
+
+state 31
+
+    (20) vars5 -> ID IS value SEMICOL vars .
+
+    $end            reduce using rule 20 (vars5 -> ID IS value SEMICOL vars .)
+
+
+state 32
+
+    (10) vars1 -> ID SEMICOL vars .
+    (14) vars3 -> ID SEMICOL vars .
+
+  ! reduce/reduce conflict for $end resolved using rule 10 (vars1 -> ID SEMICOL vars .)
+    $end            reduce using rule 10 (vars1 -> ID SEMICOL vars .)
+
+  ! $end            [ reduce using rule 14 (vars3 -> ID SEMICOL vars .) ]
+
+
+state 33
+
+    (11) vars2 -> ID IS value . check_type SEMICOL
+    (12) vars2 -> ID IS value . check_type SEMICOL vars
+    (16) vars4 -> ID IS value . check_type COMMA vars4
+    (17) vars4 -> ID IS value . check_type SEMICOL vars
+    (18) vars4 -> ID IS value . check_type SEMICOL
+    (29) check_type -> .
+
+    SEMICOL         reduce using rule 29 (check_type -> .)
+    COMMA           reduce using rule 29 (check_type -> .)
+
+    check_type                     shift and go to state 36
+
+state 34
+
+    (13) vars3 -> ID . COMMA vars3
+    (14) vars3 -> ID . SEMICOL vars
+    (15) vars3 -> ID . SEMICOL
+
+    COMMA           shift and go to state 30
+    SEMICOL         shift and go to state 37
+
+
+state 35
+
+    (13) vars3 -> ID COMMA vars3 .
+
+    $end            reduce using rule 13 (vars3 -> ID COMMA vars3 .)
+
+
+state 36
+
+    (11) vars2 -> ID IS value check_type . SEMICOL
+    (12) vars2 -> ID IS value check_type . SEMICOL vars
+    (16) vars4 -> ID IS value check_type . COMMA vars4
+    (17) vars4 -> ID IS value check_type . SEMICOL vars
+    (18) vars4 -> ID IS value check_type . SEMICOL
+
+    SEMICOL         shift and go to state 38
+    COMMA           shift and go to state 39
+
+
+state 37
+
+    (14) vars3 -> ID SEMICOL . vars
+    (15) vars3 -> ID SEMICOL .
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (19) vars5 -> . ID IS value SEMICOL
+    (20) vars5 -> . ID IS value SEMICOL vars
+
+    $end            reduce using rule 15 (vars3 -> ID SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+    vars                           shift and go to state 40
+    vars5                          shift and go to state 10
+
+state 38
+
+    (11) vars2 -> ID IS value check_type SEMICOL .
+    (12) vars2 -> ID IS value check_type SEMICOL . vars
+    (17) vars4 -> ID IS value check_type SEMICOL . vars
+    (18) vars4 -> ID IS value check_type SEMICOL .
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (19) vars5 -> . ID IS value SEMICOL
+    (20) vars5 -> . ID IS value SEMICOL vars
+
+  ! reduce/reduce conflict for $end resolved using rule 11 (vars2 -> ID IS value check_type SEMICOL .)
+    $end            reduce using rule 11 (vars2 -> ID IS value check_type SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+  ! $end            [ reduce using rule 18 (vars4 -> ID IS value check_type SEMICOL .) ]
+
+    vars                           shift and go to state 41
+    vars5                          shift and go to state 10
+
+state 39
+
+    (16) vars4 -> ID IS value check_type COMMA . vars4
+    (16) vars4 -> . ID IS value check_type COMMA vars4
+    (17) vars4 -> . ID IS value check_type SEMICOL vars
+    (18) vars4 -> . ID IS value check_type SEMICOL
+
+    ID              shift and go to state 42
+
+    vars4                          shift and go to state 43
+
+state 40
+
+    (14) vars3 -> ID SEMICOL vars .
+
+    $end            reduce using rule 14 (vars3 -> ID SEMICOL vars .)
+
+
+state 41
+
+    (12) vars2 -> ID IS value check_type SEMICOL vars .
+    (17) vars4 -> ID IS value check_type SEMICOL vars .
+
+  ! reduce/reduce conflict for $end resolved using rule 12 (vars2 -> ID IS value check_type SEMICOL vars .)
+    $end            reduce using rule 12 (vars2 -> ID IS value check_type SEMICOL vars .)
+
+  ! $end            [ reduce using rule 17 (vars4 -> ID IS value check_type SEMICOL vars .) ]
+
+
+state 42
+
+    (16) vars4 -> ID . IS value check_type COMMA vars4
+    (17) vars4 -> ID . IS value check_type SEMICOL vars
+    (18) vars4 -> ID . IS value check_type SEMICOL
+
+    IS              shift and go to state 44
+
+
+state 43
+
+    (16) vars4 -> ID IS value check_type COMMA vars4 .
+
+    $end            reduce using rule 16 (vars4 -> ID IS value check_type COMMA vars4 .)
+
+
+state 44
+
+    (16) vars4 -> ID IS . value check_type COMMA vars4
+    (17) vars4 -> ID IS . value check_type SEMICOL vars
+    (18) vars4 -> ID IS . value check_type SEMICOL
+    (24) value -> . CTE_I
+    (25) value -> . CTE_F
+    (26) value -> . CTE_C
+    (27) value -> . ID
+    (28) value -> . empty
+    (61) empty -> .
+
+    CTE_I           shift and go to state 18
+    CTE_F           shift and go to state 19
+    CTE_C           shift and go to state 20
+    ID              shift and go to state 16
+    COMMA           reduce using rule 61 (empty -> .)
+    SEMICOL         reduce using rule 61 (empty -> .)
+
+    value                          shift and go to state 45
+    empty                          shift and go to state 21
+
+state 45
+
+    (16) vars4 -> ID IS value . check_type COMMA vars4
+    (17) vars4 -> ID IS value . check_type SEMICOL vars
+    (18) vars4 -> ID IS value . check_type SEMICOL
+    (29) check_type -> .
+
+    COMMA           reduce using rule 29 (check_type -> .)
+    SEMICOL         reduce using rule 29 (check_type -> .)
+
+    check_type                     shift and go to state 46
+
+state 46
+
+    (16) vars4 -> ID IS value check_type . COMMA vars4
+    (17) vars4 -> ID IS value check_type . SEMICOL vars
+    (18) vars4 -> ID IS value check_type . SEMICOL
+
+    COMMA           shift and go to state 39
+    SEMICOL         shift and go to state 47
+
+
+state 47
+
+    (17) vars4 -> ID IS value check_type SEMICOL . vars
+    (18) vars4 -> ID IS value check_type SEMICOL .
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (19) vars5 -> . ID IS value SEMICOL
+    (20) vars5 -> . ID IS value SEMICOL vars
+
+    $end            reduce using rule 18 (vars4 -> ID IS value check_type SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+    vars                           shift and go to state 48
+    vars5                          shift and go to state 10
+
+state 48
+
+    (17) vars4 -> ID IS value check_type SEMICOL vars .
+
+    $end            reduce using rule 17 (vars4 -> ID IS value check_type SEMICOL vars .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: reduce/reduce conflict in state 28 resolved using rule (vars1 -> ID SEMICOL)
+WARNING: rejected rule (vars3 -> ID SEMICOL) in state 28
+WARNING: reduce/reduce conflict in state 32 resolved using rule (vars1 -> ID SEMICOL vars)
+WARNING: rejected rule (vars3 -> ID SEMICOL vars) in state 32
+WARNING: reduce/reduce conflict in state 38 resolved using rule (vars2 -> ID IS value check_type SEMICOL)
+WARNING: rejected rule (vars4 -> ID IS value check_type SEMICOL) in state 38
+WARNING: reduce/reduce conflict in state 41 resolved using rule (vars2 -> ID IS value check_type SEMICOL vars)
+WARNING: rejected rule (vars4 -> ID IS value check_type SEMICOL vars) in state 41

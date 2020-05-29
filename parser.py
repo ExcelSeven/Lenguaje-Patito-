@@ -1,65 +1,230 @@
 import ply.yacc as yacc
+import ply.lex as lex
 from lexer import tokens
 import lexer
 import math
-from programa import Program
+from program import Program
 from patType import PatType
+from varTable import Var
+from  varTable import VarTable
+from functionDirectory import Function
+from functionDirectory import FunctionDirectory
 import sys
 
 
+program = Program()
 error_message = '\033[91m' + "ERROR: " + '\033[0m'
 error = False
-program = Program()
-
 
 
 precedence = (
-    ('left', 'SUMA', 'RESTA'),
-    ('left', 'MULT', 'DIV')
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'MUL', 'DIV')
 )
 
+
+def p_programa(p):
+    """
+    programa : PROGRAM ID SEMICOL programa1
+    """
+    p[0] = 'Compilacion Exitosa'
+    print(p[0])
+
+
+def p_programa1(p):
+    """
+    programa1 : vars
+              | empty
+    """
+
+
+lista = list()
+def p_vars(p):
+    """
+    vars : VAR tipo vars1
+         | VAR tipo vars2
+         | VAR tipo vars3
+         | VAR tipo vars4
+         | vars5
+    """
+
+# var int a;
+def p_vars1(p):
+    """
+    vars1 : ID SEMICOL
+          | ID SEMICOL vars
+    """
+    lista.append(p[1])
+    print('listaVariables >> ', lista)
+    print('TIPOOOO >> ', tipo)
+
+# var int a = 5;
+def p_vars2(p):
+    """
+    vars2 : ID IS value check_type SEMICOL
+          | ID IS value check_type SEMICOL vars
+    """
+    lista.append(p[1])
+    print('listaVariables >> ', lista)
+
+# var int a,b,c;
+def p_vars3(p):
+    """
+    vars3 : ID COMMA vars3
+          | ID SEMICOL vars
+          | ID SEMICOL
+    """
+    lista.append(p[1])
+    print('listaVariables >> ', lista)
+
+# var int a=0, b=1, c=2;
+def p_vars4(p):
+    """
+    vars4 : ID IS value check_type COMMA vars4
+          | ID IS value check_type SEMICOL vars
+          | ID IS value check_type SEMICOL
+    """
+    lista.append(p[1])
+    print('listaVariables >> ', lista)
+
+# a=2;
+def p_vars5(p):
+    """
+    vars5 : ID IS value SEMICOL
+          | ID IS value SEMICOL vars
+    """
+    lista.append(p[1])
+    listaV.append(p[3])
+
+def p_tipo(p):
+    """
+    tipo : INT
+        | FLOAT
+        | CHAR
+    """
+
+    global tipo
+    tipo = p[1]
+
+
+listaV = list()
+def p_value(p):
+    """
+    value : CTE_I
+          | CTE_F
+          | CTE_C
+          | ID
+          | empty
+    """
+    listaV.append(p[1])
+    print('listaValores >> ', listaV)
+    #FALTA: if ID no existe en la tabla de variables, error.
+    #if encuentra la variable de p[1], entonces p[0] = .valor
+
+def p_check_type(p):
+    """
+    check_type :
+    """
+    # print("check_type >> ", p[-8])
+
+
 def p_calc(p):
-    '''
+    """
     calc : expr
          | var_assign
          | empty
-    '''
-    print(run(p[1]))
+         | var_lt
+         | var_gt
+         | var_equal
+         | var_neq
+         | IF
+         | LP
+         | row
+         | matrix
+    """
+    print(operacion(p[1]))
     print(p[1])
-    return run(p[1])
+    return operacion(p[1])
 
 def p_var_assign(p):
-    '''
-    var_assign : ID IGUAL expr
-    '''
+    """
+    var_assign : ID IS expr
+
+    """
     p[0] = ('=', p[1], p[3])
 
+pila = list()
 
-def p_expression(p):
-    '''
-    expr : expr MULT expr
+def p_LT(p):
+    """
+    var_lt : expr LT expr
+    """
+    # p[0] = ('<', p[1], p[3])
+    if p[1] < p[3]:
+        pila.append(p[1])
+        print('true', pila)
+    else:
+        pila.append(p[3])
+        print('false', pila)
+
+def p_GT(p):
+    """
+    var_gt : expr GT expr
+    """
+    # p[0] = ('<', p[1], p[3])
+    if p[1] > p[3]:
+        pila.append(p[1])
+        print('true', pila)
+    else:
+        pila.append(p[3])
+        print('false', pila)
+
+def p_EQUAL(p):
+    """
+    var_equal : expr EQUAL expr
+    """
+    # p[0] = ('<', p[1], p[3])
+    if p[1] == p[3]:
+        print('true')
+    else:
+        print('false')
+
+def p_NEQ(p):
+    """
+    var_neq : expr NEQ expr
+    """
+    # p[0] = ('<', p[1], p[3])
+    if p[1] != p[3]:
+        print('true')
+    else:
+        print('false')
+
+
+def p_expr(p):
+    """
+    expr : expr MUL expr
          | expr DIV expr
-         | expr SUMA expr
-         | expr RESTA expr
-    '''
+         | expr PLUS expr
+         | expr MINUS expr
+    """
     p[0] = (p[2], p[1], p[3])
 
+
 def p_expression_int_float(p):
-    '''
+    """
     expr : CTE_I
          | CTE_F
          | CTE_C
-    '''
+    """
     p[0] = p[1]
 
 def p_expression_var(p):
-    '''
+    """
     expr : ID
-               | ID row
-               | ID matrix
-    '''
+         | ID row
+         | ID matrix
+    """
     p[0] = ('var', p[1])
-    print('hola')
 
 
 def p_list_first(p):
@@ -71,7 +236,7 @@ def p_list_first(p):
 
 def p_list_extend(p):
     """
-    row_list   : expr PYCOMA expr
+    row_list   : expr SEMICOL expr
     """
     #p[0] = p[1] + [p[3]]
 
@@ -85,234 +250,102 @@ def p_matrix(p):
     """
     matrix    : row row
     """
-    #p[0] = p[2]
+    return p[0]
+
+
+
+
+# def p_error(p):
+#     print("Syntax error found!")
 
 def p_error(p):
-    print("Syntax error found!")
+    global error
+    if p:
+        # print('p >> ', p)
+        print(error_message + "Unexpected token '" + str(p.value) + "' at line " + str(p.lexer.lineno) + ".")
+        error = True
+        # sys.exit(0)
+        # print('ptype', p.type)
+    else:
+        print(error_message + "Syntax error at EOF")
+        error = True
+        #sys.exit(0)
+
 
 def p_empty(p):
-    '''
+    """
     empty :
-    '''
-    p[0] = None
+    """
+    # p[0] = None
 
 
-# CONDICIONAL IF ##################################################################
 
-def p_condition(p):
-    'condition : IF expression condition1 block condition_a condition_b condition4'
-
-def p_condition_a(p):
-    '''
-    condition_a  : elseif condition_a
-    | empty
-    '''
-
-def p_condition_b(p):
-    '''
-    condition_b : condition3 else
-    | empty
-    '''
-
-def p_condition1(p):
-    'condition1 : '
-    global error
-    program.pJumps.append("$")
-    exp_type = program.pType.pop()
-    if exp_type.type != "Bool":
-        print(error_message + "Type mismatch in line " + str(p.lexer.lineno) + ".")
-        error = True
-        sys.exit(0)
-
-    else:
-        result = program.VP.pop()
-        program.add_pJump()
-        program.current_quad = ("GOTOF", result, None, None)
-        program.add_quad()
-
-
-def p_condition2(p):
-    'condition2 : '
-    global error
-    program.fill_quad(program.BASE + 1)
-    program.add_pJump()
-    program.current_quad = ("GOTO", None, None, None)
-    program.add_quad()
-
-
-def p_condition3(p):
-    'condition3 : '
-    program.fill_quad(program.BASE + 1)
-    program.add_pJump()
-    program.current_quad = ("GOTO", None, None, None)
-    program.add_quad()
-
-
-def p_condition4(p):
-    'condition4 : '
-    while program.pJumps[-1] != "$":
-        program.fill_quad(program.BASE)
-    program.pJumps.pop()
-
-
-def p_condition5(p):
-    'condition5 : '
-    exp_type = program.pType.pop()
-    if exp_type.type != "Bool":
-        print(error_message + "Type mismatch in line " + str(p.lexer.lineno) + ".")
-        error = True
-        sys.exit(0)
-
-    else:
-        result = program.VP.pop()
-        program.add_pJump()
-        program.current_quad = ("GOTOF", result, None, None)
-        program.add_quad()
+def p_if(p):
+    print("IFFFF")
+    """
+    if : IF LP expression RP check_bool LB statement RB guarda_salto
+        | IF LP expression RP check_bool LB statement RB guarda_salto elseif
+        | IF LP expression RP check_bool LB statement RB guarda_salto else
+        | IF LP RP
+    """
+    print("Iffff")
 
 def p_elseif(p):
-    'elseif : ELSEIF condition2 expression condition5 block'
+    """
+    elseif : ELSEIF LP expression RP check_bool LB statement RB guarda_salto elseif
+           | ELSEIF LP expression RP check_bool LB statement RB guarda_salto else
+    """
 
 def p_else(p):
-    'else   : ELSE block'
+    """
+    else : ELSE LB statement RB guarda_salto
+    """
 
 def p_expression(p):
-    'expression : comparison expression1 expression_a'
+    """
+    expression :
+    """
+    return operacion(p[1])
 
-def p_expression_a(p):
-    '''
-    expression_a    : AND expression2 comparison expression1 expression_a
-    | OR expression2 comparison expression1 expression_a
-    | empty
-    '''
+def p_check_bool(p):
+    """
+    check_bool :
+    """
+    # global error
+    print("check_bool")
 
-#-----------------------------------------------------------------------
-# Neuro points comparison stage
-#################
+def p_statement(p):
+    """
+    statement :
+    """
+    print("statement")
 
-def p_expression1(p):
-    'expression1   :'
-    if len(program.pOper) != 0:
-        if program.pOper[-1] == "&&" or program.pOper[-1] == "||":
-            solveOperation(p)
-
-def p_expression2(p):
-    'expression2   :'
-    program.pOper.append(p[-1])
-
-def p_comparison(p):
-    'comparison    : exp comparison1 comparison_a'
-
-def p_comparison_a(p):
-    '''
-    comparison_a  : comparison_b exp comparison1 comparison_a
-    | empty
-    '''
-def p_comparison_b(p):
-    '''
-    comparison_b  : GEQ comparison2
-    | LEQ comparison2
-    | GT comparison2
-    | LT comparison2
-    | EQUAL comparison2
-    | NEQ comparison2
-    '''
-
-#-----------------------------------------------------------------------
-# Neuro points comparison stage
-#################
-
-def p_comparison1(p):
-    'comparison1   :'
-    if len(program.pOper) != 0:
-        if program.pOper[-1] == ">=" or program.pOper[-1] == "<=" or program.pOper[-1] == ">" or program.pOper[-1] == "<" or program.pOper[-1] == "==" or program.pOper[-1] == "!=":
-            solveOperation(p)
-
-def p_comparison2(p):
-    'comparison2   :'
-    program.pOper.append(p[-1])
-
-def p_exp(p):
-    'exp    : term exp1 exp_a'
-
-def p_exp_a(p):
-    '''
-    exp_a   : PLUS exp2 term exp1 exp_a
-    | MINUS exp2 term exp1 exp_a
-    | empty
-    '''
-
-#-----------------------------------------------------------------------
-# Neuro points exp stage
-#################
-def p_exp1(p):
-    'exp1   :'
-    if len(program.pOper) != 0:
-        if program.pOper[-1] == "+" or program.pOper[-1] == "-":
-            solveOperation(p)
-
-def p_exp2(p):
-    'exp2   :'
-    program.pOper.append(p[-1])
-
-def p_term(p):
-    'term    : factor term1 term_a'
-def p_term_a(p):
-    '''
-    term_a   : MUL term2 factor term1 term_a
-    | DIV term2 factor term1 term_a
-    | empty
-    '''
-
-#-----------------------------------------------------------------------
-# Neuro points term stage
-#################
-def p_term1(p):
-    'term1   :'
-    if len(program.pOper) != 0:
-        if program.pOper[-1] == "*" or program.pOper[-1] == "/":
-            solveOperation(p)
-
-def p_term2(p):
-    'term2   :'
-    program.pOper.append(p[-1])
-
-# WHILE
-# def p_while(p):
-#     'loop = WHILE loop1 expression loop2 '
+def p_guarda_salto(p):
+    """
+    guarda_salto :
+    """
+    print("guarda_salto")
 
 
-def solveOperation(p):
-    global error
-    right_operand = program.VP.pop()
-    right_type = program.pType.pop()
-    left_operand = program.VP.pop()
-    left_type = program.pType.pop()
-    operator = program.pOper.pop()
-    result_type = program.semanticCube.checkResult(operator, left_type.type, right_type.type)
-    if result_type == "Error":
-        print(error_message + "Type mismatch in operation in line " + str(p.lexer.lineno) + ".")
-        error = True
-        sys.exit(0)
-
-
-parser = yacc.yacc()
+# parser = yacc.yacc()
 
 env = {}
 
-def run(p):
+
+def operacion(p):
     global env
 
     if type(p) == tuple:
         if p[0] == '+':
-            return run(p[1]) + run(p[2])
+            return operacion(p[1]) + operacion(p[2])
         elif p[0] == '-':
-            return run(p[1]) - run(p[2])
+            return operacion(p[1]) - operacion(p[2])
         elif p[0] == '*':
-            return run(p[1]) * run(p[2])
+            return operacion(p[1]) * operacion(p[2])
         elif p[0] == '/':
-            return run(p[1]) / run(p[2])
+            return operacion(p[1]) / operacion(p[2])
         elif p[0] == '=':
-            env[p[1]] = run(p[2])
+            env[p[1]] = operacion(p[2])
             print (env)
         elif p[0] == 'var':
             if p[1] not in env:
@@ -321,9 +354,47 @@ def run(p):
     else:
         return p
 
-while True:
+
+# # file = open(input())
+# file = open("programa1.txt")
+# data = file.readlines()
+# parser = yacc.yacc()
+# for line in data:
+#     try:
+#         parser.parse(line)
+#         # print("parserrrr")
+#     finally:
+#         if not error:
+#             pass
+#             # print("VirtualMachine.execute()")
+
+
+parser = yacc.yacc()
+lexer = lex.lexer
+
+def test():
     try:
-        s = input('>> ')
+        arch = open("variables.txt", 'r')
+        informacion = arch.read()
+        arch.close()
+        lexer.input(informacion)
+        while True:
+            tok = lexer.token()
+            if not tok:
+                break
+            # print(tok)
+        if (parser.parse(informacion, tracking=True) == 'PROGRAMA COMPILADO'):
+            print("Correct Syntax")
+        else:
+            print("Syntax error")
     except EOFError:
-        break
-    parser.parse(s)
+        # print("ERROREOF")
+        print(EOFError)
+
+test()
+# while True:
+#     try:
+#         s = input('>> ')
+#     except EOFError:
+#         break
+#     parser.parse(s)

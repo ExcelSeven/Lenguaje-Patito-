@@ -1,25 +1,27 @@
-class Variables:
+class Var:
     def __init__(self, name, type, valor):
         self.name = name
         self.type = type
         self.valor = valor
+        self.is_param = False
+        # self.address = 0
 
 
-class TablaVariables:
+class VarTable:
     def __init__(self):
-        self.directorio = dict()
+        self.directyory = dict()
 
     def __set__(self, key, var):
-        self.directorio[key] = var
+        self.directyory[key] = var
 
     def __getitem__(self, key):
-        return self.directorio[key]
+        return self.directyory[key]
 
     def __contains__(self, key):
-        return key in self.directorio
+        return key in self.directyory
 
     def set(self, key, var):
-        self.directorio[key] = var
+        self.directyory[key] = var
 
 
 

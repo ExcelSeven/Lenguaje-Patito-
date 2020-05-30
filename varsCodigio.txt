@@ -1,0 +1,102 @@
+def p_programa(p):
+    """
+    programa : PROGRAM ID SEMICOL programa1
+    """
+    p[0] = 'Compilacion Exitosa'
+    print(p[0])
+
+
+def p_programa1(p):
+    """
+    programa1 : vars
+              | empty
+    """
+
+# def p_global_vars(p):
+#     '''
+#     global_vars : VAR LB vars RB
+#     '''
+
+
+tipo = list()
+lista = list()
+
+def p_vars(p):
+    """
+    vars : VAR tipo vars1
+         | VAR tipo vars2
+         | VAR tipo vars3
+         | VAR tipo vars4
+    """
+    print('aaaaa >> ', p[2])
+
+# var int a;
+def p_vars1(p):
+    """
+    vars1 : ID SEMICOL
+          | ID SEMICOL vars
+    """
+    lista.append(p[1])
+    print('listaVariables >> ', lista)
+
+# var int a = 5;
+def p_vars2(p):
+    """
+    vars2 : ID IS value check_type SEMICOL
+          | ID IS value check_type SEMICOL vars
+    """
+    lista.append(p[1])
+    print('listaVariables >> ', lista)
+
+# var int a,b,c;
+def p_vars3(p):
+    """
+    vars3 : ID COMMA vars3
+          | ID SEMICOL vars
+          | ID SEMICOL
+    """
+    lista.append(p[1])
+    print('listaVariables >> ', lista)
+
+# var int a=0, b=1, c=2;
+def p_vars4(p):
+    """
+    vars4 : ID IS value check_type COMMA vars4
+          | ID IS value check_type SEMICOL vars
+          | ID IS value check_type SEMICOL
+    """
+    lista.append(p[1])
+    print('listaVariables >> ', lista)
+
+def p_tipo(p):
+    """
+    tipo : INT
+        | FLOAT
+        | CHAR
+    """
+    tipo.append(p[1])
+    print('tipo >> ', tipo)
+
+    # global pTipo
+    # pTipo = p[0]
+
+
+listaV = list()
+def p_value(p):
+    """
+    value : CTE_I
+          | CTE_F
+          | CTE_C
+          | ID
+          | empty
+    """
+    listaV.append(p[1])
+    print('listaValores >> ', listaV)
+    #FALTA: if ID no existe en la tabla de variables, error.
+    #if encuentra la variable de p[1], entonces p[0] = .valor
+
+def p_check_type(p):
+    """
+    check_type :
+    """
+    # print("check_type >> ", p[-8])

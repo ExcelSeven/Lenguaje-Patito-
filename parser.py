@@ -78,7 +78,6 @@ def p_vars2(p):
     vt.__set__(p[1], v1)
     #print("VarTable >>  ", vt.__getitem__(p[1]))
 
-
 # var int a,b,c;
 def p_vars3(p):
     """

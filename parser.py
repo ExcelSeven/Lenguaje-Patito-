@@ -362,10 +362,9 @@ def p_expression_var(p):
          | ID matrix
     """
     p[0] = ('var', p[1])
-<<<<<<< HEAD
-=======
+
     #print('hola')
->>>>>>> master
+
 
 
 def p_list_first(p):

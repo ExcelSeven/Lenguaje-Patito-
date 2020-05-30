@@ -1,7 +1,13 @@
 program patito;
+var{
+var int MAR;
+var float HAM=5;
+}
 
-var int a;
-var int b = a;
+
+var int ad;
+var int c = a;
 var int x,h,g;
-var float b = 55, r=66, t=77;
+var float b=55;
+var int q=11, w=12, e=13;
 a=0;

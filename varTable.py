@@ -1,8 +1,9 @@
 class Var:
-    def __init__(self, name, type, valor):
+    def __init__(self, name, type, valor, scope):
         self.name = name
         self.type = type
         self.valor = valor
+        self.scope = scope
         self.is_param = False
         # self.address = 0
 

@@ -20,10 +20,12 @@ Unused terminals:
     FALSE
     FUNCTION
     GEQ
+    GLOBAL
     INPUT
     INVERMATRIZ
     LEQ
     LET
+    LOCAL
     MAIN
     NOT
     OR
@@ -48,130 +50,153 @@ Rule 5     vars -> VAR tipo vars2
 Rule 6     vars -> VAR tipo vars3
 Rule 7     vars -> VAR tipo vars4
 Rule 8     vars -> vars5
-Rule 9     vars1 -> ID SEMICOL
-Rule 10    vars1 -> ID SEMICOL vars
-Rule 11    vars2 -> ID IS value check_type SEMICOL
-Rule 12    vars2 -> ID IS value check_type SEMICOL vars
-Rule 13    vars3 -> ID COMMA vars3
-Rule 14    vars3 -> ID SEMICOL vars
-Rule 15    vars3 -> ID SEMICOL
-Rule 16    vars4 -> ID IS value check_type COMMA vars4
-Rule 17    vars4 -> ID IS value check_type SEMICOL vars
-Rule 18    vars4 -> ID IS value check_type SEMICOL
-Rule 19    vars5 -> ID IS value SEMICOL
-Rule 20    vars5 -> ID IS value SEMICOL vars
-Rule 21    tipo -> INT
-Rule 22    tipo -> FLOAT
-Rule 23    tipo -> CHAR
-Rule 24    value -> CTE_I
-Rule 25    value -> CTE_F
-Rule 26    value -> CTE_C
-Rule 27    value -> ID
-Rule 28    value -> empty
-Rule 29    check_type -> <empty>
-Rule 30    calc -> expr
-Rule 31    calc -> var_assign
-Rule 32    calc -> empty
-Rule 33    calc -> var_lt
-Rule 34    calc -> var_gt
-Rule 35    calc -> var_equal
-Rule 36    calc -> var_neq
-Rule 37    calc -> IF
-Rule 38    calc -> LP
-Rule 39    calc -> row
-Rule 40    calc -> matrix
-Rule 41    var_assign -> ID IS expr
-Rule 42    var_lt -> expr LT expr
-Rule 43    var_gt -> expr GT expr
-Rule 44    var_equal -> expr EQUAL expr
-Rule 45    var_neq -> expr NEQ expr
-Rule 46    expr -> expr MUL expr
-Rule 47    expr -> expr DIV expr
-Rule 48    expr -> expr PLUS expr
-Rule 49    expr -> expr MINUS expr
-Rule 50    expr -> CTE_I
-Rule 51    expr -> CTE_F
-Rule 52    expr -> CTE_C
-Rule 53    expr -> ID
-Rule 54    expr -> ID row
-Rule 55    expr -> ID matrix
-Rule 56    value_list -> expr
-Rule 57    row_list -> row
-Rule 58    row_list -> expr SEMICOL expr
-Rule 59    row -> LC expr RC
-Rule 60    matrix -> row row
-Rule 61    empty -> <empty>
-Rule 62    elseif -> ELSEIF LP expression RP check_bool LB statement RB guarda_salto elseif
-Rule 63    elseif -> ELSEIF LP expression RP check_bool LB statement RB guarda_salto else
-Rule 64    else -> ELSE LB statement RB guarda_salto
-Rule 65    expression -> <empty>
-Rule 66    check_bool -> <empty>
-Rule 67    statement -> <empty>
-Rule 68    guarda_salto -> <empty>
+Rule 9     vars -> varsG
+Rule 10    vars1 -> ID SEMICOL
+Rule 11    vars1 -> ID SEMICOL vars
+Rule 12    vars2 -> ID IS value check_type SEMICOL
+Rule 13    vars2 -> ID IS value check_type SEMICOL vars
+Rule 14    vars3 -> ID COMMA vars3
+Rule 15    vars3 -> ID SEMICOL vars
+Rule 16    vars3 -> ID SEMICOL
+Rule 17    vars4 -> ID IS value check_type COMMA vars4
+Rule 18    vars4 -> ID IS value check_type SEMICOL vars
+Rule 19    vars4 -> ID IS value check_type SEMICOL
+Rule 20    vars4 -> empty
+Rule 21    vars5 -> ID IS value SEMICOL
+Rule 22    vars5 -> ID IS value SEMICOL vars
+Rule 23    varsG -> VAR tipo vars1G
+Rule 24    varsG -> VAR tipo vars2G
+Rule 25    varsG -> VAR tipo vars3G
+Rule 26    varsG -> VAR tipo vars4G
+Rule 27    varsG -> VAR LB varsG RB vars
+Rule 28    varsG -> vars5G
+Rule 29    vars1G -> ID SEMICOL
+Rule 30    vars1G -> ID SEMICOL varsG
+Rule 31    vars2G -> ID IS value check_type SEMICOL
+Rule 32    vars2G -> ID IS value check_type SEMICOL varsG
+Rule 33    vars3G -> ID COMMA vars3G
+Rule 34    vars3G -> ID SEMICOL varsG
+Rule 35    vars3G -> ID SEMICOL
+Rule 36    vars4G -> ID IS value check_type COMMA vars4G
+Rule 37    vars4G -> ID IS value check_type SEMICOL varsG
+Rule 38    vars4G -> ID IS value check_type SEMICOL
+Rule 39    vars4G -> empty
+Rule 40    vars5G -> ID IS value SEMICOL
+Rule 41    vars5G -> ID IS value SEMICOL varsG
+Rule 42    tipo -> INT
+Rule 43    tipo -> FLOAT
+Rule 44    tipo -> CHAR
+Rule 45    value -> CTE_I
+Rule 46    value -> CTE_F
+Rule 47    value -> CTE_C
+Rule 48    value -> ID
+Rule 49    value -> empty
+Rule 50    check_type -> <empty>
+Rule 51    calc -> expr
+Rule 52    calc -> var_assign
+Rule 53    calc -> empty
+Rule 54    calc -> var_lt
+Rule 55    calc -> var_gt
+Rule 56    calc -> var_equal
+Rule 57    calc -> var_neq
+Rule 58    calc -> IF
+Rule 59    calc -> LP
+Rule 60    calc -> row
+Rule 61    calc -> matrix
+Rule 62    var_assign -> ID IS expr
+Rule 63    var_lt -> expr LT expr
+Rule 64    var_gt -> expr GT expr
+Rule 65    var_equal -> expr EQUAL expr
+Rule 66    var_neq -> expr NEQ expr
+Rule 67    expr -> expr MUL expr
+Rule 68    expr -> expr DIV expr
+Rule 69    expr -> expr PLUS expr
+Rule 70    expr -> expr MINUS expr
+Rule 71    expr -> CTE_I
+Rule 72    expr -> CTE_F
+Rule 73    expr -> CTE_C
+Rule 74    expr -> ID
+Rule 75    expr -> ID row
+Rule 76    expr -> ID matrix
+Rule 77    value_list -> expr
+Rule 78    row_list -> row
+Rule 79    row_list -> expr SEMICOL expr
+Rule 80    row -> LC expr RC
+Rule 81    matrix -> row row
+Rule 82    empty -> <empty>
+Rule 83    elseif -> ELSEIF LP expression RP check_bool LB statement RB guarda_salto elseif
+Rule 84    elseif -> ELSEIF LP expression RP check_bool LB statement RB guarda_salto else
+Rule 85    else -> ELSE LB statement RB guarda_salto
+Rule 86    expression -> <empty>
+Rule 87    check_bool -> <empty>
+Rule 88    statement -> <empty>
+Rule 89    guarda_salto -> <empty>
 
 Terminals, with rules where they appear
 
 AND                  : 
 BEGIN                : 
 BOOL                 : 
-CHAR                 : 23
+CHAR                 : 44
 COL                  : 
 COMILLA              : 
 COMILLAS             : 
-COMMA                : 13 16
+COMMA                : 14 17 33 36
 CONST                : 
 CTE_B                : 
-CTE_C                : 26 52
-CTE_F                : 25 51
-CTE_I                : 24 50
+CTE_C                : 47 73
+CTE_F                : 46 72
+CTE_I                : 45 71
 CTE_S                : 
 DETERMATRIZ          : 
-DIV                  : 47
+DIV                  : 68
 DO                   : 
 DOT                  : 
 ELIF                 : 
-ELSE                 : 64
-ELSEIF               : 62 63
+ELSE                 : 85
+ELSEIF               : 83 84
 END                  : 
 EOF                  : 
-EQUAL                : 44
+EQUAL                : 65
 FALSE                : 
-FLOAT                : 22
+FLOAT                : 43
 FUNCTION             : 
 GEQ                  : 
-GT                   : 43
-ID                   : 1 9 10 11 12 13 14 15 16 17 18 19 20 27 41 53 54 55
-IF                   : 37
+GLOBAL               : 
+GT                   : 64
+ID                   : 1 10 11 12 13 14 15 16 17 18 19 21 22 29 30 31 32 33 34 35 36 37 38 40 41 48 62 74 75 76
+IF                   : 58
 INPUT                : 
-INT                  : 21
+INT                  : 42
 INVERMATRIZ          : 
-IS                   : 11 12 16 17 18 19 20 41
-LB                   : 62 63 64
-LC                   : 59
+IS                   : 12 13 17 18 19 21 22 31 32 36 37 38 40 41 62
+LB                   : 27 83 84 85
+LC                   : 80
 LEQ                  : 
 LET                  : 
-LP                   : 38 62 63
-LT                   : 42
+LOCAL                : 
+LP                   : 59 83 84
+LT                   : 63
 MAIN                 : 
-MINUS                : 49
-MUL                  : 46
-NEQ                  : 45
+MINUS                : 70
+MUL                  : 67
+NEQ                  : 66
 NOT                  : 
 OR                   : 
-PLUS                 : 48
+PLUS                 : 69
 PRINT                : 
 PROGRAM              : 1
-RB                   : 62 63 64
-RC                   : 59
+RB                   : 27 83 84 85
+RC                   : 80
 RETURN               : 
-RP                   : 62 63
+RP                   : 83 84
 SELECT               : 
-SEMICOL              : 1 9 10 11 12 14 15 17 18 19 20 58
+SEMICOL              : 1 10 11 12 13 15 16 18 19 21 22 29 30 31 32 34 35 37 38 40 41 79
 SWITCH               : 
 THEN                 : 
 TRANSMATRIZ          : 
 TRUE                 : 
-VAR                  : 4 5 6 7
+VAR                  : 4 5 6 7 23 24 25 26 27
 VOID                 : 
 WHILE                : 
 error                : 
@@ -179,34 +204,40 @@ error                :
 Nonterminals, with rules where they appear
 
 calc                 : 
-check_bool           : 62 63
-check_type           : 11 12 16 17 18
-else                 : 63
-elseif               : 62
-empty                : 3 28 32
-expr                 : 30 41 42 42 43 43 44 44 45 45 46 46 47 47 48 48 49 49 56 58 58 59
-expression           : 62 63
-guarda_salto         : 62 63 64
-matrix               : 40 55
+check_bool           : 83 84
+check_type           : 12 13 17 18 19 31 32 36 37 38
+else                 : 84
+elseif               : 83
+empty                : 3 20 39 49 53
+expr                 : 51 62 63 63 64 64 65 65 66 66 67 67 68 68 69 69 70 70 77 79 79 80
+expression           : 83 84
+guarda_salto         : 83 84 85
+matrix               : 61 76
 programa             : 0
 programa1            : 1
-row                  : 39 54 57 60 60
+row                  : 60 75 78 81 81
 row_list             : 
-statement            : 62 63 64
-tipo                 : 4 5 6 7
-value                : 11 12 16 17 18 19 20
+statement            : 83 84 85
+tipo                 : 4 5 6 7 23 24 25 26
+value                : 12 13 17 18 19 21 22 31 32 36 37 38 40 41
 value_list           : 
-var_assign           : 31
-var_equal            : 35
-var_gt               : 34
-var_lt               : 33
-var_neq              : 36
-vars                 : 2 10 12 14 17 20
+var_assign           : 52
+var_equal            : 56
+var_gt               : 55
+var_lt               : 54
+var_neq              : 57
+vars                 : 2 11 13 15 18 22 27
 vars1                : 4
+vars1G               : 23
 vars2                : 5
-vars3                : 6 13
-vars4                : 7 16
+vars2G               : 24
+vars3                : 6 14
+vars3G               : 25 33
+vars4                : 7 17
+vars4G               : 26 36
 vars5                : 8
+vars5G               : 28
+varsG                : 9 27 30 32 34 37 41
 
 Parsing method: LALR
 
@@ -249,25 +280,38 @@ state 4
     (6) vars -> . VAR tipo vars3
     (7) vars -> . VAR tipo vars4
     (8) vars -> . vars5
-    (61) empty -> .
-    (19) vars5 -> . ID IS value SEMICOL
-    (20) vars5 -> . ID IS value SEMICOL vars
+    (9) vars -> . varsG
+    (82) empty -> .
+    (21) vars5 -> . ID IS value SEMICOL
+    (22) vars5 -> . ID IS value SEMICOL vars
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
 
     VAR             shift and go to state 9
-    $end            reduce using rule 61 (empty -> .)
+    $end            reduce using rule 82 (empty -> .)
     ID              shift and go to state 5
 
     programa1                      shift and go to state 6
     vars                           shift and go to state 7
     empty                          shift and go to state 8
     vars5                          shift and go to state 10
+    varsG                          shift and go to state 11
+    vars5G                         shift and go to state 12
 
 state 5
 
-    (19) vars5 -> ID . IS value SEMICOL
-    (20) vars5 -> ID . IS value SEMICOL vars
+    (21) vars5 -> ID . IS value SEMICOL
+    (22) vars5 -> ID . IS value SEMICOL vars
+    (40) vars5G -> ID . IS value SEMICOL
+    (41) vars5G -> ID . IS value SEMICOL varsG
 
-    IS              shift and go to state 11
+    IS              shift and go to state 13
 
 
 state 6
@@ -297,486 +341,1363 @@ state 9
     (5) vars -> VAR . tipo vars2
     (6) vars -> VAR . tipo vars3
     (7) vars -> VAR . tipo vars4
-    (21) tipo -> . INT
-    (22) tipo -> . FLOAT
-    (23) tipo -> . CHAR
+    (23) varsG -> VAR . tipo vars1G
+    (24) varsG -> VAR . tipo vars2G
+    (25) varsG -> VAR . tipo vars3G
+    (26) varsG -> VAR . tipo vars4G
+    (27) varsG -> VAR . LB varsG RB vars
+    (42) tipo -> . INT
+    (43) tipo -> . FLOAT
+    (44) tipo -> . CHAR
 
-    INT             shift and go to state 13
-    FLOAT           shift and go to state 14
-    CHAR            shift and go to state 15
+    LB              shift and go to state 15
+    INT             shift and go to state 16
+    FLOAT           shift and go to state 17
+    CHAR            shift and go to state 18
 
-    tipo                           shift and go to state 12
+    tipo                           shift and go to state 14
 
 state 10
 
     (8) vars -> vars5 .
 
     $end            reduce using rule 8 (vars -> vars5 .)
+    RB              reduce using rule 8 (vars -> vars5 .)
 
 
 state 11
 
-    (19) vars5 -> ID IS . value SEMICOL
-    (20) vars5 -> ID IS . value SEMICOL vars
-    (24) value -> . CTE_I
-    (25) value -> . CTE_F
-    (26) value -> . CTE_C
-    (27) value -> . ID
-    (28) value -> . empty
-    (61) empty -> .
+    (9) vars -> varsG .
 
-    CTE_I           shift and go to state 18
-    CTE_F           shift and go to state 19
-    CTE_C           shift and go to state 20
-    ID              shift and go to state 16
-    SEMICOL         reduce using rule 61 (empty -> .)
+    $end            reduce using rule 9 (vars -> varsG .)
+    RB              reduce using rule 9 (vars -> varsG .)
 
-    value                          shift and go to state 17
-    empty                          shift and go to state 21
 
 state 12
+
+    (28) varsG -> vars5G .
+
+    $end            reduce using rule 28 (varsG -> vars5G .)
+    RB              reduce using rule 28 (varsG -> vars5G .)
+
+
+state 13
+
+    (21) vars5 -> ID IS . value SEMICOL
+    (22) vars5 -> ID IS . value SEMICOL vars
+    (40) vars5G -> ID IS . value SEMICOL
+    (41) vars5G -> ID IS . value SEMICOL varsG
+    (45) value -> . CTE_I
+    (46) value -> . CTE_F
+    (47) value -> . CTE_C
+    (48) value -> . ID
+    (49) value -> . empty
+    (82) empty -> .
+
+    CTE_I           shift and go to state 21
+    CTE_F           shift and go to state 22
+    CTE_C           shift and go to state 23
+    ID              shift and go to state 19
+    SEMICOL         reduce using rule 82 (empty -> .)
+
+    value                          shift and go to state 20
+    empty                          shift and go to state 24
+
+state 14
 
     (4) vars -> VAR tipo . vars1
     (5) vars -> VAR tipo . vars2
     (6) vars -> VAR tipo . vars3
     (7) vars -> VAR tipo . vars4
-    (9) vars1 -> . ID SEMICOL
-    (10) vars1 -> . ID SEMICOL vars
-    (11) vars2 -> . ID IS value check_type SEMICOL
-    (12) vars2 -> . ID IS value check_type SEMICOL vars
-    (13) vars3 -> . ID COMMA vars3
-    (14) vars3 -> . ID SEMICOL vars
-    (15) vars3 -> . ID SEMICOL
-    (16) vars4 -> . ID IS value check_type COMMA vars4
-    (17) vars4 -> . ID IS value check_type SEMICOL vars
-    (18) vars4 -> . ID IS value check_type SEMICOL
+    (23) varsG -> VAR tipo . vars1G
+    (24) varsG -> VAR tipo . vars2G
+    (25) varsG -> VAR tipo . vars3G
+    (26) varsG -> VAR tipo . vars4G
+    (10) vars1 -> . ID SEMICOL
+    (11) vars1 -> . ID SEMICOL vars
+    (12) vars2 -> . ID IS value check_type SEMICOL
+    (13) vars2 -> . ID IS value check_type SEMICOL vars
+    (14) vars3 -> . ID COMMA vars3
+    (15) vars3 -> . ID SEMICOL vars
+    (16) vars3 -> . ID SEMICOL
+    (17) vars4 -> . ID IS value check_type COMMA vars4
+    (18) vars4 -> . ID IS value check_type SEMICOL vars
+    (19) vars4 -> . ID IS value check_type SEMICOL
+    (20) vars4 -> . empty
+    (29) vars1G -> . ID SEMICOL
+    (30) vars1G -> . ID SEMICOL varsG
+    (31) vars2G -> . ID IS value check_type SEMICOL
+    (32) vars2G -> . ID IS value check_type SEMICOL varsG
+    (33) vars3G -> . ID COMMA vars3G
+    (34) vars3G -> . ID SEMICOL varsG
+    (35) vars3G -> . ID SEMICOL
+    (36) vars4G -> . ID IS value check_type COMMA vars4G
+    (37) vars4G -> . ID IS value check_type SEMICOL varsG
+    (38) vars4G -> . ID IS value check_type SEMICOL
+    (39) vars4G -> . empty
+    (82) empty -> .
 
-    ID              shift and go to state 26
+    ID              shift and go to state 33
+    $end            reduce using rule 82 (empty -> .)
+    RB              reduce using rule 82 (empty -> .)
 
-    vars1                          shift and go to state 22
-    vars2                          shift and go to state 23
-    vars3                          shift and go to state 24
-    vars4                          shift and go to state 25
-
-state 13
-
-    (21) tipo -> INT .
-
-    ID              reduce using rule 21 (tipo -> INT .)
-
-
-state 14
-
-    (22) tipo -> FLOAT .
-
-    ID              reduce using rule 22 (tipo -> FLOAT .)
-
+    vars1                          shift and go to state 25
+    vars2                          shift and go to state 26
+    vars3                          shift and go to state 27
+    vars4                          shift and go to state 28
+    vars1G                         shift and go to state 29
+    vars2G                         shift and go to state 30
+    vars3G                         shift and go to state 31
+    vars4G                         shift and go to state 32
+    empty                          shift and go to state 34
 
 state 15
 
-    (23) tipo -> CHAR .
+    (27) varsG -> VAR LB . varsG RB vars
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
 
-    ID              reduce using rule 23 (tipo -> CHAR .)
+    VAR             shift and go to state 35
+    ID              shift and go to state 37
 
+    varsG                          shift and go to state 36
+    vars5G                         shift and go to state 12
 
 state 16
 
-    (27) value -> ID .
+    (42) tipo -> INT .
 
-    SEMICOL         reduce using rule 27 (value -> ID .)
-    COMMA           reduce using rule 27 (value -> ID .)
+    ID              reduce using rule 42 (tipo -> INT .)
+    $end            reduce using rule 42 (tipo -> INT .)
+    RB              reduce using rule 42 (tipo -> INT .)
 
 
 state 17
 
-    (19) vars5 -> ID IS value . SEMICOL
-    (20) vars5 -> ID IS value . SEMICOL vars
+    (43) tipo -> FLOAT .
 
-    SEMICOL         shift and go to state 27
+    ID              reduce using rule 43 (tipo -> FLOAT .)
+    $end            reduce using rule 43 (tipo -> FLOAT .)
+    RB              reduce using rule 43 (tipo -> FLOAT .)
 
 
 state 18
 
-    (24) value -> CTE_I .
+    (44) tipo -> CHAR .
 
-    SEMICOL         reduce using rule 24 (value -> CTE_I .)
-    COMMA           reduce using rule 24 (value -> CTE_I .)
+    ID              reduce using rule 44 (tipo -> CHAR .)
+    $end            reduce using rule 44 (tipo -> CHAR .)
+    RB              reduce using rule 44 (tipo -> CHAR .)
 
 
 state 19
 
-    (25) value -> CTE_F .
+    (48) value -> ID .
 
-    SEMICOL         reduce using rule 25 (value -> CTE_F .)
-    COMMA           reduce using rule 25 (value -> CTE_F .)
+    SEMICOL         reduce using rule 48 (value -> ID .)
+    COMMA           reduce using rule 48 (value -> ID .)
 
 
 state 20
 
-    (26) value -> CTE_C .
+    (21) vars5 -> ID IS value . SEMICOL
+    (22) vars5 -> ID IS value . SEMICOL vars
+    (40) vars5G -> ID IS value . SEMICOL
+    (41) vars5G -> ID IS value . SEMICOL varsG
 
-    SEMICOL         reduce using rule 26 (value -> CTE_C .)
-    COMMA           reduce using rule 26 (value -> CTE_C .)
+    SEMICOL         shift and go to state 38
 
 
 state 21
 
-    (28) value -> empty .
+    (45) value -> CTE_I .
 
-    SEMICOL         reduce using rule 28 (value -> empty .)
-    COMMA           reduce using rule 28 (value -> empty .)
+    SEMICOL         reduce using rule 45 (value -> CTE_I .)
+    COMMA           reduce using rule 45 (value -> CTE_I .)
 
 
 state 22
 
-    (4) vars -> VAR tipo vars1 .
+    (46) value -> CTE_F .
 
-    $end            reduce using rule 4 (vars -> VAR tipo vars1 .)
+    SEMICOL         reduce using rule 46 (value -> CTE_F .)
+    COMMA           reduce using rule 46 (value -> CTE_F .)
 
 
 state 23
 
-    (5) vars -> VAR tipo vars2 .
+    (47) value -> CTE_C .
 
-    $end            reduce using rule 5 (vars -> VAR tipo vars2 .)
+    SEMICOL         reduce using rule 47 (value -> CTE_C .)
+    COMMA           reduce using rule 47 (value -> CTE_C .)
 
 
 state 24
 
-    (6) vars -> VAR tipo vars3 .
+    (49) value -> empty .
 
-    $end            reduce using rule 6 (vars -> VAR tipo vars3 .)
+    SEMICOL         reduce using rule 49 (value -> empty .)
+    COMMA           reduce using rule 49 (value -> empty .)
 
 
 state 25
 
-    (7) vars -> VAR tipo vars4 .
+    (4) vars -> VAR tipo vars1 .
 
-    $end            reduce using rule 7 (vars -> VAR tipo vars4 .)
+    $end            reduce using rule 4 (vars -> VAR tipo vars1 .)
+    RB              reduce using rule 4 (vars -> VAR tipo vars1 .)
 
 
 state 26
 
-    (9) vars1 -> ID . SEMICOL
-    (10) vars1 -> ID . SEMICOL vars
-    (11) vars2 -> ID . IS value check_type SEMICOL
-    (12) vars2 -> ID . IS value check_type SEMICOL vars
-    (13) vars3 -> ID . COMMA vars3
-    (14) vars3 -> ID . SEMICOL vars
-    (15) vars3 -> ID . SEMICOL
-    (16) vars4 -> ID . IS value check_type COMMA vars4
-    (17) vars4 -> ID . IS value check_type SEMICOL vars
-    (18) vars4 -> ID . IS value check_type SEMICOL
+    (5) vars -> VAR tipo vars2 .
 
-    SEMICOL         shift and go to state 28
-    IS              shift and go to state 29
-    COMMA           shift and go to state 30
+    $end            reduce using rule 5 (vars -> VAR tipo vars2 .)
+    RB              reduce using rule 5 (vars -> VAR tipo vars2 .)
 
 
 state 27
 
-    (19) vars5 -> ID IS value SEMICOL .
-    (20) vars5 -> ID IS value SEMICOL . vars
-    (4) vars -> . VAR tipo vars1
-    (5) vars -> . VAR tipo vars2
-    (6) vars -> . VAR tipo vars3
-    (7) vars -> . VAR tipo vars4
-    (8) vars -> . vars5
-    (19) vars5 -> . ID IS value SEMICOL
-    (20) vars5 -> . ID IS value SEMICOL vars
+    (6) vars -> VAR tipo vars3 .
 
-    $end            reduce using rule 19 (vars5 -> ID IS value SEMICOL .)
-    VAR             shift and go to state 9
-    ID              shift and go to state 5
+    $end            reduce using rule 6 (vars -> VAR tipo vars3 .)
+    RB              reduce using rule 6 (vars -> VAR tipo vars3 .)
 
-    vars                           shift and go to state 31
-    vars5                          shift and go to state 10
 
 state 28
 
-    (9) vars1 -> ID SEMICOL .
-    (10) vars1 -> ID SEMICOL . vars
-    (14) vars3 -> ID SEMICOL . vars
-    (15) vars3 -> ID SEMICOL .
-    (4) vars -> . VAR tipo vars1
-    (5) vars -> . VAR tipo vars2
-    (6) vars -> . VAR tipo vars3
-    (7) vars -> . VAR tipo vars4
-    (8) vars -> . vars5
-    (19) vars5 -> . ID IS value SEMICOL
-    (20) vars5 -> . ID IS value SEMICOL vars
+    (7) vars -> VAR tipo vars4 .
 
-  ! reduce/reduce conflict for $end resolved using rule 9 (vars1 -> ID SEMICOL .)
-    $end            reduce using rule 9 (vars1 -> ID SEMICOL .)
-    VAR             shift and go to state 9
-    ID              shift and go to state 5
+    $end            reduce using rule 7 (vars -> VAR tipo vars4 .)
+    RB              reduce using rule 7 (vars -> VAR tipo vars4 .)
 
-  ! $end            [ reduce using rule 15 (vars3 -> ID SEMICOL .) ]
-
-    vars                           shift and go to state 32
-    vars5                          shift and go to state 10
 
 state 29
 
-    (11) vars2 -> ID IS . value check_type SEMICOL
-    (12) vars2 -> ID IS . value check_type SEMICOL vars
-    (16) vars4 -> ID IS . value check_type COMMA vars4
-    (17) vars4 -> ID IS . value check_type SEMICOL vars
-    (18) vars4 -> ID IS . value check_type SEMICOL
-    (24) value -> . CTE_I
-    (25) value -> . CTE_F
-    (26) value -> . CTE_C
-    (27) value -> . ID
-    (28) value -> . empty
-    (61) empty -> .
+    (23) varsG -> VAR tipo vars1G .
 
-    CTE_I           shift and go to state 18
-    CTE_F           shift and go to state 19
-    CTE_C           shift and go to state 20
-    ID              shift and go to state 16
-    SEMICOL         reduce using rule 61 (empty -> .)
-    COMMA           reduce using rule 61 (empty -> .)
+    $end            reduce using rule 23 (varsG -> VAR tipo vars1G .)
+    RB              reduce using rule 23 (varsG -> VAR tipo vars1G .)
 
-    value                          shift and go to state 33
-    empty                          shift and go to state 21
 
 state 30
 
-    (13) vars3 -> ID COMMA . vars3
-    (13) vars3 -> . ID COMMA vars3
-    (14) vars3 -> . ID SEMICOL vars
-    (15) vars3 -> . ID SEMICOL
+    (24) varsG -> VAR tipo vars2G .
 
-    ID              shift and go to state 34
+    $end            reduce using rule 24 (varsG -> VAR tipo vars2G .)
+    RB              reduce using rule 24 (varsG -> VAR tipo vars2G .)
 
-    vars3                          shift and go to state 35
 
 state 31
 
-    (20) vars5 -> ID IS value SEMICOL vars .
+    (25) varsG -> VAR tipo vars3G .
 
-    $end            reduce using rule 20 (vars5 -> ID IS value SEMICOL vars .)
+    $end            reduce using rule 25 (varsG -> VAR tipo vars3G .)
+    RB              reduce using rule 25 (varsG -> VAR tipo vars3G .)
 
 
 state 32
 
-    (10) vars1 -> ID SEMICOL vars .
-    (14) vars3 -> ID SEMICOL vars .
+    (26) varsG -> VAR tipo vars4G .
 
-  ! reduce/reduce conflict for $end resolved using rule 10 (vars1 -> ID SEMICOL vars .)
-    $end            reduce using rule 10 (vars1 -> ID SEMICOL vars .)
-
-  ! $end            [ reduce using rule 14 (vars3 -> ID SEMICOL vars .) ]
+    $end            reduce using rule 26 (varsG -> VAR tipo vars4G .)
+    RB              reduce using rule 26 (varsG -> VAR tipo vars4G .)
 
 
 state 33
 
-    (11) vars2 -> ID IS value . check_type SEMICOL
-    (12) vars2 -> ID IS value . check_type SEMICOL vars
-    (16) vars4 -> ID IS value . check_type COMMA vars4
-    (17) vars4 -> ID IS value . check_type SEMICOL vars
-    (18) vars4 -> ID IS value . check_type SEMICOL
-    (29) check_type -> .
+    (10) vars1 -> ID . SEMICOL
+    (11) vars1 -> ID . SEMICOL vars
+    (12) vars2 -> ID . IS value check_type SEMICOL
+    (13) vars2 -> ID . IS value check_type SEMICOL vars
+    (14) vars3 -> ID . COMMA vars3
+    (15) vars3 -> ID . SEMICOL vars
+    (16) vars3 -> ID . SEMICOL
+    (17) vars4 -> ID . IS value check_type COMMA vars4
+    (18) vars4 -> ID . IS value check_type SEMICOL vars
+    (19) vars4 -> ID . IS value check_type SEMICOL
+    (29) vars1G -> ID . SEMICOL
+    (30) vars1G -> ID . SEMICOL varsG
+    (31) vars2G -> ID . IS value check_type SEMICOL
+    (32) vars2G -> ID . IS value check_type SEMICOL varsG
+    (33) vars3G -> ID . COMMA vars3G
+    (34) vars3G -> ID . SEMICOL varsG
+    (35) vars3G -> ID . SEMICOL
+    (36) vars4G -> ID . IS value check_type COMMA vars4G
+    (37) vars4G -> ID . IS value check_type SEMICOL varsG
+    (38) vars4G -> ID . IS value check_type SEMICOL
 
-    SEMICOL         reduce using rule 29 (check_type -> .)
-    COMMA           reduce using rule 29 (check_type -> .)
+    SEMICOL         shift and go to state 39
+    IS              shift and go to state 40
+    COMMA           shift and go to state 41
 
-    check_type                     shift and go to state 36
 
 state 34
 
-    (13) vars3 -> ID . COMMA vars3
-    (14) vars3 -> ID . SEMICOL vars
-    (15) vars3 -> ID . SEMICOL
+    (20) vars4 -> empty .
+    (39) vars4G -> empty .
 
-    COMMA           shift and go to state 30
-    SEMICOL         shift and go to state 37
+  ! reduce/reduce conflict for $end resolved using rule 20 (vars4 -> empty .)
+  ! reduce/reduce conflict for RB resolved using rule 20 (vars4 -> empty .)
+    $end            reduce using rule 20 (vars4 -> empty .)
+    RB              reduce using rule 20 (vars4 -> empty .)
+
+  ! $end            [ reduce using rule 39 (vars4G -> empty .) ]
+  ! RB              [ reduce using rule 39 (vars4G -> empty .) ]
 
 
 state 35
 
-    (13) vars3 -> ID COMMA vars3 .
+    (23) varsG -> VAR . tipo vars1G
+    (24) varsG -> VAR . tipo vars2G
+    (25) varsG -> VAR . tipo vars3G
+    (26) varsG -> VAR . tipo vars4G
+    (27) varsG -> VAR . LB varsG RB vars
+    (42) tipo -> . INT
+    (43) tipo -> . FLOAT
+    (44) tipo -> . CHAR
 
-    $end            reduce using rule 13 (vars3 -> ID COMMA vars3 .)
+    LB              shift and go to state 15
+    INT             shift and go to state 16
+    FLOAT           shift and go to state 17
+    CHAR            shift and go to state 18
 
+    tipo                           shift and go to state 42
 
 state 36
 
-    (11) vars2 -> ID IS value check_type . SEMICOL
-    (12) vars2 -> ID IS value check_type . SEMICOL vars
-    (16) vars4 -> ID IS value check_type . COMMA vars4
-    (17) vars4 -> ID IS value check_type . SEMICOL vars
-    (18) vars4 -> ID IS value check_type . SEMICOL
+    (27) varsG -> VAR LB varsG . RB vars
 
-    SEMICOL         shift and go to state 38
-    COMMA           shift and go to state 39
+    RB              shift and go to state 43
 
 
 state 37
 
-    (14) vars3 -> ID SEMICOL . vars
-    (15) vars3 -> ID SEMICOL .
-    (4) vars -> . VAR tipo vars1
-    (5) vars -> . VAR tipo vars2
-    (6) vars -> . VAR tipo vars3
-    (7) vars -> . VAR tipo vars4
-    (8) vars -> . vars5
-    (19) vars5 -> . ID IS value SEMICOL
-    (20) vars5 -> . ID IS value SEMICOL vars
-
-    $end            reduce using rule 15 (vars3 -> ID SEMICOL .)
-    VAR             shift and go to state 9
-    ID              shift and go to state 5
-
-    vars                           shift and go to state 40
-    vars5                          shift and go to state 10
-
-state 38
-
-    (11) vars2 -> ID IS value check_type SEMICOL .
-    (12) vars2 -> ID IS value check_type SEMICOL . vars
-    (17) vars4 -> ID IS value check_type SEMICOL . vars
-    (18) vars4 -> ID IS value check_type SEMICOL .
-    (4) vars -> . VAR tipo vars1
-    (5) vars -> . VAR tipo vars2
-    (6) vars -> . VAR tipo vars3
-    (7) vars -> . VAR tipo vars4
-    (8) vars -> . vars5
-    (19) vars5 -> . ID IS value SEMICOL
-    (20) vars5 -> . ID IS value SEMICOL vars
-
-  ! reduce/reduce conflict for $end resolved using rule 11 (vars2 -> ID IS value check_type SEMICOL .)
-    $end            reduce using rule 11 (vars2 -> ID IS value check_type SEMICOL .)
-    VAR             shift and go to state 9
-    ID              shift and go to state 5
-
-  ! $end            [ reduce using rule 18 (vars4 -> ID IS value check_type SEMICOL .) ]
-
-    vars                           shift and go to state 41
-    vars5                          shift and go to state 10
-
-state 39
-
-    (16) vars4 -> ID IS value check_type COMMA . vars4
-    (16) vars4 -> . ID IS value check_type COMMA vars4
-    (17) vars4 -> . ID IS value check_type SEMICOL vars
-    (18) vars4 -> . ID IS value check_type SEMICOL
-
-    ID              shift and go to state 42
-
-    vars4                          shift and go to state 43
-
-state 40
-
-    (14) vars3 -> ID SEMICOL vars .
-
-    $end            reduce using rule 14 (vars3 -> ID SEMICOL vars .)
-
-
-state 41
-
-    (12) vars2 -> ID IS value check_type SEMICOL vars .
-    (17) vars4 -> ID IS value check_type SEMICOL vars .
-
-  ! reduce/reduce conflict for $end resolved using rule 12 (vars2 -> ID IS value check_type SEMICOL vars .)
-    $end            reduce using rule 12 (vars2 -> ID IS value check_type SEMICOL vars .)
-
-  ! $end            [ reduce using rule 17 (vars4 -> ID IS value check_type SEMICOL vars .) ]
-
-
-state 42
-
-    (16) vars4 -> ID . IS value check_type COMMA vars4
-    (17) vars4 -> ID . IS value check_type SEMICOL vars
-    (18) vars4 -> ID . IS value check_type SEMICOL
+    (40) vars5G -> ID . IS value SEMICOL
+    (41) vars5G -> ID . IS value SEMICOL varsG
 
     IS              shift and go to state 44
 
 
-state 43
+state 38
 
-    (16) vars4 -> ID IS value check_type COMMA vars4 .
-
-    $end            reduce using rule 16 (vars4 -> ID IS value check_type COMMA vars4 .)
-
-
-state 44
-
-    (16) vars4 -> ID IS . value check_type COMMA vars4
-    (17) vars4 -> ID IS . value check_type SEMICOL vars
-    (18) vars4 -> ID IS . value check_type SEMICOL
-    (24) value -> . CTE_I
-    (25) value -> . CTE_F
-    (26) value -> . CTE_C
-    (27) value -> . ID
-    (28) value -> . empty
-    (61) empty -> .
-
-    CTE_I           shift and go to state 18
-    CTE_F           shift and go to state 19
-    CTE_C           shift and go to state 20
-    ID              shift and go to state 16
-    COMMA           reduce using rule 61 (empty -> .)
-    SEMICOL         reduce using rule 61 (empty -> .)
-
-    value                          shift and go to state 45
-    empty                          shift and go to state 21
-
-state 45
-
-    (16) vars4 -> ID IS value . check_type COMMA vars4
-    (17) vars4 -> ID IS value . check_type SEMICOL vars
-    (18) vars4 -> ID IS value . check_type SEMICOL
-    (29) check_type -> .
-
-    COMMA           reduce using rule 29 (check_type -> .)
-    SEMICOL         reduce using rule 29 (check_type -> .)
-
-    check_type                     shift and go to state 46
-
-state 46
-
-    (16) vars4 -> ID IS value check_type . COMMA vars4
-    (17) vars4 -> ID IS value check_type . SEMICOL vars
-    (18) vars4 -> ID IS value check_type . SEMICOL
-
-    COMMA           shift and go to state 39
-    SEMICOL         shift and go to state 47
-
-
-state 47
-
-    (17) vars4 -> ID IS value check_type SEMICOL . vars
-    (18) vars4 -> ID IS value check_type SEMICOL .
+    (21) vars5 -> ID IS value SEMICOL .
+    (22) vars5 -> ID IS value SEMICOL . vars
+    (40) vars5G -> ID IS value SEMICOL .
+    (41) vars5G -> ID IS value SEMICOL . varsG
     (4) vars -> . VAR tipo vars1
     (5) vars -> . VAR tipo vars2
     (6) vars -> . VAR tipo vars3
     (7) vars -> . VAR tipo vars4
     (8) vars -> . vars5
-    (19) vars5 -> . ID IS value SEMICOL
-    (20) vars5 -> . ID IS value SEMICOL vars
+    (9) vars -> . varsG
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (21) vars5 -> . ID IS value SEMICOL
+    (22) vars5 -> . ID IS value SEMICOL vars
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
 
-    $end            reduce using rule 18 (vars4 -> ID IS value check_type SEMICOL .)
+  ! reduce/reduce conflict for $end resolved using rule 21 (vars5 -> ID IS value SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 21 (vars5 -> ID IS value SEMICOL .)
+    $end            reduce using rule 21 (vars5 -> ID IS value SEMICOL .)
+    RB              reduce using rule 21 (vars5 -> ID IS value SEMICOL .)
     VAR             shift and go to state 9
     ID              shift and go to state 5
 
-    vars                           shift and go to state 48
+  ! $end            [ reduce using rule 40 (vars5G -> ID IS value SEMICOL .) ]
+  ! RB              [ reduce using rule 40 (vars5G -> ID IS value SEMICOL .) ]
+
+    vars                           shift and go to state 45
+    varsG                          shift and go to state 46
     vars5                          shift and go to state 10
+    vars5G                         shift and go to state 12
+
+state 39
+
+    (10) vars1 -> ID SEMICOL .
+    (11) vars1 -> ID SEMICOL . vars
+    (15) vars3 -> ID SEMICOL . vars
+    (16) vars3 -> ID SEMICOL .
+    (29) vars1G -> ID SEMICOL .
+    (30) vars1G -> ID SEMICOL . varsG
+    (34) vars3G -> ID SEMICOL . varsG
+    (35) vars3G -> ID SEMICOL .
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (9) vars -> . varsG
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (21) vars5 -> . ID IS value SEMICOL
+    (22) vars5 -> . ID IS value SEMICOL vars
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+  ! reduce/reduce conflict for $end resolved using rule 10 (vars1 -> ID SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 10 (vars1 -> ID SEMICOL .)
+  ! reduce/reduce conflict for $end resolved using rule 10 (vars1 -> ID SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 10 (vars1 -> ID SEMICOL .)
+  ! reduce/reduce conflict for $end resolved using rule 10 (vars1 -> ID SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 10 (vars1 -> ID SEMICOL .)
+    $end            reduce using rule 10 (vars1 -> ID SEMICOL .)
+    RB              reduce using rule 10 (vars1 -> ID SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+  ! $end            [ reduce using rule 16 (vars3 -> ID SEMICOL .) ]
+  ! RB              [ reduce using rule 16 (vars3 -> ID SEMICOL .) ]
+  ! $end            [ reduce using rule 29 (vars1G -> ID SEMICOL .) ]
+  ! RB              [ reduce using rule 29 (vars1G -> ID SEMICOL .) ]
+  ! $end            [ reduce using rule 35 (vars3G -> ID SEMICOL .) ]
+  ! RB              [ reduce using rule 35 (vars3G -> ID SEMICOL .) ]
+
+    vars                           shift and go to state 47
+    varsG                          shift and go to state 48
+    vars5                          shift and go to state 10
+    vars5G                         shift and go to state 12
+
+state 40
+
+    (12) vars2 -> ID IS . value check_type SEMICOL
+    (13) vars2 -> ID IS . value check_type SEMICOL vars
+    (17) vars4 -> ID IS . value check_type COMMA vars4
+    (18) vars4 -> ID IS . value check_type SEMICOL vars
+    (19) vars4 -> ID IS . value check_type SEMICOL
+    (31) vars2G -> ID IS . value check_type SEMICOL
+    (32) vars2G -> ID IS . value check_type SEMICOL varsG
+    (36) vars4G -> ID IS . value check_type COMMA vars4G
+    (37) vars4G -> ID IS . value check_type SEMICOL varsG
+    (38) vars4G -> ID IS . value check_type SEMICOL
+    (45) value -> . CTE_I
+    (46) value -> . CTE_F
+    (47) value -> . CTE_C
+    (48) value -> . ID
+    (49) value -> . empty
+    (82) empty -> .
+
+    CTE_I           shift and go to state 21
+    CTE_F           shift and go to state 22
+    CTE_C           shift and go to state 23
+    ID              shift and go to state 19
+    SEMICOL         reduce using rule 82 (empty -> .)
+    COMMA           reduce using rule 82 (empty -> .)
+
+    value                          shift and go to state 49
+    empty                          shift and go to state 24
+
+state 41
+
+    (14) vars3 -> ID COMMA . vars3
+    (33) vars3G -> ID COMMA . vars3G
+    (14) vars3 -> . ID COMMA vars3
+    (15) vars3 -> . ID SEMICOL vars
+    (16) vars3 -> . ID SEMICOL
+    (33) vars3G -> . ID COMMA vars3G
+    (34) vars3G -> . ID SEMICOL varsG
+    (35) vars3G -> . ID SEMICOL
+
+    ID              shift and go to state 50
+
+    vars3                          shift and go to state 51
+    vars3G                         shift and go to state 52
+
+state 42
+
+    (23) varsG -> VAR tipo . vars1G
+    (24) varsG -> VAR tipo . vars2G
+    (25) varsG -> VAR tipo . vars3G
+    (26) varsG -> VAR tipo . vars4G
+    (29) vars1G -> . ID SEMICOL
+    (30) vars1G -> . ID SEMICOL varsG
+    (31) vars2G -> . ID IS value check_type SEMICOL
+    (32) vars2G -> . ID IS value check_type SEMICOL varsG
+    (33) vars3G -> . ID COMMA vars3G
+    (34) vars3G -> . ID SEMICOL varsG
+    (35) vars3G -> . ID SEMICOL
+    (36) vars4G -> . ID IS value check_type COMMA vars4G
+    (37) vars4G -> . ID IS value check_type SEMICOL varsG
+    (38) vars4G -> . ID IS value check_type SEMICOL
+    (39) vars4G -> . empty
+    (82) empty -> .
+
+    ID              shift and go to state 53
+    RB              reduce using rule 82 (empty -> .)
+
+    vars1G                         shift and go to state 29
+    vars2G                         shift and go to state 30
+    vars3G                         shift and go to state 31
+    vars4G                         shift and go to state 32
+    empty                          shift and go to state 54
+
+state 43
+
+    (27) varsG -> VAR LB varsG RB . vars
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (9) vars -> . varsG
+    (21) vars5 -> . ID IS value SEMICOL
+    (22) vars5 -> . ID IS value SEMICOL vars
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+    varsG                          shift and go to state 11
+    vars                           shift and go to state 55
+    vars5                          shift and go to state 10
+    vars5G                         shift and go to state 12
+
+state 44
+
+    (40) vars5G -> ID IS . value SEMICOL
+    (41) vars5G -> ID IS . value SEMICOL varsG
+    (45) value -> . CTE_I
+    (46) value -> . CTE_F
+    (47) value -> . CTE_C
+    (48) value -> . ID
+    (49) value -> . empty
+    (82) empty -> .
+
+    CTE_I           shift and go to state 21
+    CTE_F           shift and go to state 22
+    CTE_C           shift and go to state 23
+    ID              shift and go to state 19
+    SEMICOL         reduce using rule 82 (empty -> .)
+
+    value                          shift and go to state 56
+    empty                          shift and go to state 24
+
+state 45
+
+    (22) vars5 -> ID IS value SEMICOL vars .
+
+    $end            reduce using rule 22 (vars5 -> ID IS value SEMICOL vars .)
+    RB              reduce using rule 22 (vars5 -> ID IS value SEMICOL vars .)
+
+
+state 46
+
+    (41) vars5G -> ID IS value SEMICOL varsG .
+    (9) vars -> varsG .
+
+  ! reduce/reduce conflict for $end resolved using rule 9 (vars -> varsG .)
+  ! reduce/reduce conflict for RB resolved using rule 9 (vars -> varsG .)
+    $end            reduce using rule 9 (vars -> varsG .)
+    RB              reduce using rule 9 (vars -> varsG .)
+
+  ! $end            [ reduce using rule 41 (vars5G -> ID IS value SEMICOL varsG .) ]
+  ! RB              [ reduce using rule 41 (vars5G -> ID IS value SEMICOL varsG .) ]
+
+
+state 47
+
+    (11) vars1 -> ID SEMICOL vars .
+    (15) vars3 -> ID SEMICOL vars .
+
+  ! reduce/reduce conflict for $end resolved using rule 11 (vars1 -> ID SEMICOL vars .)
+  ! reduce/reduce conflict for RB resolved using rule 11 (vars1 -> ID SEMICOL vars .)
+    $end            reduce using rule 11 (vars1 -> ID SEMICOL vars .)
+    RB              reduce using rule 11 (vars1 -> ID SEMICOL vars .)
+
+  ! $end            [ reduce using rule 15 (vars3 -> ID SEMICOL vars .) ]
+  ! RB              [ reduce using rule 15 (vars3 -> ID SEMICOL vars .) ]
+
 
 state 48
 
-    (17) vars4 -> ID IS value check_type SEMICOL vars .
+    (30) vars1G -> ID SEMICOL varsG .
+    (34) vars3G -> ID SEMICOL varsG .
+    (9) vars -> varsG .
 
-    $end            reduce using rule 17 (vars4 -> ID IS value check_type SEMICOL vars .)
+  ! reduce/reduce conflict for $end resolved using rule 30 (vars1G -> ID SEMICOL varsG .)
+  ! reduce/reduce conflict for RB resolved using rule 30 (vars1G -> ID SEMICOL varsG .)
+  ! reduce/reduce conflict for $end resolved using rule 9 (vars -> varsG .)
+  ! reduce/reduce conflict for RB resolved using rule 9 (vars -> varsG .)
+    $end            reduce using rule 9 (vars -> varsG .)
+    RB              reduce using rule 9 (vars -> varsG .)
+
+  ! $end            [ reduce using rule 30 (vars1G -> ID SEMICOL varsG .) ]
+  ! RB              [ reduce using rule 30 (vars1G -> ID SEMICOL varsG .) ]
+  ! $end            [ reduce using rule 34 (vars3G -> ID SEMICOL varsG .) ]
+  ! RB              [ reduce using rule 34 (vars3G -> ID SEMICOL varsG .) ]
+
+
+state 49
+
+    (12) vars2 -> ID IS value . check_type SEMICOL
+    (13) vars2 -> ID IS value . check_type SEMICOL vars
+    (17) vars4 -> ID IS value . check_type COMMA vars4
+    (18) vars4 -> ID IS value . check_type SEMICOL vars
+    (19) vars4 -> ID IS value . check_type SEMICOL
+    (31) vars2G -> ID IS value . check_type SEMICOL
+    (32) vars2G -> ID IS value . check_type SEMICOL varsG
+    (36) vars4G -> ID IS value . check_type COMMA vars4G
+    (37) vars4G -> ID IS value . check_type SEMICOL varsG
+    (38) vars4G -> ID IS value . check_type SEMICOL
+    (50) check_type -> .
+
+    SEMICOL         reduce using rule 50 (check_type -> .)
+    COMMA           reduce using rule 50 (check_type -> .)
+
+    check_type                     shift and go to state 57
+
+state 50
+
+    (14) vars3 -> ID . COMMA vars3
+    (15) vars3 -> ID . SEMICOL vars
+    (16) vars3 -> ID . SEMICOL
+    (33) vars3G -> ID . COMMA vars3G
+    (34) vars3G -> ID . SEMICOL varsG
+    (35) vars3G -> ID . SEMICOL
+
+    COMMA           shift and go to state 41
+    SEMICOL         shift and go to state 58
+
+
+state 51
+
+    (14) vars3 -> ID COMMA vars3 .
+
+    $end            reduce using rule 14 (vars3 -> ID COMMA vars3 .)
+    RB              reduce using rule 14 (vars3 -> ID COMMA vars3 .)
+
+
+state 52
+
+    (33) vars3G -> ID COMMA vars3G .
+
+    $end            reduce using rule 33 (vars3G -> ID COMMA vars3G .)
+    RB              reduce using rule 33 (vars3G -> ID COMMA vars3G .)
+
+
+state 53
+
+    (29) vars1G -> ID . SEMICOL
+    (30) vars1G -> ID . SEMICOL varsG
+    (31) vars2G -> ID . IS value check_type SEMICOL
+    (32) vars2G -> ID . IS value check_type SEMICOL varsG
+    (33) vars3G -> ID . COMMA vars3G
+    (34) vars3G -> ID . SEMICOL varsG
+    (35) vars3G -> ID . SEMICOL
+    (36) vars4G -> ID . IS value check_type COMMA vars4G
+    (37) vars4G -> ID . IS value check_type SEMICOL varsG
+    (38) vars4G -> ID . IS value check_type SEMICOL
+
+    SEMICOL         shift and go to state 59
+    IS              shift and go to state 60
+    COMMA           shift and go to state 61
+
+
+state 54
+
+    (39) vars4G -> empty .
+
+    RB              reduce using rule 39 (vars4G -> empty .)
+
+
+state 55
+
+    (27) varsG -> VAR LB varsG RB vars .
+
+    $end            reduce using rule 27 (varsG -> VAR LB varsG RB vars .)
+    RB              reduce using rule 27 (varsG -> VAR LB varsG RB vars .)
+
+
+state 56
+
+    (40) vars5G -> ID IS value . SEMICOL
+    (41) vars5G -> ID IS value . SEMICOL varsG
+
+    SEMICOL         shift and go to state 62
+
+
+state 57
+
+    (12) vars2 -> ID IS value check_type . SEMICOL
+    (13) vars2 -> ID IS value check_type . SEMICOL vars
+    (17) vars4 -> ID IS value check_type . COMMA vars4
+    (18) vars4 -> ID IS value check_type . SEMICOL vars
+    (19) vars4 -> ID IS value check_type . SEMICOL
+    (31) vars2G -> ID IS value check_type . SEMICOL
+    (32) vars2G -> ID IS value check_type . SEMICOL varsG
+    (36) vars4G -> ID IS value check_type . COMMA vars4G
+    (37) vars4G -> ID IS value check_type . SEMICOL varsG
+    (38) vars4G -> ID IS value check_type . SEMICOL
+
+    SEMICOL         shift and go to state 63
+    COMMA           shift and go to state 64
+
+
+state 58
+
+    (15) vars3 -> ID SEMICOL . vars
+    (16) vars3 -> ID SEMICOL .
+    (34) vars3G -> ID SEMICOL . varsG
+    (35) vars3G -> ID SEMICOL .
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (9) vars -> . varsG
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (21) vars5 -> . ID IS value SEMICOL
+    (22) vars5 -> . ID IS value SEMICOL vars
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+  ! reduce/reduce conflict for $end resolved using rule 16 (vars3 -> ID SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 16 (vars3 -> ID SEMICOL .)
+    $end            reduce using rule 16 (vars3 -> ID SEMICOL .)
+    RB              reduce using rule 16 (vars3 -> ID SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+  ! $end            [ reduce using rule 35 (vars3G -> ID SEMICOL .) ]
+  ! RB              [ reduce using rule 35 (vars3G -> ID SEMICOL .) ]
+
+    vars                           shift and go to state 65
+    varsG                          shift and go to state 66
+    vars5                          shift and go to state 10
+    vars5G                         shift and go to state 12
+
+state 59
+
+    (29) vars1G -> ID SEMICOL .
+    (30) vars1G -> ID SEMICOL . varsG
+    (34) vars3G -> ID SEMICOL . varsG
+    (35) vars3G -> ID SEMICOL .
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+  ! reduce/reduce conflict for RB resolved using rule 29 (vars1G -> ID SEMICOL .)
+    RB              reduce using rule 29 (vars1G -> ID SEMICOL .)
+    VAR             shift and go to state 35
+    ID              shift and go to state 37
+
+  ! RB              [ reduce using rule 35 (vars3G -> ID SEMICOL .) ]
+
+    varsG                          shift and go to state 67
+    vars5G                         shift and go to state 12
+
+state 60
+
+    (31) vars2G -> ID IS . value check_type SEMICOL
+    (32) vars2G -> ID IS . value check_type SEMICOL varsG
+    (36) vars4G -> ID IS . value check_type COMMA vars4G
+    (37) vars4G -> ID IS . value check_type SEMICOL varsG
+    (38) vars4G -> ID IS . value check_type SEMICOL
+    (45) value -> . CTE_I
+    (46) value -> . CTE_F
+    (47) value -> . CTE_C
+    (48) value -> . ID
+    (49) value -> . empty
+    (82) empty -> .
+
+    CTE_I           shift and go to state 21
+    CTE_F           shift and go to state 22
+    CTE_C           shift and go to state 23
+    ID              shift and go to state 19
+    SEMICOL         reduce using rule 82 (empty -> .)
+    COMMA           reduce using rule 82 (empty -> .)
+
+    value                          shift and go to state 68
+    empty                          shift and go to state 24
+
+state 61
+
+    (33) vars3G -> ID COMMA . vars3G
+    (33) vars3G -> . ID COMMA vars3G
+    (34) vars3G -> . ID SEMICOL varsG
+    (35) vars3G -> . ID SEMICOL
+
+    ID              shift and go to state 69
+
+    vars3G                         shift and go to state 52
+
+state 62
+
+    (40) vars5G -> ID IS value SEMICOL .
+    (41) vars5G -> ID IS value SEMICOL . varsG
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+    RB              reduce using rule 40 (vars5G -> ID IS value SEMICOL .)
+    VAR             shift and go to state 35
+    ID              shift and go to state 37
+
+    varsG                          shift and go to state 70
+    vars5G                         shift and go to state 12
+
+state 63
+
+    (12) vars2 -> ID IS value check_type SEMICOL .
+    (13) vars2 -> ID IS value check_type SEMICOL . vars
+    (18) vars4 -> ID IS value check_type SEMICOL . vars
+    (19) vars4 -> ID IS value check_type SEMICOL .
+    (31) vars2G -> ID IS value check_type SEMICOL .
+    (32) vars2G -> ID IS value check_type SEMICOL . varsG
+    (37) vars4G -> ID IS value check_type SEMICOL . varsG
+    (38) vars4G -> ID IS value check_type SEMICOL .
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (9) vars -> . varsG
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (21) vars5 -> . ID IS value SEMICOL
+    (22) vars5 -> . ID IS value SEMICOL vars
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+  ! reduce/reduce conflict for $end resolved using rule 12 (vars2 -> ID IS value check_type SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 12 (vars2 -> ID IS value check_type SEMICOL .)
+  ! reduce/reduce conflict for $end resolved using rule 12 (vars2 -> ID IS value check_type SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 12 (vars2 -> ID IS value check_type SEMICOL .)
+  ! reduce/reduce conflict for $end resolved using rule 12 (vars2 -> ID IS value check_type SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 12 (vars2 -> ID IS value check_type SEMICOL .)
+    $end            reduce using rule 12 (vars2 -> ID IS value check_type SEMICOL .)
+    RB              reduce using rule 12 (vars2 -> ID IS value check_type SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+  ! $end            [ reduce using rule 19 (vars4 -> ID IS value check_type SEMICOL .) ]
+  ! RB              [ reduce using rule 19 (vars4 -> ID IS value check_type SEMICOL .) ]
+  ! $end            [ reduce using rule 31 (vars2G -> ID IS value check_type SEMICOL .) ]
+  ! RB              [ reduce using rule 31 (vars2G -> ID IS value check_type SEMICOL .) ]
+  ! $end            [ reduce using rule 38 (vars4G -> ID IS value check_type SEMICOL .) ]
+  ! RB              [ reduce using rule 38 (vars4G -> ID IS value check_type SEMICOL .) ]
+
+    vars                           shift and go to state 71
+    varsG                          shift and go to state 72
+    vars5                          shift and go to state 10
+    vars5G                         shift and go to state 12
+
+state 64
+
+    (17) vars4 -> ID IS value check_type COMMA . vars4
+    (36) vars4G -> ID IS value check_type COMMA . vars4G
+    (17) vars4 -> . ID IS value check_type COMMA vars4
+    (18) vars4 -> . ID IS value check_type SEMICOL vars
+    (19) vars4 -> . ID IS value check_type SEMICOL
+    (20) vars4 -> . empty
+    (36) vars4G -> . ID IS value check_type COMMA vars4G
+    (37) vars4G -> . ID IS value check_type SEMICOL varsG
+    (38) vars4G -> . ID IS value check_type SEMICOL
+    (39) vars4G -> . empty
+    (82) empty -> .
+
+    ID              shift and go to state 73
+    $end            reduce using rule 82 (empty -> .)
+    RB              reduce using rule 82 (empty -> .)
+
+    vars4                          shift and go to state 74
+    vars4G                         shift and go to state 75
+    empty                          shift and go to state 34
+
+state 65
+
+    (15) vars3 -> ID SEMICOL vars .
+
+    $end            reduce using rule 15 (vars3 -> ID SEMICOL vars .)
+    RB              reduce using rule 15 (vars3 -> ID SEMICOL vars .)
+
+
+state 66
+
+    (34) vars3G -> ID SEMICOL varsG .
+    (9) vars -> varsG .
+
+  ! reduce/reduce conflict for $end resolved using rule 9 (vars -> varsG .)
+  ! reduce/reduce conflict for RB resolved using rule 9 (vars -> varsG .)
+    $end            reduce using rule 9 (vars -> varsG .)
+    RB              reduce using rule 9 (vars -> varsG .)
+
+  ! $end            [ reduce using rule 34 (vars3G -> ID SEMICOL varsG .) ]
+  ! RB              [ reduce using rule 34 (vars3G -> ID SEMICOL varsG .) ]
+
+
+state 67
+
+    (30) vars1G -> ID SEMICOL varsG .
+    (34) vars3G -> ID SEMICOL varsG .
+
+  ! reduce/reduce conflict for RB resolved using rule 30 (vars1G -> ID SEMICOL varsG .)
+    RB              reduce using rule 30 (vars1G -> ID SEMICOL varsG .)
+
+  ! RB              [ reduce using rule 34 (vars3G -> ID SEMICOL varsG .) ]
+
+
+state 68
+
+    (31) vars2G -> ID IS value . check_type SEMICOL
+    (32) vars2G -> ID IS value . check_type SEMICOL varsG
+    (36) vars4G -> ID IS value . check_type COMMA vars4G
+    (37) vars4G -> ID IS value . check_type SEMICOL varsG
+    (38) vars4G -> ID IS value . check_type SEMICOL
+    (50) check_type -> .
+
+    SEMICOL         reduce using rule 50 (check_type -> .)
+    COMMA           reduce using rule 50 (check_type -> .)
+
+    check_type                     shift and go to state 76
+
+state 69
+
+    (33) vars3G -> ID . COMMA vars3G
+    (34) vars3G -> ID . SEMICOL varsG
+    (35) vars3G -> ID . SEMICOL
+
+    COMMA           shift and go to state 61
+    SEMICOL         shift and go to state 77
+
+
+state 70
+
+    (41) vars5G -> ID IS value SEMICOL varsG .
+
+    RB              reduce using rule 41 (vars5G -> ID IS value SEMICOL varsG .)
+
+
+state 71
+
+    (13) vars2 -> ID IS value check_type SEMICOL vars .
+    (18) vars4 -> ID IS value check_type SEMICOL vars .
+
+  ! reduce/reduce conflict for $end resolved using rule 13 (vars2 -> ID IS value check_type SEMICOL vars .)
+  ! reduce/reduce conflict for RB resolved using rule 13 (vars2 -> ID IS value check_type SEMICOL vars .)
+    $end            reduce using rule 13 (vars2 -> ID IS value check_type SEMICOL vars .)
+    RB              reduce using rule 13 (vars2 -> ID IS value check_type SEMICOL vars .)
+
+  ! $end            [ reduce using rule 18 (vars4 -> ID IS value check_type SEMICOL vars .) ]
+  ! RB              [ reduce using rule 18 (vars4 -> ID IS value check_type SEMICOL vars .) ]
+
+
+state 72
+
+    (32) vars2G -> ID IS value check_type SEMICOL varsG .
+    (37) vars4G -> ID IS value check_type SEMICOL varsG .
+    (9) vars -> varsG .
+
+  ! reduce/reduce conflict for $end resolved using rule 32 (vars2G -> ID IS value check_type SEMICOL varsG .)
+  ! reduce/reduce conflict for RB resolved using rule 32 (vars2G -> ID IS value check_type SEMICOL varsG .)
+  ! reduce/reduce conflict for $end resolved using rule 9 (vars -> varsG .)
+  ! reduce/reduce conflict for RB resolved using rule 9 (vars -> varsG .)
+    $end            reduce using rule 9 (vars -> varsG .)
+    RB              reduce using rule 9 (vars -> varsG .)
+
+  ! $end            [ reduce using rule 32 (vars2G -> ID IS value check_type SEMICOL varsG .) ]
+  ! RB              [ reduce using rule 32 (vars2G -> ID IS value check_type SEMICOL varsG .) ]
+  ! $end            [ reduce using rule 37 (vars4G -> ID IS value check_type SEMICOL varsG .) ]
+  ! RB              [ reduce using rule 37 (vars4G -> ID IS value check_type SEMICOL varsG .) ]
+
+
+state 73
+
+    (17) vars4 -> ID . IS value check_type COMMA vars4
+    (18) vars4 -> ID . IS value check_type SEMICOL vars
+    (19) vars4 -> ID . IS value check_type SEMICOL
+    (36) vars4G -> ID . IS value check_type COMMA vars4G
+    (37) vars4G -> ID . IS value check_type SEMICOL varsG
+    (38) vars4G -> ID . IS value check_type SEMICOL
+
+    IS              shift and go to state 78
+
+
+state 74
+
+    (17) vars4 -> ID IS value check_type COMMA vars4 .
+
+    $end            reduce using rule 17 (vars4 -> ID IS value check_type COMMA vars4 .)
+    RB              reduce using rule 17 (vars4 -> ID IS value check_type COMMA vars4 .)
+
+
+state 75
+
+    (36) vars4G -> ID IS value check_type COMMA vars4G .
+
+    $end            reduce using rule 36 (vars4G -> ID IS value check_type COMMA vars4G .)
+    RB              reduce using rule 36 (vars4G -> ID IS value check_type COMMA vars4G .)
+
+
+state 76
+
+    (31) vars2G -> ID IS value check_type . SEMICOL
+    (32) vars2G -> ID IS value check_type . SEMICOL varsG
+    (36) vars4G -> ID IS value check_type . COMMA vars4G
+    (37) vars4G -> ID IS value check_type . SEMICOL varsG
+    (38) vars4G -> ID IS value check_type . SEMICOL
+
+    SEMICOL         shift and go to state 79
+    COMMA           shift and go to state 80
+
+
+state 77
+
+    (34) vars3G -> ID SEMICOL . varsG
+    (35) vars3G -> ID SEMICOL .
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+    RB              reduce using rule 35 (vars3G -> ID SEMICOL .)
+    VAR             shift and go to state 35
+    ID              shift and go to state 37
+
+    varsG                          shift and go to state 81
+    vars5G                         shift and go to state 12
+
+state 78
+
+    (17) vars4 -> ID IS . value check_type COMMA vars4
+    (18) vars4 -> ID IS . value check_type SEMICOL vars
+    (19) vars4 -> ID IS . value check_type SEMICOL
+    (36) vars4G -> ID IS . value check_type COMMA vars4G
+    (37) vars4G -> ID IS . value check_type SEMICOL varsG
+    (38) vars4G -> ID IS . value check_type SEMICOL
+    (45) value -> . CTE_I
+    (46) value -> . CTE_F
+    (47) value -> . CTE_C
+    (48) value -> . ID
+    (49) value -> . empty
+    (82) empty -> .
+
+    CTE_I           shift and go to state 21
+    CTE_F           shift and go to state 22
+    CTE_C           shift and go to state 23
+    ID              shift and go to state 19
+    COMMA           reduce using rule 82 (empty -> .)
+    SEMICOL         reduce using rule 82 (empty -> .)
+
+    value                          shift and go to state 82
+    empty                          shift and go to state 24
+
+state 79
+
+    (31) vars2G -> ID IS value check_type SEMICOL .
+    (32) vars2G -> ID IS value check_type SEMICOL . varsG
+    (37) vars4G -> ID IS value check_type SEMICOL . varsG
+    (38) vars4G -> ID IS value check_type SEMICOL .
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+  ! reduce/reduce conflict for RB resolved using rule 31 (vars2G -> ID IS value check_type SEMICOL .)
+    RB              reduce using rule 31 (vars2G -> ID IS value check_type SEMICOL .)
+    VAR             shift and go to state 35
+    ID              shift and go to state 37
+
+  ! RB              [ reduce using rule 38 (vars4G -> ID IS value check_type SEMICOL .) ]
+
+    varsG                          shift and go to state 83
+    vars5G                         shift and go to state 12
+
+state 80
+
+    (36) vars4G -> ID IS value check_type COMMA . vars4G
+    (36) vars4G -> . ID IS value check_type COMMA vars4G
+    (37) vars4G -> . ID IS value check_type SEMICOL varsG
+    (38) vars4G -> . ID IS value check_type SEMICOL
+    (39) vars4G -> . empty
+    (82) empty -> .
+
+    ID              shift and go to state 84
+    RB              reduce using rule 82 (empty -> .)
+
+    vars4G                         shift and go to state 75
+    empty                          shift and go to state 54
+
+state 81
+
+    (34) vars3G -> ID SEMICOL varsG .
+
+    RB              reduce using rule 34 (vars3G -> ID SEMICOL varsG .)
+
+
+state 82
+
+    (17) vars4 -> ID IS value . check_type COMMA vars4
+    (18) vars4 -> ID IS value . check_type SEMICOL vars
+    (19) vars4 -> ID IS value . check_type SEMICOL
+    (36) vars4G -> ID IS value . check_type COMMA vars4G
+    (37) vars4G -> ID IS value . check_type SEMICOL varsG
+    (38) vars4G -> ID IS value . check_type SEMICOL
+    (50) check_type -> .
+
+    COMMA           reduce using rule 50 (check_type -> .)
+    SEMICOL         reduce using rule 50 (check_type -> .)
+
+    check_type                     shift and go to state 85
+
+state 83
+
+    (32) vars2G -> ID IS value check_type SEMICOL varsG .
+    (37) vars4G -> ID IS value check_type SEMICOL varsG .
+
+  ! reduce/reduce conflict for RB resolved using rule 32 (vars2G -> ID IS value check_type SEMICOL varsG .)
+    RB              reduce using rule 32 (vars2G -> ID IS value check_type SEMICOL varsG .)
+
+  ! RB              [ reduce using rule 37 (vars4G -> ID IS value check_type SEMICOL varsG .) ]
+
+
+state 84
+
+    (36) vars4G -> ID . IS value check_type COMMA vars4G
+    (37) vars4G -> ID . IS value check_type SEMICOL varsG
+    (38) vars4G -> ID . IS value check_type SEMICOL
+
+    IS              shift and go to state 86
+
+
+state 85
+
+    (17) vars4 -> ID IS value check_type . COMMA vars4
+    (18) vars4 -> ID IS value check_type . SEMICOL vars
+    (19) vars4 -> ID IS value check_type . SEMICOL
+    (36) vars4G -> ID IS value check_type . COMMA vars4G
+    (37) vars4G -> ID IS value check_type . SEMICOL varsG
+    (38) vars4G -> ID IS value check_type . SEMICOL
+
+    COMMA           shift and go to state 64
+    SEMICOL         shift and go to state 87
+
+
+state 86
+
+    (36) vars4G -> ID IS . value check_type COMMA vars4G
+    (37) vars4G -> ID IS . value check_type SEMICOL varsG
+    (38) vars4G -> ID IS . value check_type SEMICOL
+    (45) value -> . CTE_I
+    (46) value -> . CTE_F
+    (47) value -> . CTE_C
+    (48) value -> . ID
+    (49) value -> . empty
+    (82) empty -> .
+
+    CTE_I           shift and go to state 21
+    CTE_F           shift and go to state 22
+    CTE_C           shift and go to state 23
+    ID              shift and go to state 19
+    COMMA           reduce using rule 82 (empty -> .)
+    SEMICOL         reduce using rule 82 (empty -> .)
+
+    value                          shift and go to state 88
+    empty                          shift and go to state 24
+
+state 87
+
+    (18) vars4 -> ID IS value check_type SEMICOL . vars
+    (19) vars4 -> ID IS value check_type SEMICOL .
+    (37) vars4G -> ID IS value check_type SEMICOL . varsG
+    (38) vars4G -> ID IS value check_type SEMICOL .
+    (4) vars -> . VAR tipo vars1
+    (5) vars -> . VAR tipo vars2
+    (6) vars -> . VAR tipo vars3
+    (7) vars -> . VAR tipo vars4
+    (8) vars -> . vars5
+    (9) vars -> . varsG
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (21) vars5 -> . ID IS value SEMICOL
+    (22) vars5 -> . ID IS value SEMICOL vars
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+  ! reduce/reduce conflict for $end resolved using rule 19 (vars4 -> ID IS value check_type SEMICOL .)
+  ! reduce/reduce conflict for RB resolved using rule 19 (vars4 -> ID IS value check_type SEMICOL .)
+    $end            reduce using rule 19 (vars4 -> ID IS value check_type SEMICOL .)
+    RB              reduce using rule 19 (vars4 -> ID IS value check_type SEMICOL .)
+    VAR             shift and go to state 9
+    ID              shift and go to state 5
+
+  ! $end            [ reduce using rule 38 (vars4G -> ID IS value check_type SEMICOL .) ]
+  ! RB              [ reduce using rule 38 (vars4G -> ID IS value check_type SEMICOL .) ]
+
+    vars                           shift and go to state 89
+    varsG                          shift and go to state 90
+    vars5                          shift and go to state 10
+    vars5G                         shift and go to state 12
+
+state 88
+
+    (36) vars4G -> ID IS value . check_type COMMA vars4G
+    (37) vars4G -> ID IS value . check_type SEMICOL varsG
+    (38) vars4G -> ID IS value . check_type SEMICOL
+    (50) check_type -> .
+
+    COMMA           reduce using rule 50 (check_type -> .)
+    SEMICOL         reduce using rule 50 (check_type -> .)
+
+    check_type                     shift and go to state 91
+
+state 89
+
+    (18) vars4 -> ID IS value check_type SEMICOL vars .
+
+    $end            reduce using rule 18 (vars4 -> ID IS value check_type SEMICOL vars .)
+    RB              reduce using rule 18 (vars4 -> ID IS value check_type SEMICOL vars .)
+
+
+state 90
+
+    (37) vars4G -> ID IS value check_type SEMICOL varsG .
+    (9) vars -> varsG .
+
+  ! reduce/reduce conflict for $end resolved using rule 9 (vars -> varsG .)
+  ! reduce/reduce conflict for RB resolved using rule 9 (vars -> varsG .)
+    $end            reduce using rule 9 (vars -> varsG .)
+    RB              reduce using rule 9 (vars -> varsG .)
+
+  ! $end            [ reduce using rule 37 (vars4G -> ID IS value check_type SEMICOL varsG .) ]
+  ! RB              [ reduce using rule 37 (vars4G -> ID IS value check_type SEMICOL varsG .) ]
+
+
+state 91
+
+    (36) vars4G -> ID IS value check_type . COMMA vars4G
+    (37) vars4G -> ID IS value check_type . SEMICOL varsG
+    (38) vars4G -> ID IS value check_type . SEMICOL
+
+    COMMA           shift and go to state 80
+    SEMICOL         shift and go to state 92
+
+
+state 92
+
+    (37) vars4G -> ID IS value check_type SEMICOL . varsG
+    (38) vars4G -> ID IS value check_type SEMICOL .
+    (23) varsG -> . VAR tipo vars1G
+    (24) varsG -> . VAR tipo vars2G
+    (25) varsG -> . VAR tipo vars3G
+    (26) varsG -> . VAR tipo vars4G
+    (27) varsG -> . VAR LB varsG RB vars
+    (28) varsG -> . vars5G
+    (40) vars5G -> . ID IS value SEMICOL
+    (41) vars5G -> . ID IS value SEMICOL varsG
+
+    RB              reduce using rule 38 (vars4G -> ID IS value check_type SEMICOL .)
+    VAR             shift and go to state 35
+    ID              shift and go to state 37
+
+    varsG                          shift and go to state 93
+    vars5G                         shift and go to state 12
+
+state 93
+
+    (37) vars4G -> ID IS value check_type SEMICOL varsG .
+
+    RB              reduce using rule 37 (vars4G -> ID IS value check_type SEMICOL varsG .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: reduce/reduce conflict in state 28 resolved using rule (vars1 -> ID SEMICOL)
-WARNING: rejected rule (vars3 -> ID SEMICOL) in state 28
-WARNING: reduce/reduce conflict in state 32 resolved using rule (vars1 -> ID SEMICOL vars)
-WARNING: rejected rule (vars3 -> ID SEMICOL vars) in state 32
-WARNING: reduce/reduce conflict in state 38 resolved using rule (vars2 -> ID IS value check_type SEMICOL)
-WARNING: rejected rule (vars4 -> ID IS value check_type SEMICOL) in state 38
-WARNING: reduce/reduce conflict in state 41 resolved using rule (vars2 -> ID IS value check_type SEMICOL vars)
-WARNING: rejected rule (vars4 -> ID IS value check_type SEMICOL vars) in state 41
+WARNING: reduce/reduce conflict in state 34 resolved using rule (vars4 -> empty)
+WARNING: rejected rule (vars4G -> empty) in state 34
+WARNING: reduce/reduce conflict in state 38 resolved using rule (vars5 -> ID IS value SEMICOL)
+WARNING: rejected rule (vars5G -> ID IS value SEMICOL) in state 38
+WARNING: reduce/reduce conflict in state 39 resolved using rule (vars1 -> ID SEMICOL)
+WARNING: rejected rule (vars3 -> ID SEMICOL) in state 39
+WARNING: reduce/reduce conflict in state 39 resolved using rule (vars1 -> ID SEMICOL)
+WARNING: rejected rule (vars1G -> ID SEMICOL) in state 39
+WARNING: reduce/reduce conflict in state 39 resolved using rule (vars1 -> ID SEMICOL)
+WARNING: rejected rule (vars3G -> ID SEMICOL) in state 39
+WARNING: reduce/reduce conflict in state 46 resolved using rule (vars -> varsG)
+WARNING: rejected rule (vars5G -> ID IS value SEMICOL varsG) in state 46
+WARNING: reduce/reduce conflict in state 47 resolved using rule (vars1 -> ID SEMICOL vars)
+WARNING: rejected rule (vars3 -> ID SEMICOL vars) in state 47
+WARNING: reduce/reduce conflict in state 48 resolved using rule (vars1G -> ID SEMICOL varsG)
+WARNING: rejected rule (vars3G -> ID SEMICOL varsG) in state 48
+WARNING: reduce/reduce conflict in state 48 resolved using rule (vars -> varsG)
+WARNING: rejected rule (vars1G -> ID SEMICOL varsG) in state 48
+WARNING: reduce/reduce conflict in state 58 resolved using rule (vars3 -> ID SEMICOL)
+WARNING: rejected rule (vars3G -> ID SEMICOL) in state 58
+WARNING: reduce/reduce conflict in state 59 resolved using rule (vars1G -> ID SEMICOL)
+WARNING: rejected rule (vars3G -> ID SEMICOL) in state 59
+WARNING: reduce/reduce conflict in state 63 resolved using rule (vars2 -> ID IS value check_type SEMICOL)
+WARNING: rejected rule (vars4 -> ID IS value check_type SEMICOL) in state 63
+WARNING: reduce/reduce conflict in state 63 resolved using rule (vars2 -> ID IS value check_type SEMICOL)
+WARNING: rejected rule (vars2G -> ID IS value check_type SEMICOL) in state 63
+WARNING: reduce/reduce conflict in state 63 resolved using rule (vars2 -> ID IS value check_type SEMICOL)
+WARNING: rejected rule (vars4G -> ID IS value check_type SEMICOL) in state 63
+WARNING: reduce/reduce conflict in state 66 resolved using rule (vars -> varsG)
+WARNING: rejected rule (vars3G -> ID SEMICOL varsG) in state 66
+WARNING: reduce/reduce conflict in state 67 resolved using rule (vars1G -> ID SEMICOL varsG)
+WARNING: rejected rule (vars3G -> ID SEMICOL varsG) in state 67
+WARNING: reduce/reduce conflict in state 71 resolved using rule (vars2 -> ID IS value check_type SEMICOL vars)
+WARNING: rejected rule (vars4 -> ID IS value check_type SEMICOL vars) in state 71
+WARNING: reduce/reduce conflict in state 72 resolved using rule (vars2G -> ID IS value check_type SEMICOL varsG)
+WARNING: rejected rule (vars4G -> ID IS value check_type SEMICOL varsG) in state 72
+WARNING: reduce/reduce conflict in state 72 resolved using rule (vars -> varsG)
+WARNING: rejected rule (vars2G -> ID IS value check_type SEMICOL varsG) in state 72
+WARNING: reduce/reduce conflict in state 79 resolved using rule (vars2G -> ID IS value check_type SEMICOL)
+WARNING: rejected rule (vars4G -> ID IS value check_type SEMICOL) in state 79
+WARNING: reduce/reduce conflict in state 83 resolved using rule (vars2G -> ID IS value check_type SEMICOL varsG)
+WARNING: rejected rule (vars4G -> ID IS value check_type SEMICOL varsG) in state 83
+WARNING: reduce/reduce conflict in state 87 resolved using rule (vars4 -> ID IS value check_type SEMICOL)
+WARNING: rejected rule (vars4G -> ID IS value check_type SEMICOL) in state 87
+WARNING: reduce/reduce conflict in state 90 resolved using rule (vars -> varsG)
+WARNING: rejected rule (vars4G -> ID IS value check_type SEMICOL varsG) in state 90

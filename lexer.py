@@ -71,7 +71,9 @@ palabrasReservadas = {
     'var': 'VAR',
     'let': 'LET',
     'input': 'INPUT',
-    'program': 'PROGRAM'
+    'program': 'PROGRAM',
+    'local': 'LOCAL',
+    'global': 'GLOBAL'
 }
 
 tokens = tokens + list(palabrasReservadas.values())
@@ -141,7 +143,7 @@ def t_ID(t):
     # else:
     #     return t
     t.type = palabrasReservadas.get(t.value,'ID')    # Check for reserved words
-    print(t)
+    # print(t)
     return t
 
 

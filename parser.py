@@ -6,7 +6,7 @@ import math
 from program import Program
 from patType import PatType
 from varTable import Var
-from  varTable import VarTable
+from varTable import VarTable
 from functionDirectory import Function
 from functionDirectory import FunctionDirectory
 import sys
@@ -16,6 +16,8 @@ program = Program()
 error_message = '\033[91m' + "ERROR: " + '\033[0m'
 error = False
 
+v = Var
+vt = VarTable()
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
@@ -37,8 +39,10 @@ def p_programa1(p):
               | empty
     """
 
+global scope
+scope = 'local'
 
-lista = list()
+
 def p_vars(p):
     """
     vars : VAR tipo vars1
@@ -46,6 +50,7 @@ def p_vars(p):
          | VAR tipo vars3
          | VAR tipo vars4
          | vars5
+         | varsG
     """
 
 # var int a;
@@ -54,9 +59,13 @@ def p_vars1(p):
     vars1 : ID SEMICOL
           | ID SEMICOL vars
     """
-    lista.append(p[1])
-    print('listaVariables >> ', lista)
-    print('TIPOOOO >> ', tipo)
+    global tipo
+    v1 = vars(v(p[1], p[-1], 'N', scope))
+    #print('Vars >> ', v1)
+    vt.__set__(p[1], v1)
+    #print("VarTable >>  ", vt.__getitem__(p[1]))
+
+
 
 # var int a = 5;
 def p_vars2(p):
@@ -64,8 +73,11 @@ def p_vars2(p):
     vars2 : ID IS value check_type SEMICOL
           | ID IS value check_type SEMICOL vars
     """
-    lista.append(p[1])
-    print('listaVariables >> ', lista)
+    v1 = vars(v(p[1], p[-1], 'N', scope))
+    #print('Vars >> ', v1)
+    vt.__set__(p[1], v1)
+    #print("VarTable >>  ", vt.__getitem__(p[1]))
+
 
 # var int a,b,c;
 def p_vars3(p):
@@ -74,8 +86,20 @@ def p_vars3(p):
           | ID SEMICOL vars
           | ID SEMICOL
     """
-    lista.append(p[1])
-    print('listaVariables >> ', lista)
+    global tipos
+    if p[-1] == ',':
+        tipos = 'int'
+        v1 = vars(v(p[1], tipos, 'N', scope))
+        #print('Vars >> ', v1)
+        vt.__set__(p[1], v1)
+        #print("VarTable >>  ", vt.__getitem__(p[1]))
+    else:
+        tipos = p[-1]
+        v1 = vars(v(p[1], p[-1], 'N', scope))
+        #print('Vars >> ', v1)
+        vt.__set__(p[1], v1)
+        #print("VarTable >>  ", vt.__getitem__(p[1]))
+
 
 # var int a=0, b=1, c=2;
 def p_vars4(p):
@@ -83,9 +107,21 @@ def p_vars4(p):
     vars4 : ID IS value check_type COMMA vars4
           | ID IS value check_type SEMICOL vars
           | ID IS value check_type SEMICOL
+          | empty
     """
-    lista.append(p[1])
-    print('listaVariables >> ', lista)
+    global tipos
+    if p[-1] == ',':
+        tipos = 'int'
+        v1 = vars(v(p[1], tipos, p[3], scope))
+        #print('Vars >> ', v1)
+        vt.__set__(p[1], v1)
+        #print("VarTable >>  ", vt.__getitem__(p[1]))
+    else:
+        tipos = p[-1]
+        v1 = vars(v(p[1], p[-1], p[3], scope))
+        #print('Vars >> ', v1)
+        vt.__set__(p[1], v1)
+        #print("VarTable >>  ", vt.__getitem__(p[1]))
 
 # a=2;
 def p_vars5(p):
@@ -93,8 +129,109 @@ def p_vars5(p):
     vars5 : ID IS value SEMICOL
           | ID IS value SEMICOL vars
     """
-    lista.append(p[1])
-    listaV.append(p[3])
+    tipos = 'int'
+    v1 = vars(v(p[1], tipos, p[3], scope))
+    #print('Vars >> ', v1)
+    vt.__set__(p[1], v1)
+    #print("VarTable >>  ", vt.__getitem__(p[1]))
+
+
+####### Variables Globales ################################################
+global scope_G
+scope_G = 'global'
+
+def p_varsG(p):
+    """
+    varsG : VAR tipo vars1G
+         | VAR tipo vars2G
+         | VAR tipo vars3G
+         | VAR tipo vars4G
+         | VAR LB varsG RB vars
+         | vars5G
+    """
+
+# var int a;
+def p_vars1G(p):
+    """
+    vars1G : ID SEMICOL
+          | ID SEMICOL varsG
+    """
+    global tipo
+    v1 = vars(v(p[1], p[-1], 'N', scope_G))
+   # print('Vars >> ', v1)
+    vt.__set__(p[1], v1)
+    #print("VarTable >>  ", vt.__getitem__(p[1]))
+
+
+# var int a = 5;
+def p_vars2G(p):
+    """
+    vars2G : ID IS value check_type SEMICOL
+          | ID IS value check_type SEMICOL varsG
+    """
+    v1 = vars(v(p[1], p[-1], p[3], scope_G))
+    #print('Vars >> ', v1)
+    vt.__set__(p[1], v1)
+    #print("VarTable >>  ", vt.__getitem__(p[1]))
+
+
+# var int a,b,c;
+def p_vars3G(p):
+    """
+    vars3G : ID COMMA vars3G
+          | ID SEMICOL varsG
+          | ID SEMICOL
+    """
+    global tipos
+    if p[-1] == ',':
+        tipos = 'int'
+        v1 = vars(v(p[1], tipos, 'N', scope_G))
+        #print('Vars >> ', v1)
+        vt.__set__(p[1], v1)
+        #print("VarTable >>  ", vt.__getitem__(p[1]))
+    else:
+        tipos = p[-1]
+        v1 = vars(v(p[1], p[-1], 'N', scope_G))
+        #print('Vars >> ', v1)
+        vt.__set__(p[1], v1)
+        #print("VarTable >>  ", vt.__getitem__(p[1]))
+
+
+# var int a=0, b=1, c=2;
+def p_vars4G(p):
+    """
+    vars4G : ID IS value check_type COMMA vars4G
+          | ID IS value check_type SEMICOL varsG
+          | ID IS value check_type SEMICOL
+          | empty
+    """
+    global tipos
+    if p[-1] == ',':
+        tipos = 'int'
+        v1 = vars(v(p[1], tipos, p[3], scope_G))
+        #print('Vars >> ', v1)
+        vt.__set__(p[1], v1)
+        #print("VarTable >>  ", vt.__getitem__(p[1]))
+    else:
+        tipos = p[-1]
+        v1 = vars(v(p[1], p[-1], p[3], scope_G))
+        #print('Vars >> ', v1)
+        vt.__set__(p[1], v1)
+        #print("VarTable >>  ", vt.__getitem__(p[1]))
+
+# a=2;
+def p_vars5G(p):
+    """
+    vars5G : ID IS value SEMICOL
+          | ID IS value SEMICOL varsG
+    """
+    tipos = 'int'
+    v1 = vars(v(p[1], tipos, p[3], scope_G))
+    #print('Vars >> ', v1)
+    vt.__set__(p[1], v1)
+    #print("VarTable >>  ", vt.__getitem__(p[1]))
+
+########## END Variables Globales ###############################################
 
 def p_tipo(p):
     """
@@ -102,9 +239,9 @@ def p_tipo(p):
         | FLOAT
         | CHAR
     """
-
+    p[0] = p[1]
     global tipo
-    tipo = p[1]
+    tipo = p[0]
 
 
 listaV = list()
@@ -116,8 +253,9 @@ def p_value(p):
           | ID
           | empty
     """
-    listaV.append(p[1])
-    print('listaValores >> ', listaV)
+    p[0] = p[1]
+    # listaV.append(p[1])
+    # print('listaValores >> ', listaV)
     #FALTA: if ID no existe en la tabla de variables, error.
     #if encuentra la variable de p[1], entonces p[0] = .valor
 
@@ -383,10 +521,12 @@ def test():
             if not tok:
                 break
             # print(tok)
-        if (parser.parse(informacion, tracking=True) == 'PROGRAMA COMPILADO'):
-            print("Correct Syntax")
+        if (parser.parse(informacion, tracking=True) == 'Compilacion Exitosa'):
+            print("No Syntax Error found")
+            print("VarTable >> ", vars(vt))
+
         else:
-            print("Syntax error")
+            print("Syntax Error")
     except EOFError:
         # print("ERROREOF")
         print(EOFError)

@@ -14,6 +14,7 @@ class PatType:
     def is_array(self):
         return self.row > 0
 
+<<<<<<< HEAD
     def check_type(self, pat):
         if self.type != pat.type:
             return False
@@ -22,3 +23,13 @@ class PatType:
         if self.col != pat.col:
             return False
         return True
+=======
+    def check_type(self, spark):
+        if self.type != spark.type:
+            return False
+        if self.row != spark.row:
+            return False
+        if self.col != spark.col:
+            return False
+        return True
+>>>>>>> master

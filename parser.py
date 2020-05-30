@@ -362,6 +362,10 @@ def p_expression_var(p):
          | ID matrix
     """
     p[0] = ('var', p[1])
+<<<<<<< HEAD
+=======
+    #print('hola')
+>>>>>>> master
 
 
 def p_list_first(p):
@@ -472,6 +476,7 @@ env = {}
 def operacion(p):
     global env
 
+# FALTA: Otros operadores como < > != & | ..... y quizas otras cosas mas
     if type(p) == tuple:
         if p[0] == '+':
             return operacion(p[1]) + operacion(p[2])

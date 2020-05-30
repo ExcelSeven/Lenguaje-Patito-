@@ -541,5 +541,4 @@ test()
 #     except EOFError:
 #         break
 #     parser.parse(s)
-=======
 #     parser.parse(s)

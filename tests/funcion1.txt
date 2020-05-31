@@ -1,0 +1,16 @@
+program patito;
+
+int func1(){
+	var int a=4+5+1*6+2/5-10;
+	var int b=2.2;
+	var float c= 3.3;
+	var float d=8;
+	
+	if(true){
+	}
+}
+
+void func2(){
+	var char ch = 'Va';
+	var char cha = "v";
+}

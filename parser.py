@@ -634,7 +634,7 @@ lexer = lex.lexer
 
 def test():
     try:
-        arch = open("funcion1.txt", 'r')
+        arch = open("tests/funcion1.txt", 'r')
         informacion = arch.read()
         arch.close()
         lexer.input(informacion)

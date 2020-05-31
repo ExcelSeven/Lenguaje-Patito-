@@ -1,0 +1,30 @@
+program patito;
+
+var int r,x;
+var float y=52;
+
+
+main(){
+
+	if(a){
+		
+	}
+	if(2<3){
+		cont = 1;
+	}
+	else{
+		cont = 2;
+	}
+
+
+	if(2>3){
+		arbol = 1;
+	}
+	elseif(3<555){
+		
+	}
+	else{
+		arbol2 = 2;
+	}
+
+}

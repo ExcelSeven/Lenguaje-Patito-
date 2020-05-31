@@ -112,6 +112,8 @@ t_COMMA = ','
 t_COL = ':'
 t_SEMICOL = ';'
 t_DOT = '.'
+t_COMILLA = r'\''
+t_COMILLAS = r'\"'
 
 # def t_CTE_C(t):
 #     r'[A-Za-z]'
@@ -121,6 +123,7 @@ t_DOT = '.'
 
 def t_CTE_F(t):
     r'[0-9]+\.[0-9]+'
+    t.value = float(t.value)
     return t
 
 def t_CTE_I(t):

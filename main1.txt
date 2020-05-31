@@ -1,0 +1,13 @@
+program patito;
+
+var int r,x;
+var float y=52;
+
+main(){
+var int a,b;
+var float c=33;
+a=2;
+j=3;
+
+
+}

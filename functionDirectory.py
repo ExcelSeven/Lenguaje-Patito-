@@ -2,10 +2,9 @@ import varTable
 
 
 class Function:
-    def __init__(self, name, type, scope, vars):
+    def __init__(self, name, type, vars):
         self.name = name
         self.type = type
-        self.scope = scope
         self.vars = vars
 
 

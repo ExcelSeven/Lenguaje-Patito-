@@ -6,7 +6,7 @@ int func1(){
 	var float c= 3.3;
 	var float d=8;
 	
-	if(4>5){
+	if(2+3*5>55){
 	}
 }
 

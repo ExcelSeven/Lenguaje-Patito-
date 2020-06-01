@@ -1,4 +1,4 @@
-class Stack:
+class QuadStack:
     def __init__(self):
         self.items = []
 

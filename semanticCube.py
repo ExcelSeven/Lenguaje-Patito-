@@ -135,5 +135,7 @@ class SemanticCube:
 		key = (op1, op2, operator)
 		if key in self.cube:
 			return self.cube[key]
+		# elif isinstance(int(op1), int) == True or isinstance(float(op1), float) == True or isinstance(op2, int) == True or isinstance(op2, float) == True:
+		# 	return self.cube[key]
 		else:
-			return "Error"
+			return "Type Mismatch!"

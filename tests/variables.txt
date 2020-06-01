@@ -1,13 +1,14 @@
 program patito;
 var{
 var int MAR;
-var float HAM=5;
+var float HAM=5.3;
 }
 
+int main(){
 
 var int ad;
 var int c = a;
 var int x,h,g;
-var float b=55;
+var float b=5.35, d=66.2;
 var int q=11, w=12, e=13;
-a=0;
+}

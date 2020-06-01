@@ -1,42 +1,31 @@
 import sys
-error_message = "ERROR: "  
 
 class MemoryMap:
 
     def __init__(self, stage):
+
         if stage == "program":
-            self.INT_LOC = 5000
-            self.MAX_INT_LOC = 9999
-            self.FLOAT_LOC = 10000
-            self.MAX_FLOAT_LOC = 14999
-            self.BOOL_LOC = 15000
-            self.MAX_BOOL_LOC = 19999
+            self.INT = 1000
+            self.FLOAT = 4000
+            self.CHAR = 7000
+            self.BOOL = 10000
+			self.TOP = 13000
+
         if stage == "function":
-            self.INT_LOC = 20000
-            self.MAX_INT_LOC = 24999
-            self.FLOAT_LOC = 25000
-            self.MAX_FLOAT_LOC = 29999
-            self.BOOL_LOC = 30000
-            self.MAX_BOOL_LOC = 34999
+            self.INT = 13000
+            self.FLOAT = 16000
+            self.CHAR = 19000
+            self.BOOL = 22000
+			self.TOP = 25000
+
         if stage == "temporal":
-            self.INT_LOC = 35000
-            self.MAX_INT_LOC = 39999
-            self.FLOAT_LOC = 40000
-            self.MAX_FLOAT_LOC = 44999
-            self.BOOL_LOC = 45000
-            self.MAX_BOOL_LOC = 49999
+            self.INT = 25000
+            self.FLOAT = 28000
+            self.CHAR = 31000
+            self.BOOL = 34000
+			self.TOP = 37000
 
-
-    def int_check(self):
-        return self.INT_LOC <= self.MAX_INT_LOC
-
-    def float_check(self):
-        return self.FLOAT_LOC <= self.MAX_FLOAT_LOC
-
-    def bool_check(self):
-        return self.BOOL_LOC <= self.MAX_BOOL_LOC
-
-    def get_next_address(self, t):
+    def get_address(self, t):
         total_space = 0
         if t.row == 0 and t.col == 0:
             total_space = 1
@@ -46,21 +35,29 @@ class MemoryMap:
             total_space = t.row * t.col
 
         if t.type == "Int":
-            self.INT_LOC = self.INT_LOC + total_space
-            if self.INT_LOC > self.MAX_INT_LOC:
-                print(error_message + "Too many variables")
+            self.INT += total_space
+            if self.INT => self.FLOAT:
+                print("ERROR: No hay espacio de memoria suficiente.")
                 return None
-            return self.INT_LOC - total_space
-        elif t.type == "Float":
-            self.FLOAT_LOC = self.FLOAT_LOC + total_space
-            if self.FLOAT_LOC > self.MAX_FLOAT_LOC:
-                print(error_message + "Too many variables")
-                return None
-            return self.FLOAT_LOC - total_space
-        elif t.type == "Bool":
-            self.BOOL_LOC = self.BOOL_LOC + total_space
-            if self.BOOL_LOC > self.MAX_BOOL_LOC:
-                print(error_message + "Too many variables")
-                return None
-            return self.BOOL_LOC - total_space
+			return self.INT
 
+        elif t.type == "Float":
+            self.FLOAT += total_space
+            if self.FLOAT => self.CHAR:
+                print("ERROR: No hay espacio de memoria suficiente.")
+                return None
+			return self.FLOAT
+
+		elif t.type == "Char":
+            self.CHAR += total_space
+            if self.CHAR => self.BOOL:
+                print("ERROR: No hay espacio de memoria suficiente.")
+                return None
+			return self.CHAR
+
+        else:
+            self.BOOL += total_space
+            if self.BOOL => self.TOP:
+                print("ERROR: No hay espacio de memoria suficiente.")
+                return None
+			return self.BOOL

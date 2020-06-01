@@ -24,6 +24,7 @@ class VarTable:
     def set(self, key, var):
         self.directyory[key] = var
 
+tipos = list()
 
 # var1 = Variables('a', 'int', 1)
 # var2 = Variables('b', 'float', 2.5)

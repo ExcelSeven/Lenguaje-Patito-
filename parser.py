@@ -11,6 +11,12 @@ from tablaConstantes import Constante
 from tablaConstantes import TablaConstantes
 from functionDirectory import Function
 from functionDirectory import FunctionDirectory
+from stack import QuadStack
+from avail import Avail
+from semanticCube import SemanticCube
+from tipo import Tipo
+from cuadruplos import Quad
+from cuadruplos import QuadList
 import sys
 
 
@@ -21,6 +27,26 @@ error = False
 v = Var
 vt = VarTable()
 
+quad = list()
+quadList = list()
+
+## GOTO Main
+quad = ('GOTO', None, None, 'main')
+quadList.append(quad)
+
+# temp = avail.next()
+# quad = ('+', p[1], p[3], temp)
+# p[0] = temp
+
+quad_name = QuadStack()
+quad_type = QuadStack()
+pOpdores = QuadStack()
+pOpandos = QuadStack()
+avail = Avail()
+
+semCube = SemanticCube()
+
+tipos = list()
 
 def p_programa(p):
     """
@@ -34,8 +60,14 @@ def p_programa1(p):
     """
     programa1 : vars funcion main funcion
               | funcion main funcion
+              | funcion main
+              | vars funcion main
               | vars funcion
+              | vars main
+              | vars main funcion
               | funcion
+              | vars
+              | main
               | empty
     """
 
@@ -43,7 +75,8 @@ def p_programa1(p):
 
 def p_main(p):
     """
-    main : MAIN LP RP LB statement RB
+    main : tipo MAIN LP RP LB statement RB
+         | VOID tipo MAIN LP RP LB statement RB
     """
     print("MAIN ok")
 
@@ -53,17 +86,16 @@ def p_statement(p):
     statement : asignacion SEMICOL statement
               | if statement
               | vars statement
-              | p_operacion statement
-              | oper_aritmetica statement
               | empty
     """
-    ## FALTA: llamada, lectura, escritura, for, if, while
+    ## FALTA: llamada, lectura, escritura, for, while
 
 
 def p_asignacion(p):
     """
     asignacion : ID IS value
     """
+
     v1 = vars(v(p[1], 'int', p[3], scope))
     vt.set(p[1], v1)
 
@@ -73,6 +105,7 @@ def p_asignacion(p):
 
 ####### Variables Locales ################################################
 
+## 꺼꾸로 하기
 global scope
 scope = 'local'
 
@@ -81,7 +114,6 @@ def p_vars(p):
     vars : VAR tipo vars1
          | VAR tipo vars2
          | VAR tipo vars3
-         | VAR tipo vars4
          | VAR tipo oper_aritmetica
          | varsG
          | empty
@@ -93,31 +125,36 @@ def p_vars1(p):
     vars1 : ID SEMICOL
           | ID SEMICOL vars
     """
-    global tipo
     v1 = vars(v(p[1], p[-1], 'N', scope))
-    #print('Vars >> ', v1)
     vt.__set__(p[1], v1)
-    #print("VarTable >>  ", vt.__getitem__(p[1]))
-
-
 
 # var int a = 5;
 def p_vars2(p):
     """
-    vars2 : ID IS value SEMICOL
+    vars2 : ID IS value COMMA vars2
+          | ID IS value COMMA
           | ID IS value SEMICOL vars
     """
+    global tt
     if p[-1] == 'int' and isinstance(p[3], int) is False:
         print("Error>", p[3], " No es un int!")
         # sys.exit(0)
     elif p[-1] == 'float' and isinstance(p[3], float) is False:
         print("Error> ", p[3], " No es un float!")
         # sys.exit(0)
+    elif p[-1] == ',':
+        v1 = vars(v(p[1], tipo, p[3], scope))
+        vt.__set__(p[1], v1)
     else:
         v1 = vars(v(p[1], p[-1], p[3], scope))
         vt.__set__(p[1], v1)
-        #print('Vars >> ', v1)
-        #print("VarTable >>  ", vt.__getitem__(p[1]))
+
+    temp = avail.next()
+    quad = ('=', p[3], None, p[1])
+    quadList.append(quad)
+    print(quadList)
+    p[0] = temp
+
 
 # var int a,b,c;
 def p_vars3(p):
@@ -130,55 +167,43 @@ def p_vars3(p):
     if p[-1] == ',':
         tipos = 'int'
         v1 = vars(v(p[1], tipos, 'N', scope))
-        #print('Vars >> ', v1)
         vt.__set__(p[1], v1)
-        #print("VarTable >>  ", vt.__getitem__(p[1]))
     else:
         tipos = p[-1]
         v1 = vars(v(p[1], p[-1], 'N', scope))
-        #print('Vars >> ', v1)
         vt.__set__(p[1], v1)
-        #print("VarTable >>  ", vt.__getitem__(p[1]))
 
 
-# var int a=0, b=1, c=2;
-def p_vars4(p):
-    """
-    vars4 : ID IS value check_type COMMA vars4
-          | ID IS value check_type SEMICOL vars
-          | ID IS value check_type SEMICOL
-          | empty
-    """
-    global tipos
-    if p[-1] == ',':
-        tipos = 'int'
-        v1 = vars(v(p[1], tipos, p[3], scope))
-        #print('Vars >> ', v1)
-        vt.__set__(p[1], v1)
-        #print("VarTable >>  ", vt.__getitem__(p[1]))
-    else:
-        tipos = p[-1]
-        v1 = vars(v(p[1], p[-1], p[3], scope))
-        #print('Vars >> ', v1)
-        vt.__set__(p[1], v1)
-        #print("VarTable >>  ", vt.__getitem__(p[1]))
-
-# a=2;
-# def p_vars5(p):
+# # var int a=0, b=1, c=2;
+# def p_vars4(p):
 #     """
-#     vars5 : ID IS value SEMICOL
-#           | ID IS value SEMICOL vars
+#     vars4 : ID IS value check_type COMMA vars4
+#           | ID IS value check_type SEMICOL vars
+#           | ID IS value check_type SEMICOL
+#           | empty
 #     """
-#     tipos = 'int'
-#     v1 = vars(v(p[1], tipos, p[3], scope))
-#     #print('Vars >> ', v1)
-#     vt.__set__(p[1], v1)
-#     #print("VarTable >>  ", vt.__getitem__(p[1]))
-
+#     global tipos
+#     if p[-1] == ',':
+#         tipos = 'int'
+#         v1 = vars(v(p[1], tipos, p[3], scope))
+#         vt.__set__(p[1], v1)
+#     else:
+#         ttipos = p[-1]
+#         v1 = vars(v(p[1], p[-1], p[3], scope))
+#         vt.__set__(p[1], v1)
+#
+#     # temp = avail.next()
+#     # quad = ('=', p[3], None, temp)
+#     # quadList.append(quad)
+#     # p[0] = temp
+#
+#     # semCube.checkResult()
 
 ####### END Variables Locales ################################################
 
+
 ####### Variables Globales ################################################
+
 global scope_G
 scope_G = 'global'
 
@@ -187,7 +212,6 @@ def p_varsG(p):
     varsG : VAR tipo vars1G
          | VAR tipo vars2G
          | VAR tipo vars3G
-         | VAR tipo vars4G
          | VAR LB varsG RB
     """
 
@@ -199,16 +223,15 @@ def p_vars1G(p):
     """
     global tipo
     v1 = vars(v(p[1], p[-1], 'N', scope_G))
-   # print('Vars >> ', v1)
     vt.__set__(p[1], v1)
-    #print("VarTable >>  ", vt.__getitem__(p[1]))
 
 
 # var int a = 5;
 def p_vars2G(p):
     """
-    vars2G : ID IS value check_type SEMICOL
+    vars2G : ID IS value check_type COMMA vars2G
           | ID IS value check_type SEMICOL varsG
+          | empty
     """
 
     if p[-1] == 'int' and isinstance(p[3], int) is False:
@@ -217,11 +240,13 @@ def p_vars2G(p):
     elif p[-1] == 'float' and isinstance(p[3], float) is False:
         print("Error> ", p[3], " No es un float!")
         # sys.exit(0)
+    elif p[-1] == ',':
+        tipos = 'int'
+        v1 = vars(v(p[1], tipos, p[3], scope_G))
+        vt.__set__(p[1], v1)
     else:
         v1 = vars(v(p[1], p[-1], p[3], scope))
         vt.__set__(p[1], v1)
-        # print('Vars >> ', v1)
-        # print("VarTable >>  ", vt.__getitem__(p[1]))
 
 
 # var int a,b,c;
@@ -235,52 +260,35 @@ def p_vars3G(p):
     if p[-1] == ',':
         tipos = 'int'
         v1 = vars(v(p[1], tipos, 'N', scope_G))
-        #print('Vars >> ', v1)
         vt.__set__(p[1], v1)
-        #print("VarTable >>  ", vt.__getitem__(p[1]))
     else:
         tipos = p[-1]
         v1 = vars(v(p[1], p[-1], 'N', scope_G))
-        #print('Vars >> ', v1)
         vt.__set__(p[1], v1)
-        #print("VarTable >>  ", vt.__getitem__(p[1]))
 
 
-# var int a=0, b=1, c=2;
-def p_vars4G(p):
-    """
-    vars4G : ID IS value check_type COMMA vars4G
-          | ID IS value check_type SEMICOL varsG
-          | ID IS value check_type SEMICOL
-          | empty
-    """
-    global tipos
-    if p[-1] == ',':
-        tipos = 'int'
-        v1 = vars(v(p[1], tipos, p[3], scope_G))
-        #print('Vars >> ', v1)
-        vt.__set__(p[1], v1)
-        #print("VarTable >>  ", vt.__getitem__(p[1]))
-    else:
-        tipos = p[-1]
-        v1 = vars(v(p[1], p[-1], p[3], scope_G))
-        #print('Vars >> ', v1)
-        vt.__set__(p[1], v1)
-        # print("VarTable >>  ", vt.__getitem__(p[1]))
-
-# a=2;
-# def p_vars5G(p):
+# # var int a=0, b=1, c=2;
+# def p_vars4G(p):
 #     """
-#     vars5G : ID IS value SEMICOL
-#           | ID IS value SEMICOL varsG
+#     vars4G : ID IS value check_type COMMA vars4G
+#           | ID IS value check_type SEMICOL varsG
+#           | ID IS value check_type SEMICOL
+#           | empty
 #     """
-#     tipos = 'int'
-#     v1 = vars(v(p[1], tipos, p[3], scope_G))
-#     #print('Vars >> ', v1)
-#     vt.__set__(p[1], v1)
-#     #print("VarTable >>  ", vt.__getitem__(p[1]))
+#     global tipos
+#     if p[-1] == ',':
+#         tipos = 'int'
+#         v1 = vars(v(p[1], tipos, p[3], scope_G))
+#         vt.__set__(p[1], v1)
+#     else:
+#         tipos = p[-1]
+#         v1 = vars(v(p[1], p[-1], p[3], scope_G))
+#         vt.__set__(p[1], v1)
 
 ########## END Variables Globales ###############################################
+
+
+########## Tipo y Value #########################################################
 
 def p_tipo(p):
     """
@@ -337,12 +345,13 @@ def p_value_char2(p):
         print("No es un char!")
         # sys.exit(0)
 
-
 def p_check_type(p):
     """
     check_type :
     """
     # print("check_type >> ", p[-8])
+
+########## END Tipo y Value #########################################################
 
 
 ####### Funciones ##########################################################
@@ -350,12 +359,15 @@ def p_check_type(p):
 f = Function
 fd = FunctionDirectory()
 
+## FALTA : Parametros
+
 def p_funcion(p):
     """
     funcion : VOID ID LP param RP LB statement RB funcion
-             | VOID ID LP param RP LB statement RB
              | tipo ID LP param RP LB statement RB funcion
+             | VOID ID LP param RP LB statement RB
              | tipo ID LP param RP LB statement RB
+
     """
     p[0] = p[2]
 
@@ -367,18 +379,17 @@ def p_param(p):
     param :
     """
 
-def p_calc(p):
-    """
-    calc : expr
-         | asignacion
-         | empty
-         | row
-         | matrix
-    """
-    print(p_operacion(p[1]))
-    print(p[1])
-    return p_operacion(p[1])
-
+# def p_calc(p):
+#     """
+#     calc : expr
+#          | asignacion
+#          | empty
+#          | row
+#          | matrix
+#     """
+#     print(p_operacion(p[1]))
+#     print(p[1])
+#     return p_operacion(p[1])
 
 
 pila = list()
@@ -387,56 +398,87 @@ def p_LT(p):
     """
     var_lt : expr LT expr
     """
-    if p[1] < p[3]:
-        p[0] = True
-    else:
-        p[0] = False
+    temp = avail.next()
+    quad = ('<', p[1], p[3], temp)
+    quadList.append(quad)
+    p[0] = temp
+
+    # if p[1] < p[3]:
+    #     p[0] = True
+    #
+    # else:
+    #     # p[0] = False
+
 
 def p_GT(p):
     """
     var_gt : expr GT expr
     """
-    if p[1] > p[3]:
-        p[0] = True
-    else:
-        p[0] = False
+    temp = avail.next()
+    quad = ('>', p[1], p[3], temp)
+    quadList.append(quad)
+    p[0] = temp
+
+    # if p[1] > p[3]:
+    #     p[0] = True
+    # else:
+    #     p[0] = False
 
 def p_LEQ(p):
     """
     var_leq : expr LEQ expr
     """
-    if p[1] <= p[3]:
-        p[0] = True
-    else:
-        p[0] = False
+    temp = avail.next()
+    quad = ('<=', p[1], p[3], temp)
+    quadList.append(quad)
+    p[0] = temp
+
+    # if p[1] <= p[3]:
+    #     p[0] = True
+    # else:
+    #     p[0] = False
 
 def p_GEQ(p):
     """
     var_geq : expr GEQ expr
     """
-    if p[1] >= p[3]:
-        p[0] = True
-    else:
-        p[0] = False
+    temp = avail.next()
+    quad = ('>=', p[1], p[3], temp)
+    quadList.append(quad)
+    p[0] = temp
+
+    # if p[1] >= p[3]:
+    #     p[0] = True
+    # else:
+    #     p[0] = False
 
 def p_EQUAL(p):
     """
     var_equal : expr EQUAL expr
     """
-    if p[1] == p[3]:
-        p[0] = True
-    else:
-        p[0] = False
+    temp = avail.next()
+    quad = ('==', p[1], p[3], temp)
+    quadList.append(quad)
+    p[0] = temp
+
+    # if p[1] == p[3]:
+    #     p[0] = True
+    # else:
+    #     p[0] = False
 
 def p_NEQ(p):
     """
     var_neq : expr NEQ expr
     """
-    # p[0] = ('<', p[1], p[3])
-    if p[1] != p[3]:
-        p[0] = True
-    else:
-        p[0] = False
+    temp = avail.next()
+    quad = ('!=', p[1], p[3], temp)
+    quadList.append(quad)
+    p[0] = temp
+
+    # if p[1] != p[3]:
+    #     p[0] = True
+    # else:
+    #     p[0] = False
 
 ####### OPERACIONES ARITMETICAS ##########################################
 
@@ -445,12 +487,19 @@ precedence = (
     ('left', 'MUL', 'DIV')
 )
 
+## FALTA : Operaciones con Parentesis
+
 def p_oper_aritmetica(p):
     """
     oper_aritmetica : ID IS expr SEMICOL
 
     """
-    print("FINAL  ", p[3])
+    # print("RESULTADO FINAL >> ", p[3])
+    v1 = vars(v(p[1], p[-1], p[3], scope))
+    vt.__set__(p[1], v1)
+    # print("TEMP > ", vt.__getitem__(p[1]))
+    # print("TEMP > ", list(vt.__getitem__(p[1]).values())[1]) # int de la variable en la operacion
+
 
 def p_expr(p):
     """
@@ -460,13 +509,44 @@ def p_expr(p):
          | expr MINUS expr
     """
     if p[2] == '+':
-        p[0] = p[1] + p[3]
+        # p[0] = p[1] + p[3]
+        temp = avail.next()
+        quad = ('+', p[1], p[3], temp)
+        p[0] = temp
+        # quad_type = semCube.checkResult(p[1],p[3],'+')
+        # print (quad_type)
+        quadList.append(quad)
+        print(quadList)
+
+
     if p[2] == '-':
-        p[0] = p[1] - p[3]
+        # p[0] = p[1] - p[3]
+        temp = avail.next()
+        quad = ('-', p[1], p[3], temp)
+        p[0] = temp
+        # quad_type = semCube.checkResult(p[1],p[3],'+')
+        quadList.append(quad)
+        print(quadList)
+
     if p[2] == '*':
-        p[0] = p[1] * p[3]
+        # p[0] = p[1] * p[3]
+        temp = avail.next()
+        quad = ('*', p[1], p[3], temp)
+        p[0] = temp
+        # quad_type = semCube.checkResult(p[1],p[3],'+')
+        quadList.append(quad)
+        print(quadList)
+
     if p[2] == '/':
-        p[0] = p[1] / p[3]
+        # p[0] = p[1] / p[3]
+        temp = avail.next()
+        quad = ('/', p[1], p[3], temp)
+        p[0] = temp
+        # quad_type = semCube.checkResult(p[1],p[3],'+')
+        quadList.append(quad)
+        print(quadList)
+
+
 
 
 def p_expression_int_float(p):
@@ -490,18 +570,18 @@ def p_expression_var(p):
     #print('hola')
 
 
-def p_list_first(p):
-    """
-    value_list : expr
-    row_list   : row
-    """
-    p[0] = [p[1]]
-
-def p_list_extend(p):
-    """
-    row_list   : expr SEMICOL expr
-    """
-    #p[0] = p[1] + [p[3]]
+# def p_list_first(p):
+#     """
+#     value_list : expr
+#     row_list   : row
+#     """
+#     p[0] = [p[1]]
+#
+# def p_list_extend(p):
+#     """
+#     row_list   : expr SEMICOL expr
+#     """
+#     #p[0] = p[1] + [p[3]]
 
 def p_row(p):
     """
@@ -562,6 +642,9 @@ def p_else(p):
 
 ######## END IF ############################################################
 
+
+## FALTA : AND y OR. Luego comparar sus resultados. y Fondo Falso
+
 def p_expression(p):
     """
     expression : var_gt
@@ -570,6 +653,7 @@ def p_expression(p):
                | var_neq
                | var_geq
                | var_leq
+               | expr
                | TRUE
                | FALSE
                | ID
@@ -580,9 +664,10 @@ def p_check_bool(p):
     """
     check_bool :
     """
-    if p[-2] != True and p[-2] != False and p[-2] != 'true' and p[-2] != 'false':
-        print("Expresion no es bool!")
-        # sys.exit(0)
+    ## FALTA : Cambiar p[-2] por el valor de los temporales t1.
+    # if p[-2] != True and p[-2] != False and p[-2] != 'true' and p[-2] != 'false':
+    #     print("Expresion no es bool!")
+    #     # sys.exit(0)
 
 def p_gotof(p):
     """
@@ -601,32 +686,31 @@ def p_guarda_salto(p):
 
 env = {}
 
-def p_operacion(p):
-    """
-    p_operacion :
-
-    """
-    global env
-
-    if type(p) == tuple:
-        if p[0] == '+':
-            return p_operacion(p[1]) + p_operacion(p[2])
-        elif p[0] == '-':
-            return p_operacion(p[1]) - p_operacion(p[2])
-        elif p[0] == '*':
-            return p_operacion(p[1]) * p_operacion(p[2])
-        elif p[0] == '/':
-            return p_operacion(p[1]) / p_operacion(p[2])
-        elif p[0] == '=':
-            env[p[1]] = p_operacion(p[2])
-            print (env)
-        elif p[0] == 'var':
-            if p[1] not in env:
-                return 'Undeclared variable!'
-            return env[p[1]]
-    else:
-        return p
-
+# def p_operacion(p):
+#     """
+#     p_operacion :
+#
+#     """
+#     global env
+#
+#     if type(p) == tuple:
+#         if p[0] == '+':
+#             return p_operacion(p[1]) + p_operacion(p[2])
+#         elif p[0] == '-':
+#             return p_operacion(p[1]) - p_operacion(p[2])
+#         elif p[0] == '*':
+#             return p_operacion(p[1]) * p_operacion(p[2])
+#         elif p[0] == '/':
+#             return p_operacion(p[1]) / p_operacion(p[2])
+#         elif p[0] == '=':
+#             env[p[1]] = p_operacion(p[2])
+#             print (env)
+#         elif p[0] == 'var':
+#             if p[1] not in env:
+#                 return 'Undeclared variable!'
+#             return env[p[1]]
+#     else:
+#         return p
 
 
 parser = yacc.yacc()
@@ -645,12 +729,10 @@ def test():
             # print(tok)
         if (parser.parse(informacion, tracking=True) == 'Compilacion Exitosa'):
             print("No Syntax Error found")
-            print("VarTable >> ", vars(vt))
-
+            # print("VarTable >> ", vars(vt))
         else:
             print("Syntax Error")
     except EOFError:
-        # print("ERROREOF")
         print(EOFError)
 
 test()

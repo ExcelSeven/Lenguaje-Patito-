@@ -67,7 +67,7 @@ palabrasReservadas = {
     'bool': 'BOOL',
     'print': 'PRINT',
     'main': 'MAIN',
-    'function': 'FUNCTION',
+    'func': 'FUNC',
     'var': 'VAR',
     'let': 'LET',
     'input': 'INPUT',

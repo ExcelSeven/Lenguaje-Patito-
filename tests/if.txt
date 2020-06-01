@@ -4,13 +4,15 @@ var int r,x;
 var float y=52;
 
 
-main(){
+int main(){
 
-	if(a){
+	if(True){
+		arr[1];
 		
 	}
 	if(2<3){
 		cont = 1;
+		a = 1;
 	}
 	else{
 		cont = 2;

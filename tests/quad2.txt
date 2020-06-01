@@ -5,7 +5,7 @@ int func1(){
 	var int b=2.2;
 	var float c= 3.3;
 	var float d=8;
-
+	inf = 999;
 	
 	if(4>5){
 	}

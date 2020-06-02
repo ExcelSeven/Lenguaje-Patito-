@@ -53,6 +53,7 @@ palabrasReservadas = {
     'elseif': 'ELSEIF',
     'then': 'THEN',
     'while': 'WHILE',
+    'for': 'FOR',
     'do': 'DO',
     'const': 'CONST',
     'int': 'INT',
@@ -66,6 +67,7 @@ palabrasReservadas = {
     'false': 'FALSE',
     'bool': 'BOOL',
     'print': 'PRINT',
+    'read': 'READ',
     'main': 'MAIN',
     'func': 'FUNC',
     'var': 'VAR',
@@ -79,7 +81,7 @@ palabrasReservadas = {
 tokens = tokens + list(palabrasReservadas.values())
 # Expresiones Regulares
 t_ignore = ' \t\n\r'  # espacios y tabs
-t_ignore_comment = '\/\/.*'
+t_ignore_comment = '\#.*'
 
 
 

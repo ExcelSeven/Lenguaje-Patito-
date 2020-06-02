@@ -1,0 +1,12 @@
+program patito;
+
+var{
+	var int MAR = 31;
+}
+
+int main(){
+    var int chau = 100;
+	print("hola");
+	print(chau);
+	# print(chauss);
+}

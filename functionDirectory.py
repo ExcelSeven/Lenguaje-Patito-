@@ -18,7 +18,7 @@ class FunctionDirectory:
     def __getitem__(self, num):
         return self.directorio[num]
 
-    def __contains__(self, num, funcion):
+    def __contains__(self, num):
         return num in self.directorio
 
     def __repr__(self):

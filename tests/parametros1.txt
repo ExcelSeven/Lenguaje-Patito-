@@ -1,0 +1,28 @@
+program patito;
+
+var{
+    var int Mouse = 500;
+    func int func1(int, float, char);
+    func int func2(int, char);
+}
+
+int func1(int pas, float pac, char man){
+	var int a=4+5+1*6+2/5-10;
+	var int b=2;
+	#var int b=2.2;
+	var float c= 3.3;
+	#var float d=8;
+
+
+	if(4>5){
+	}
+}
+
+void func2(int as, char ad){
+	var char ch = 'V';
+	var char cha = "v";
+}
+
+void func3(){
+    var char chaasd = "v";
+}

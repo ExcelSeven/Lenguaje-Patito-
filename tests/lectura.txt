@@ -1,0 +1,5 @@
+program patito;
+
+int main(){
+    read("escritura");
+}

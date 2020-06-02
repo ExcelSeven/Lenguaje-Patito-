@@ -1,0 +1,17 @@
+program patito;
+
+var{
+	var int MAR = 31;
+}
+
+int main(){
+	var int JAN = 30;
+
+	while(2<4){
+	    var int DIC = 21;
+
+	    while(a+b == 3){
+            var int DIC = 25;
+	    }
+	}
+}

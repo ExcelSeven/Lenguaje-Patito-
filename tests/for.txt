@@ -1,0 +1,13 @@
+program patito;
+
+var{
+	var int MAR = 31;
+}
+
+int main(){
+	var int JAN = 30;
+
+	for(var int i=0; i < 10; i++){
+	    var int DIC = 25;
+	}
+}

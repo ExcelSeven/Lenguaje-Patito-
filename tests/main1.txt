@@ -1,13 +1,14 @@
 program patito;
+var{
+    var int r,x;
+    var float y=52.3;
+}
 
-var int r,x;
-var float y=52;
+int main(){
+    var int a,b;
+    var float c=33;
+    a=2;
+    j=3;
 
-main(){
-var int a,b;
-var float c=33;
-a=2;
-j=3;
-
-
+    return 1;
 }

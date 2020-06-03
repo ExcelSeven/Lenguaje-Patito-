@@ -2,4 +2,6 @@ program patito;
 
 int main(){
     read("escritura");
+
+    return 1;
 }

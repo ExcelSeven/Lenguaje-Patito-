@@ -4,6 +4,7 @@ var{
     var int Mouse = 500;
     func int func1(int, float, char);
     func int func2(int, char);
+
 }
 
 int func1(int pas, float pac, char man){
@@ -16,6 +17,8 @@ int func1(int pas, float pac, char man){
 
 	if(4>5){
 	}
+
+	return 1;
 }
 
 void func2(int as, char ad){
@@ -25,4 +28,5 @@ void func2(int as, char ad){
 
 void func3(){
     var char chaasd = "v";
+
 }

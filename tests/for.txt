@@ -10,4 +10,6 @@ int main(){
 	for(var int i=0; i < 10; i++){
 	    var int DIC = 25;
 	}
+
+	return 1;
 }

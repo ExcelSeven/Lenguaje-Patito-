@@ -70,6 +70,7 @@ palabrasReservadas = {
     'read': 'READ',
     'main': 'MAIN',
     'func': 'FUNC',
+    'return': 'RETURN',
     'var': 'VAR',
     'let': 'LET',
     'input': 'INPUT',

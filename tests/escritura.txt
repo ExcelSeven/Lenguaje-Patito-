@@ -9,4 +9,6 @@ int main(){
 	print("hola");
 	print(chau);
 	# print(chauss);
+
+	return 1;
 }

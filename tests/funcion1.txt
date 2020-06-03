@@ -9,6 +9,8 @@ int func1(){
 	
 	if(4>5){
 	}
+
+	return 1;
 }
 
 void func2(){

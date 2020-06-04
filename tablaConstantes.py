@@ -2,9 +2,10 @@ import lexer
 import parser
 
 class Constante:
-    def __init__(self, type, valor):
+    def __init__(self, type, valor, address):
         self.type = type
         self.valor = valor
+        self.address = address
 
 class TablaConstantes:
     def __init__(self):

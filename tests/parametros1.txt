@@ -22,7 +22,7 @@ int func1(int pas, float pac, char man){
 }
 
 void func2(int as, char ad){
-	var char ch = 'V';
+	var char ch = 'Va';
 	var char cha = "v";
 }
 

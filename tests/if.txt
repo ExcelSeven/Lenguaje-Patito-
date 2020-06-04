@@ -6,7 +6,7 @@ var float y=52;
 
 int main(){
 
-	if(True){
+	if(3>5){
 		arr[1];
 		
 	}
@@ -28,5 +28,7 @@ int main(){
 	else{
 		arbol2 = 2;
 	}
+
+	return 1;
 
 }

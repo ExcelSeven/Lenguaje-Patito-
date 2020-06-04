@@ -1,0 +1,57 @@
+def p_vars2_2(p):
+    """
+    vars2 :  ID IS value SEMICOL
+
+    """
+    global tt
+    global address_id
+    global address_value
+
+    # if tc.__contains__(p[4]) is True:
+    #     address_value = list(tc.__getitem__(p[4]).values())[2]
+    # elif vt.__contains__(p[2]) is True:
+    #     address_value = list(vt.__getitem__(p[2]).values())[2]
+    # print("AD VALL > ", address_value)
+
+
+
+    if p[-1] == 'int' and isinstance(p[3], int) is False:
+        print("Error >", p[3], " No es un int!")
+        # sys.exit(0)
+
+    elif p[-1] == 'float' and isinstance(p[3], float) is False:
+        print("Error > ", p[3], " No es un float!")
+        # sys.exit(0)
+
+    elif p[-1] == ',':
+        if tc.__contains__(p[4]) is True:
+            address_id = memory.local_mem(tipo)
+            address_value = list(tc.__getitem__(p[4]).values())[2]
+            v1 = vars(v(p[1], tipo, address_value, scope, address_id))
+            vtf.__set__(p[1], v1)
+
+        elif vt.__contains__(p[2]) is True:
+            address_id = memory.local_mem(tipo)
+            address_value = list(vt.__getitem__(p[2]).values())[2]
+            v1 = vars(v(p[1], tipo, address_value, scope, address_id))
+            vtf.__set__(p[1], v1)
+
+    else:
+        if tc.__contains__(p[4]) is True:
+            address_id = memory.local_mem(tipo)
+            address_value = list(tc.__getitem__(p[4]).values())[2]
+            v1 = vars(v(p[1], tipo, address_value, scope, address_id))
+            vtf.__set__(p[1], v1)
+
+        elif vt.__contains__(p[2]) is True:
+            address_id = memory.local_mem(tipo)
+            address_value = list(vt.__getitem__(p[2]).values())[2]
+            v1 = vars(v(p[1], tipo, address_value, scope, address_id))
+            vtf.__set__(p[1], v1)
+
+
+    temp = avail.next()
+    quad = ('=', address_value, None, address_id)
+    quadList.append(quad)
+    # print(quadList)
+    p[0] = temp

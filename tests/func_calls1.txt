@@ -9,7 +9,7 @@ var{
 }
 
 
-int func1(int pas, float pac, int man){
+int func1(int pas, float pac, char man){
 	var int a=4+5+1*6+2/5-10;
 	var int b=2;
 	#var int b=2.2;
@@ -19,12 +19,13 @@ int func1(int pas, float pac, int man){
 	if(4>5){
 	}
 
-	return 2+5; #Marca error por el t11 int
+	return 1; #Marca error por el t11 int
 }
 
 
 int func3(){
     var int wer = 31;
+    var int werty = 321;
     return 12;
 }
 
@@ -32,9 +33,9 @@ int func3(){
 int main(){
     var int casa = 10;
     func1(77,107.5, c);
-    func2(10+2,as);
+    func2(10,as);
     func3();
-    #func4();
+    func4();
 
     return a;
 }

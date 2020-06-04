@@ -1,0 +1,13 @@
+program patito;
+
+var{
+    var int Mouse = 500;
+}
+
+int main(){
+    var int Control = 105;
+    var float Barco = 205.8;
+    var int Banana = 305;
+
+    return Control;
+}

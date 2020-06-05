@@ -215,13 +215,9 @@ def p_vars2(p):
     """
 
     global tt
-    # global address_value
-    #
-    # if tc.__contains__(p[4]) is True:
-    #     address_value = list(tc.__getitem__(p[4]).values())[2]
-    # elif vt.__contains__(p[2]) is True:
-    #     address_value = list(vt.__getitem__(p[2]).values())[2]
-    # print(address_value)
+    global valor
+    valor = p[4]
+
 
     if p[-1] == 'int' and isinstance(p[4], int) is False:
         print("Error >", p[4], " No es un int!")
@@ -231,14 +227,15 @@ def p_vars2(p):
         # sys.exit(0)
     elif p[-1] == ',':
         address_id = memory.local_mem(tipo)
-        v1 = vars(v(p[2], tipo, address_value, scope, address_id))
+        v1 = vars(v(p[2], tipo, p[4], scope, address_id))
         vtf.__set__(p[2], v1)
     else:
         address_id = memory.local_mem(tipo)
-        v1 = vars(v(p[2], p[-1], address_value, scope, address_id))
+        v1 = vars(v(p[2], p[-1], p[4], scope, address_id))
         vtf.__set__(p[2], v1)
     # print(vars(vtf))
 
+    address_value = list(tc.__getitem__(valor).values())[2]
     temp = avail.next()
     quad = ('=', address_value, None, address_id)
     quadList.append(quad)
@@ -252,22 +249,47 @@ def p_vars2_1(p):
 
     """
     global tt
+    global valor
+    global id
+    valor = p[4]
+    id = p[2]
 
     if p[-1] == 'int' and isinstance(p[4], int) is False:
-        print("Error >", p[4], " No es un int!")
+        print("Error >", valor, " No es un int!")
         # sys.exit(0)
     elif p[-1] == 'float' and isinstance(p[4], float) is False:
-        print("Error > ", p[4], " No es un float!")
+        print("Error > ", valor, " No es un float!")
         # sys.exit(0)
     elif p[-1] == ',':
-        v1 = vars(v(p[2], tipo, p[4], scope, memory.local_mem(tipo)))
-        vtf.__set__(p[2], v1)
+        if tc.__contains__(valor) is True:
+            address_id = memory.local_mem(tipo)
+            v1 = vars(v(id, tipo, valor, scope, address_id))
+            vtf.__set__(id, v1)
+
+        elif vtf.__contains__(valor) is True:
+            address_id = memory.local_mem(tipo)
+            v1 = vars(v(id, tipo, valor, scope, address_id))
+            vtf.__set__(id, v1)
     else:
-        v1 = vars(v(p[2], p[-1], p[4], scope, memory.local_mem(p[-1])))
-        vtf.__set__(p[2], v1)
+        if tc.__contains__(valor) is True:
+            address_id = memory.local_mem(tipo)
+            v1 = vars(v(id, tipo, valor, scope, address_id))
+            vtf.__set__(id, v1)
+
+        elif vtf.__contains__(valor) is True:
+            address_id = memory.local_mem(tipo)
+            if vtf.__contains__(list(vtf.__getitem__(valor).values())[0]) is True:
+                valor = list(vtf.__getitem__(valor).values())[2]
+
+            print("Valuee >> ", list(vtf.__getitem__(valor).values())[0])
+            v1 = vars(v(id, tipo, valor, scope, address_id))
+            vtf.__set__(id, v1)
+
+
+    address_value = list(tc.__getitem__(valor).values())[2]
 
     temp = avail.next()
-    quad = ('=', p[4], None, p[2])
+    quad = ('=', address_value, None, address_id)
     quadList.append(quad)
     # print(quadList)
     p[0] = temp
@@ -280,22 +302,49 @@ def p_vars2_3(p):
 
     """
     global tt
+    global valor
+    global id
+
+    valor = p[3]
+    id = p[1]
+
 
     if p[-1] == 'int' and isinstance(p[3], int) is False:
-        print("Error >", p[3], " No es un int!")
+        print("Error >", valor, " No es un int!")
         # sys.exit(0)
     elif p[-1] == 'float' and isinstance(p[3], float) is False:
-        print("Error > ", p[3], " No es un float!")
+        print("Error > ", valor, " No es un float!")
         # sys.exit(0)
     elif p[-1] == ',':
-        v1 = vars(v(p[1], tipo, p[3], scope, memory.local_mem(tipo)))
-        vtf.__set__(p[1], v1)
+        if tc.__contains__(valor) is True:
+            address_id = memory.local_mem(tipo)
+            v1 = vars(v(id, tipo, valor, scope, address_id))
+            vtf.__set__(id, v1)
+
+        elif vtf.__contains__(valor) is True:
+            address_id = memory.local_mem(tipo)
+            v1 = vars(v(id, tipo, valor, scope, address_id))
+            vtf.__set__(id, v1)
     else:
-        v1 = vars(v(p[1], p[-1], p[3], scope, memory.local_mem(p[-1])))
-        vtf.__set__(p[1], v1)
+        if tc.__contains__(valor) is True:
+            address_id = memory.local_mem(tipo)
+            v1 = vars(v(id, tipo, valor, scope, address_id))
+            vtf.__set__(id, v1)
+
+        elif vtf.__contains__(valor) is True:
+            address_id = memory.local_mem(tipo)
+            if vtf.__contains__(list(vtf.__getitem__(valor).values())[0]) is True:
+                valor = list(vtf.__getitem__(valor).values())[2]
+
+            print("Valuee >> ", list(vtf.__getitem__(valor).values())[0])
+            v1 = vars(v(id, tipo, valor, scope, address_id))
+            vtf.__set__(id, v1)
+
+
+    address_value = list(tc.__getitem__(valor).values())[2]
 
     temp = avail.next()
-    quad = ('=', p[3], None, p[1])
+    quad = ('=', address_value, None, address_id)
     quadList.append(quad)
     # print(quadList)
     p[0] = temp
@@ -315,13 +364,12 @@ def p_vars2_2(p):
     """
     global tt
     global address_id
+    global valor
     global address_value
 
-    # address_value = list(tc.__getitem__(p[3]).values())[2]
-    # print("address >> ", address_value)
+    valor = p[3]
 
-
-    if p[-1] == 'int' and isinstance(p[3], int) is False:
+    if p[-1] == 'int' and isinstance(p[3], int) is False and vtf.__contains__(p[3] is False):
         print("Error >", p[3], " No es un int!")
         # sys.exit(0)
     elif p[-1] == 'float' and isinstance(p[3], float) is False:
@@ -330,112 +378,129 @@ def p_vars2_2(p):
     elif p[-1] == ',':
         if tc.__contains__(p[3]) is True:
             address_id = memory.local_mem(tipo)
-            address_value = list(tc.__getitem__(p[3]).values())[2]
-            v1 = vars(v(p[1], tipo, address_value, scope, address_id))
+            v1 = vars(v(p[1], tipo, p[3], scope, address_id))
             vtf.__set__(p[1], v1)
 
-        elif vt.__contains__(p[1]) is True:
+        elif vtf.__contains__(p[3]) is True:
             address_id = memory.local_mem(tipo)
-            address_value = list(vt.__getitem__(p[2]).values())[2]
-            v1 = vars(v(p[1], tipo, address_value, scope, address_id))
+            v1 = vars(v(p[1], tipo, p[3], scope, address_id))
             vtf.__set__(p[1], v1)
     else:
         if tc.__contains__(p[3]) is True:
             address_id = memory.local_mem(tipo)
-            address_value = list(tc.__getitem__(p[3]).values())[2]
-            v1 = vars(v(p[1], tipo, address_value, scope, address_id))
+            v1 = vars(v(p[1], tipo, p[3], scope, address_id))
             vtf.__set__(p[1], v1)
 
-        elif vt.__contains__(p[1]) is True:
+        elif vtf.__contains__(p[3]) is True:
             address_id = memory.local_mem(tipo)
-            address_value = list(vt.__getitem__(p[2]).values())[2]
-            v1 = vars(v(p[1], tipo, address_value, scope, address_id))
+            if vtf.__contains__(list(vtf.__getitem__(p[3]).values())[0]) is True:
+                valor = list(vtf.__getitem__(p[3]).values())[2]
+
+            print("Valuee >> ", list(vtf.__getitem__(p[3]).values())[0])
+            v1 = vars(v(p[1], tipo, valor, scope, address_id))
             vtf.__set__(p[1], v1)
 
+
+    address_value = list(tc.__getitem__(valor).values())[2]
 
     temp = avail.next()
     quad = ('=', address_value, None, address_id)
     quadList.append(quad)
-    # print(quadList)
-    p[0] = temp
 
 
-# var int a,b,c;
+# var int a, b, <<c;>>
 def p_vars3(p):
     """
     vars3 : vars3_1 ID SEMICOL
-
     """
 
-    global tipos
+    global tipo_var
+    global id
+    id = p[2]
+
     if p[-1] == ',':
-        tipos = 'int'
-        v1 = vars(v(p[2], tipos, 'N', scope, memory.local_mem(tipos)))
-        vtf.__set__(p[2], v1)
+        tipo_var = 'int'
+        address_id = memory.local_mem(tipo_var)
+        v1 = vars(v(id, tipo_var, 'N', scope, address_id))
+        vtf.__set__(id, v1)
     else:
-        tipos = p[-1]
-        v1 = vars(v(p[2], p[-1], 'N', scope, memory.local_mem(p[-1])))
-        vtf.__set__(p[2], v1)
+        tipo_var = p[-1]
+        address_id = memory.local_mem(tipo_var)
+        v1 = vars(v(id, tipo_var, 'N', scope, address_id))
+        vtf.__set__(id, v1)
 
 
-# var int a,b,c;
+# var int a, <<b,>> c;
 def p_vars3_1(p):
     """
     vars3_1 : vars3_1 ID COMMA
-
     """
 
-    global tipos
+    global tipo_var
+    global address_id
+    global id
+    id = p[2]
+
     if p[-1] == ',':
-        tipos = 'int'
-        v1 = vars(v(p[2], tipos, 'N', scope, memory.local_mem(tipos)))
-        vtf.__set__(p[2], v1)
+        tipo_var = 'int'
+        address_id = memory.local_mem(tipo_var)
+        v1 = vars(v(id, tipo_var, 'N', scope, address_id))
+        vtf.__set__(id, v1)
     else:
-        tipos = p[-1]
-        v1 = vars(v(p[2], p[-1], 'N', scope, memory.local_mem(p[-1])))
-        vtf.__set__(p[2], v1)
+        tipo_var = p[-1]
+        address_id = memory.local_mem(tipo_var)
+        v1 = vars(v(id, tipo_var, 'N', scope, address_id))
+        vtf.__set__(id, v1)
 
 
-# var int a,b,c;
+# var int <<a,>> b, c;
 def p_vars3_3(p):
     """
     vars3_1 : ID COMMA
-
     """
 
-    global tipos
+    global tipo_var
+    global id
+    id = p[1]
+
     if p[-1] == ',':
-        tipos = 'int'
-        v1 = vars(v(p[1], tipos, 'N', scope, memory.local_mem(tipos)))
-        vtf.__set__(p[1], v1)
+        tipo_var = 'int'
+        address_id = memory.local_mem(tipo_var)
+        v1 = vars(v(id, tipo_var, 'N', scope, address_id))
+        vtf.__set__(id, v1)
     else:
-        tipos = p[-1]
-        v1 = vars(v(p[1], p[-1], 'N', scope, memory.local_mem(p[-1])))
-        vtf.__set__(p[1], v1)
+        tipo_var = p[-1]
+        address_id = memory.local_mem(tipo_var)
+        v1 = vars(v(id, tipo_var, 'N', scope, address_id))
+        vtf.__set__(id, v1)
 
 
-# var int a,b,c;
+# var int a;
 def p_vars3_2(p):
     """
     vars3 : ID SEMICOL
-
     """
+    global tipo_var
+    global id
+    id = p[1]
 
-    global tipos
     if p[-1] == ',':
-        tipos = 'int'
-        v1 = vars(v(p[1], tipos, 'N', scope, memory.local_mem(tipos)))
-        vtf.__set__(p[1], v1)
+        tipo_var = 'int'
+        address_id = memory.local_mem(tipo_var)
+        v1 = vars(v(id, tipo_var, 'N', scope, address_id))
+        vtf.__set__(id, v1)
     else:
-        tipos = p[-1]
-        v1 = vars(v(p[1], p[-1], 'N', scope, memory.local_mem(p[-1])))
-        vtf.__set__(p[1], v1)
+        tipo_var = p[-1]
+        address_id = memory.local_mem(tipo_var)
+        v1 = vars(v(id, tipo_var, 'N', scope, address_id))
+        vtf.__set__(id, v1)
+
 
 def p_vars3_empty(p):
     """
     vars3_1 : empty
-
     """
+
 
 
 ####### END Variables Locales ################################################
@@ -699,7 +764,7 @@ def p_value_constantes(p):
         if isinstance(p[1], int):
             c1 = vars(c('int', p[1], memory.cte_mem('int')))
             tc.__set__(p[1], c1)
-        else: # isinstance(p[1], float):
+        elif isinstance(p[1], float):
             c1 = vars(c('float', p[1], memory.cte_mem('float')))
             tc.__set__(p[1], c1)
         # print(vars(tc))
@@ -1936,7 +2001,7 @@ def test():
             # print(tok)
         if (parser.parse(data, tracking=True) == 'Compilacion Exitosa'):
             print("No Syntax Error found")
-            print("VarTable >> ", vars(vt))
+            # print("VarTable >> ", vars(vt))
             # print("Constantes >> ",  vars(tc))  # Constantes
             # print("Funciones >> ", vars(fd.__getitem__('func1')))
             # print("PARAM >> ", param.__getitem__('func1'))

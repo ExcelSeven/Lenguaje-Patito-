@@ -5,9 +5,12 @@ var{
 }
 
 int main(){
+    var int a,b,c;
+    var int mula;
     var int Control = 105;
     var float Barco = 205.8;
-    var int Banana = 305;
+    var int Banana = Control;
+    #var int Pa = 101, Ma = 102, Sa = 103;
 
     return Control;
 }

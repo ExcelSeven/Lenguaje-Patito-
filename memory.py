@@ -48,7 +48,7 @@ class Memory:
 
 ######## FUNCIONES ###################################
 
-    def funciones(self):
+    def funciones_mem(self):
         self.f +=1
         if self.f >= 1000:
             print("ERROR > Too many functions!")

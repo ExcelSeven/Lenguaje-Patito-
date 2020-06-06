@@ -6,10 +6,11 @@ var{
 
 int main(){
 
-var int ad;
+    var int ad;
+    MAR = 5;
     # var int c = a;
     var int x,h,g;
-    # var float b=7.35, d=66.2;
+    var float b=7.35, d=66.2;
     var int ja=5, ka=6, la=7;
     var int q=11, w=12, e=13;
     return 1;

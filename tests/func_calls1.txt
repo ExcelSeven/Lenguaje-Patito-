@@ -11,12 +11,15 @@ var{
 
 int func1(int pas, float pac, char man){
 	var int a=4+5+1*6+2/5-10;
+	#var int a=4+5+3;
 	var int b=2;
 	#var int b=2.2;
 	var float c= 3.3;
 	#var float d=8;
 
-	if(4>5){
+	if(4>b){
+	}
+	if(33<66){
 	}
 
 	return 1; #Marca error por el t11 int
@@ -35,7 +38,7 @@ int main(){
     func1(77,107.5, c);
     func2(10,as);
     func3();
-    func4();
+    #func4();
 
-    return a;
+    return 1;
 }

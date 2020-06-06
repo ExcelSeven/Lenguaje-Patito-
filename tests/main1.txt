@@ -7,8 +7,8 @@ var{
 int main(){
     var int a,b;
     var float c=33;
-    a=2;
-    j=3;
+    #a=2;
+    #j=3;
 
     return 1;
 }

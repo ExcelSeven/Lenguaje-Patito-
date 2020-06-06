@@ -3,7 +3,7 @@ program patito;
 var{
     var int Mouse = 500;
     func int func1(int, float, char);
-    func void func2(int, char);
+    #func void func2(int, char);
     func int func3();
 
 }
@@ -17,7 +17,7 @@ int func1(int pas, float pac, char man){
 	var float c= 3.3;
 	#var float d=8;
 
-	if(4>b){
+	if(4>3){
 	}
 	if(33<66){
 	}
@@ -35,8 +35,8 @@ int func3(){
 
 int main(){
     var int casa = 10;
-    func1(77,107.5, c);
-    func2(10,as);
+    func1(77,107.5, c); # casa
+    #func2(10,as);
     func3();
     #func4();
 

@@ -2,10 +2,11 @@ import varTable
 
 
 class Function:
-    def __init__(self, name, type, vars):
+    def __init__(self, name, type, vars, address):
         self.name = name
         self.type = type
         self.vars = vars
+        self.address = address
 
 
 class FunctionDirectory:
@@ -23,6 +24,9 @@ class FunctionDirectory:
 
     def __repr__(self):
         return self.directorio
+
+    def size(self):
+        return len(self.directorio)
 
 
 # x = 10

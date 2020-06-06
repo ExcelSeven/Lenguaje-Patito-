@@ -46,6 +46,7 @@ class Memory:
     def get_mem_pointer(self):
         return self.p
 
+
 ######## FUNCIONES ###################################
 
     def funciones_mem(self):

@@ -1,0 +1,22 @@
+program patito;
+
+var{
+    var int Mouse = 500;
+}
+
+int main(){
+    var int a,b,c;
+    var float a11,b22,c33;
+    var int a44,b55,c66;
+    #var int mula;
+    var int Control = 105;
+    #var float Barco = 205.8;
+    var int Banana = Control;
+
+    var int Pa = 101, Ma = 102, Sa = 103;
+
+    var int Pa2 = 10111, Ma2 = 10222, Sa2 = 10333;
+    var float Pa1 = 1001.1, Ma1 = 1002.2, Sa1 = 1003.3;
+
+    return Control;
+}

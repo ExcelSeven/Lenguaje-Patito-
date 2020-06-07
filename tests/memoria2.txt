@@ -1,0 +1,28 @@
+program patito;
+
+var{
+    #var int Mouse = 500;
+}
+
+
+int main(){
+    var int b=2;
+	var int a=4+5+1*6+2/5-10;
+	#var int a=4+5+7;
+	#var int b=2.2;
+	#var float c= 3.3;
+	#var float d=8;
+
+	#if(4>b){
+	#}
+	if(33<66){             # gotof (else)
+	    var int qq = 10;
+	    var int ww = 20;
+	}                      # goto
+	else{
+	}
+	#if(t){}
+
+
+	return 1; #Marca error por el t11 int
+}

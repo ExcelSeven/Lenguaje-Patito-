@@ -1,11 +1,13 @@
+from memory import Memory
+
 class Var:
-    def __init__(self, name, type, valor, scope):
+    def __init__(self, name, type, valor, scope, address):
         self.name = name
         self.type = type
         self.valor = valor
         self.scope = scope
         self.is_param = False
-        # self.address = 0
+        self.address = address
 
 
 class VarTable:
@@ -27,21 +29,32 @@ class VarTable:
     def clear(self):
         self.directyory.clear()
 
-tipos = list()
 
-# var1 = Variables('a', 'int', 1)
-# var2 = Variables('b', 'float', 2.5)
-# var3 = Variables('c', 'chr', 'c')
+memory = Memory()
+
+# print(memory.local_int())
+# print(memory.local_int())
+# print(memory.local_int())
+# memory.resetear_memoria()
+
+# var1 = Var('a', 'int', 1, 'global', memory.global_mem('float'))
+# # var2 = Var('b', 'float', 2.5)
+# # var3 = Var('c', 'chr', 'c')
 #
-# print(vars(var1))
-# print(vars(var2))
-# print(vars(var3))
 #
-# tv = TablaVariables()
-# # tv.__set__('a', var1)
+# # print(vars(var1))
+# # print(vars(var2))
+# # print(vars(var3))
+#
+# tv = VarTable()
+# tv.__set__('a', var1)
 # # tv.__set__('b', var2)
 # # tv.__set__('c', var3)
-# #
+#
+# address = vars(tv.__getitem__('a'))
+# print(address)
+
+
 # print('Variables >>', vars(tv.__getitem__('a')))
 # print('Variables >>', vars(tv.__getitem__('b')))
 # print('Variables >>', vars(tv.__getitem__('c')))
@@ -58,4 +71,8 @@ tipos = list()
 # cont = tv.__contains__('a')
 #
 # print('Contains >>', cont)
+
+
+
+
 

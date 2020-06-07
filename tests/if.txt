@@ -1,32 +1,41 @@
 program patito;
 
-var int r,x;
-var float y=52;
+var{
+    var int r,x;
+    var float y = 52.3;
+}
 
 
 int main(){
 
-	if(True){
-		arr[1];
-		
+	if(3>5){
+    	var int asd = 1;
+
 	}
 	if(2<3){
-		cont = 1;
-		a = 1;
+		var int cont = 1;
+		var int a = 1;
 	}
 	else{
-		cont = 2;
+		var int cont = 2;
+		var int cont2 = 24;
 	}
 
+	var float casa = 12.5;
 
-	if(2>3){
-		arbol = 1;
-	}
-	elseif(3<555){
-		
-	}
-	else{
-		arbol2 = 2;
-	}
+
+	#if(2>3){
+	#	var int arbol = 1;
+	#}
+	#elseif(3<555){
+    #    var int cont = 2;
+	#}
+	#else{
+	#	var int arbol2 = 2;
+	#	var int cont2 = 242;
+	#}
+
+    #var float casa = 12.5;
+	return 1;
 
 }

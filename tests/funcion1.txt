@@ -13,7 +13,3 @@ int func1(){
 	return 1;
 }
 
-void func2(){
-	var char ch = 'Va';
-	var char cha = "v";
-}

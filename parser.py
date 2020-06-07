@@ -141,19 +141,23 @@ def p_funciones3(p):
 
 def p_main(p):
     """
-    main : tipo MAIN LP RP LB statement func_return_main RB end_main
-         | VOID MAIN LP RP LB statement RB
+    main : tipo MAIN quad_main LP RP LB statement func_return_main RB end_main
+         | VOID MAIN quad_main LP RP LB statement RB
     """
     # print("VarTable >> ", p[2], vars(vtf))
     # print("Constantes >> ", p[2], vars(tc))
-
-
 
     vtf.clear()
     memory.resetear_memoria()
 
     # print("MAIN ok")
 
+def p_quad_main(p):
+    """
+    quad_main :
+
+    """
+    quadList[0] = ('GOTO', None, None, len(quadList)+1)
 
 def p_statement(p):
     """
@@ -465,6 +469,8 @@ def p_vars2_2(p):
             vtf.__set__(id, v1)
 
 
+    ## FALTA : Da error en esta instruccion cuando declaro un char. porque busca al Char en tc
+    ##          Puedo hacer un else mejorado arriba para que acepte chars
     address_value = list(tc.__getitem__(valor).values())[2]
 
     quad = ('=', address_value, None, address_id)
@@ -803,7 +809,6 @@ def p_vars2_2G(p):
     id = p[1]
     valor = p[3]
 
-    print(p[1])
     if tipo_var == 'int' and isinstance(valor, int) is False and vtf.__contains__(valor) is False:
         print("Error >", valor, " No es un int!")
         # sys.exit(0)
@@ -1242,7 +1247,6 @@ def p_end_func (p):
     quad = ('ENDFUNC', None, None, None)
     quadList.append(quad)
 
-## FALTA : Mejor poner un era.. gosub en las expresiones regulares como Manuel
 
 def p_func_call(p):
     """
@@ -1276,7 +1280,6 @@ def p_func_call(p):
 
 ## FALTA :  Cuadruplo y Codigo (otro def) de igualar el resultado de la funcion a una variable
 ##          a = func1();
-##          END de main
 ##          Que reciba el valor de RETURN en la llamada.
 
 def p_func_call_con_param(p):
@@ -1739,50 +1742,95 @@ def p_empty(p):
 
 def p_if(p):
     """
-    if : IF LP expression RP check_bool gotof LB statement RB
-        | IF LP expression RP check_bool gotof LB statement RB goto elseif
-        | IF LP expression RP check_bool gotof LB statement RB goto else
+    if : IF LP expression RP check_bool gotof LB statement RB fill_if
+
+        | IF LP expression RP check_bool gotof LB statement RB goto fill_gotof else
     """
     # print("IF ok. Expresion >> ", p[3])
+    # | IF LP expression RP check_bool gotof LB statement RB goto fill_gotof2 elseif
 
-def p_elseif(p):
-    """
-    elseif : ELSEIF guarda_num_salto LP expression RP check_bool gotof LB statement RB goto
-           | ELSEIF guarda_num_salto LP expression RP check_bool gotof LB statement RB goto elseif
-           | ELSEIF guarda_num_salto LP expression RP check_bool gotof LB statement RB goto else
 
-    """
+# def p_elseif(p):
+#     """
+#     elseif : ELSEIF guarda_num_salto LP expression RP check_bool gotof LB statement RB fill_if
+#            | ELSEIF guarda_num_salto LP expression RP check_bool gotof LB statement RB goto elseif
+#            | ELSEIF guarda_num_salto LP expression RP check_bool gotof LB statement RB goto else
+#
+#     """
 
 def p_else(p):
     """
-    else : ELSE guarda_num_salto LB statement RB guarda_num_salto
+    else : ELSE guarda_num_salto LB statement RB fill_goto_else
 
     """
 
-def p_goto(p):
+def p_goto(p): ########
     """
     goto :
 
     """
-
-    # if jump.size() > 0:
-        # print("JUMP >> ", jump[0])
-        # jump.pop()
+    print(len(quadList))
     quad = ('GOTO', None, None, '$')
     quadList.append(quad)
 
 
-def p_gotof(p):
+def p_gotof(p): ########
     """
     gotof :
 
     """
-    # if jump.size() > 0:
-    #     print(jump.pop())
-    # print("GOTOFF")
+    print(len(quadList)+1)  ## +1
+    jump.push(len(quadList)+1)
+    # print(len(quadList)+1)
+    # print(quadList)
     quad = ('GOTOF', p[-3], None, "$")
     quadList.append(quad)
     # print(quadList)
+
+def p_fill_goto_else(p): ########
+    """
+    fill_goto_else :
+
+    """
+    jump.push(len(quadList)+1)
+    print(len(quadList)+1)
+    print(jump.top_ant())
+    quadList[jump.top_ant()-1] = ('GOTO', None, None, len(quadList)+1)
+
+def p_fill_gotof(p): ##########
+    """
+    fill_gotof :
+
+    """
+    print(len(quadList)+1)  ## +1
+    jump.push(len(quadList))
+    # print(len(quadList) + 1)
+    # print(quadList[jump.top_ant()])
+    quadList[jump.top_ant()-1] = ('GOTOF', None, None, jump.top_act())
+
+
+def p_fill_gotof2(p): ##########
+    """
+    fill_gotof2 :
+
+    """
+    print(len(quadList)+1)  ## +1
+    jump.push(len(quadList))
+    # print(len(quadList) + 1)
+    # print(quadList[jump.top_ant()])
+    quadList[jump.top_ant()-1] = ('GOTOF', None, None, jump.top_act()+1)
+
+
+
+def p_fill_if(p): ########
+    """
+    fill_if :
+
+    """
+    print(len(quadList))
+    # print(len(quadList))
+    # print(quadList[jump.top_ant()-1])
+    quadList[jump.pop()-1] = ('GOTOF', None, None, len(quadList)+1)
 
 
 def p_guarda_num_salto(p):
@@ -2533,7 +2581,6 @@ def p_check_bool(p):
     check_bool :
 
     """
-    print("HOLA")
     try:
         if p[-2] >= 34000 and p[-2] < 37000:
             pass
@@ -2550,7 +2597,7 @@ lexer = lex.lexer
 
 def test():
     try:
-        file = open("tests/funcion1.txt", 'r')
+        file = open("tests/if.txt", 'r')
         data = file.read()
         file.close()
         lexer.input(data)

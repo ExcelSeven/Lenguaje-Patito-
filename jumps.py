@@ -11,7 +11,10 @@ class Jump:
     def is_empty(self):
         return self.jump == []
 
-    def top(self):
+    def top_ant(self):
+        return self.jump[len(self.jump) - 2]
+
+    def top_act(self):
         return self.jump[len(self.jump) - 1]
 
     def pop(self):

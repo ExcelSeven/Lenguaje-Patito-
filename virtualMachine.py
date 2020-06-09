@@ -2,6 +2,7 @@ import sys
 import time
 from memory import Memory
 from functionDirectory import FunctionDirectory
+from address_id import AddressIdTable
 
 
 
@@ -13,26 +14,23 @@ class VirtualMachine:
         self.memory = Memory()
         self.start_time = 0
         self.end_time = 0
+        self.adidtg = AddressIdTable()
 
 
 
-    def start_vm(self):
-        # print("Start VM >> ", vars(self.fd))
-        # print("MEMORIA >> ", vars(self.memory))
-        # # mem_func = Memory()
-        # print(self.fd.__getitem__())
-        pass
+    def main(self):
+        salto_main = list(self.adidtg.__getitem__('main').values())[1]
+        print("VALUES ", list(self.fd.__getitem__('main').values())[2])
+
+        # a = dict(list(self.fd.__getitem__('main').values())[2])
+        # a = list(a.values())['valor']
+        # print("VALUES ", dict(a)['valor'])
+        return salto_main - 2
+
 
     def igual(self, quad):
-        # self.memory.get_memoria()
-        # quad[3] = quad[1]
-        # res = self.memory.get_memoria(4000)
-        # print
+        self.memory.guardar_memoria(int(quad[3]), self.memory.get_memoria(quad[1]))
         print(vars(self.memory))
-        # print("IGUAL", quad[1], self.memory.get_memoria(quad[3]))
-        print(quad[3], quad[1])
-        self.memory.guardar_memoria(quad[3], self.memory.get_memoria(quad[1]))
-
 
     def suma(self, quad):
         temp = self.memory.get_memoria(quad[1]) + self.memory.get_memoria(quad[2])
@@ -87,7 +85,7 @@ class VirtualMachine:
 
 
     def goto(self, quad):
-        return quad[3] - 2
+        return quad[3] - 3
 
     def gotf(self, quad):
         if quad[1] is False:
@@ -95,7 +93,8 @@ class VirtualMachine:
 
     def era(self, quad):
         func = self.memory.get_memoria(quad[3])
-        print(func)
+        # print(quad[3])
+        # print(func)
         print("ERA")
         mem_func = Memory()
         # print(self.fd.__getitem__())
@@ -104,15 +103,24 @@ class VirtualMachine:
 
 
     def gosub(self, quad):
-
-        print("GOSUB")
+        return quad[3] - 2
 
     def param(self, quad):
         print("PARAM")
 
     def end_func(self, quad):
+        # borrar memoria temporal y local
         print("END FUNC")
         print(vars(self.memory))
+
+    def print(self, quad):
+        try:
+            addr = list(self.adidtg.__getitem__(quad[3]).values())[1]
+            res = self.memory.get_memoria(addr)
+            print("PRINT ", res)
+        except:
+            res = list(self.adidtg.__getitem__(quad[3]).values())[1]
+            print("PRINT ", res)
 
 
 

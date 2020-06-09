@@ -130,13 +130,13 @@ def p_funciones3(p):
 
 def p_main(p):
     """
-    main : tipo MAIN quad_main2 LP RP LB statement func_return_main RB
-         | VOID MAIN quad_main2 LP RP LB statement RB
+    main : tipo MAIN quad_main2 LP RP LB statement add_func_main func_return_main RB
+         | VOID MAIN quad_main2 LP RP LB statement add_func_main RB
     """
     # print("VarTable >> ", p[2], vars(vtf))
     # print("Constantes >> ", p[2], vars(tc))
 
-    vtf.clear()
+    # vtf.clear()
     # memory.resetear_memoria()
 
 
@@ -146,7 +146,7 @@ def p_quad_main(p):
 
     """
 
-    quad = ('GOTO', None, None, '$')
+    quad = ('GOTO', None, None, 'main')
     quadList.append((quad))
     jump_main.append(len(quadList))
 
@@ -156,8 +156,8 @@ def p_quad_main2(p):
     quad_main2 :
 
     """
-    quadList[jump_main.pop()-1] = ('GOTO', None, None, len(quadList)+1)
-
+    # quadList[jump_main.pop()-1] = ('GOTO', None, None, len(quadList)+1)
+    adidtg.__set__('main', vars(adid('main', len(quadList)+1)))
 
 def p_statement(p):
     """
@@ -274,10 +274,10 @@ def p_vars2(p):
 
     if p[-1] == 'int' and isinstance(p[4], int) is False:
         print("Error >", valor, " No es un int!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == 'float' and isinstance(p[4], float) is False:
         print("Error > ", valor, " No es un float!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == ',':
         address_id = memory.local_mem(tipo)
         # memory.guardar_memoria(address_id, valor)
@@ -316,10 +316,10 @@ def p_vars2_1(p):
 
     if tipo_var == 'int' and isinstance(valor, int) is False:
         print("Error >", valor, " No es un int!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == 'float' and isinstance(valor, float) is False:
         print("Error > ", valor, " No es un float!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == ',':
         if tc.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
@@ -380,10 +380,10 @@ def p_vars2_3(p):
 
     if tipo_var == 'int' and isinstance(valor, int) is False:
         print("Error >", valor, " No es un int!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == 'float' and isinstance(valor, float) is False:
         print("Error > ", valor, " No es un float!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == ',':
         if tc.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
@@ -449,10 +449,10 @@ def p_vars2_2(p):
 
     if tipo_var == 'int' and isinstance(valor, int) is False and vtf.__contains__(valor) is False:
         print("Error >", valor, " No es un int!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == 'float' and isinstance(valor, float) is False:
         print("Error > ", valor, " No es un float!")
-        # sys.exit(0)
+        sys.exit(0)
     elif p[-1] == ',':
         if tc.__contains__(id) is True:
             address_id = memory.local_mem(tipo)
@@ -674,10 +674,10 @@ def p_vars2G(p):
 
     if p[-1] == 'int' and isinstance(p[4], int) is False:
         print("Error >", valor, " No es un int!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == 'float' and isinstance(p[4], float) is False:
         print("Error > ", valor, " No es un float!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == ',':
         address_id = memory.global_mem(tipo)
         memory.guardar_memoria(address_id, valor)
@@ -716,10 +716,10 @@ def p_vars2_1G(p):
 
     if tipo_var == 'int' and isinstance(valor, int) is False:
         print("Error >", valor, " No es un int!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == 'float' and isinstance(valor, float) is False:
         print("Error > ", valor, " No es un float!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == ',':
         if tc.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
@@ -781,10 +781,10 @@ def p_vars2_3G(p):
 
     if tipo_var == 'int' and isinstance(valor, int) is False:
         print("Error >", valor, " No es un int!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == 'float' and isinstance(valor, float) is False:
         print("Error > ", valor, " No es un float!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == ',':
         if tc.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
@@ -849,10 +849,10 @@ def p_vars2_2G(p):
 
     if tipo_var == 'int' and isinstance(valor, int) is False and vtf.__contains__(valor) is False:
         print("Error >", valor, " No es un int!")
-        # sys.exit(0)
+        sys.exit(0)
     elif tipo_var == 'float' and isinstance(valor, float) is False:
         print("Error > ", valor, " No es un float!")
-        # sys.exit(0)
+        sys.exit(0)
     elif p[-1] == ',':
         if tc.__contains__(id) is True:
             address_id = memory.global_mem(tipo_var)
@@ -1039,15 +1039,15 @@ def p_value_constantes(p):
 
     if tc.__contains__(id) is False:
         if isinstance(id, int):
-            c1 = vars(c('int', p[1], memory.cte_mem('int')))
-            tc.__set__(id, c1)
             address_id = memory.cte_mem(tipo)
+            c1 = vars(c('int', p[1], address_id))
+            tc.__set__(id, c1)
             memory.guardar_memoria(address_id, id)
             adidt.__set__(address_id, vars(adid(address_id, id)))
         elif isinstance(p[1], float):
-            c1 = vars(c('float', id, memory.cte_mem('float')))
-            tc.__set__(id, c1)
             address_id = memory.cte_mem(tipo)
+            c1 = vars(c('float', id, address_id))
+            tc.__set__(id, c1)
             memory.guardar_memoria(address_id, id)
             adidt.__set__(address_id, vars(adid(address_id, id)))
         # print(vars(tc))
@@ -1073,7 +1073,7 @@ def p_value_char2(p):
     p[0] = p[2]
     if len(p[2]) > 1 or p[2].isalpha() is False:
         print("No es un char!")
-        # sys.exit(0)
+        sys.exit(0)
 
 def p_check_type(p):
     """
@@ -1183,7 +1183,7 @@ def p_verificar(p):
 
     if fd.__contains__(id) is False:
         print("ERROR > Funcion", id, "no declarada!")
-        # sys.exit(0)
+        sys.exit(0)
 
     lista = p[-2]
     lista.pop()
@@ -1193,7 +1193,7 @@ def p_verificar(p):
             pass
         else:
             print("ERROR > Parametros mal declarados!")
-            # sys.exit(0)
+            sys.exit(0)
         i += 1
 
 
@@ -1208,7 +1208,7 @@ def p_verificar2(p):
 
     if fd.__contains__(id) is False:
         print("ERROR > Funcion", id, "no declarada!")
-        # sys.exit(0)
+        sys.exit(0)
 
 
 def p_add_func_dir(p):
@@ -1221,7 +1221,7 @@ def p_add_func_dir(p):
 
     if fd.__contains__(id) is True:
         address_id = list(fd.__getitem__(id).values())[3]
-        f1 = vars(f(id, tipo_func, str(vars(vtf)), address_id))
+        f1 = vars(f(id, tipo_func, vtf, address_id))
         fd.__set__(id, f1)
 
 
@@ -1236,10 +1236,21 @@ def p_add_func_dir2(p):
 
     if fd.__contains__(id) is True:
         address_id = list(fd.__getitem__(id).values())[3]
-        f1 = vars(f(id, tipo_func, str(vars(vtf)), address_id))
+        f1 = vars(f(id, tipo_func, vtf, address_id))
         fd.__set__(id, f1)
 
+def p_add_func_main(p):
+    """
+    add_func_main :
+    """
+    global id, tipo_func
+    tipo_func = p[-7]
+    id = 'main'
 
+    address_id = memory.funciones_mem()
+    f1 = vars(f(id, tipo_func, vars(vtf), address_id))
+    fd.__set__(id, f1)
+    print(vars(vtf))
 
 
 def p_var_func(p):
@@ -1356,7 +1367,7 @@ def p_func_call(p):
         try:
             len(param.__getitem__(id))
             print("ERROR > # Parametros de funcion", id)
-            # sys.exit(0)
+            sys.exit(0)
 
         except:
             address_id = list(fd.__getitem__(id).values())[3]
@@ -1407,7 +1418,7 @@ def p_func_call_con_param(p):
                     quad = ('PARAM', param_call[k], None, 'Error')
                     quadList.append(quad)
                     print("ERROR > Type Mismatch en Function Call:", id, "Esperaba", param_declar[k], "Encontro", param_call_tipos[k])
-                    # sys.exit(0)
+                    sys.exit(0)
                 else:
                     if tc.__contains__(param_call[k]) is True:
                         params = list(tc.__getitem__(param_call[k]).values())[2]
@@ -1429,7 +1440,7 @@ def p_func_call_con_param(p):
 
         else:
             print("ERROR > Cantidad de Parametros Mismatch", id)
-            # sys.exit(0)
+            sys.exit(0)
 
 
     else:
@@ -1494,7 +1505,7 @@ def p_func_return(p):
             print("ERROR > Return espera un int.", p[2], "no es int")   ## Obtengo int
             quad = ('RETURN', None, p[2], 'Error')
             quadList.append(quad)
-            # sys.exit(0)
+            sys.exit(0)
 
     elif tipo_func == 'float':
         if isinstance(p[2], float) is True:
@@ -1508,7 +1519,7 @@ def p_func_return(p):
                 quadList.append(quad)
         else:
             print("ERROR > Return espera un float.", p[2], "no es float")
-            # sys.exit(0)
+            sys.exit(0)
 
     elif vtf.__contains__(p[2]) is True:
         if list(vtf.__getitem__(p[2]).values())[1] == tipo_func:
@@ -1517,10 +1528,10 @@ def p_func_return(p):
             quadList.append(quad)
         else:
             print("ERROR > Return espera un", tipo_func, "." , p[2], "no es ", tipo_func)
-            # sys.exit(0)
+            sys.exit(0)
     else:
         print("ERROR > Return espera un", tipo_func, ".", p[2], "Variable no declarada")
-        # sys.exit(0)
+        sys.exit(0)
 
 
 def p_func_return_param(p):
@@ -1547,7 +1558,7 @@ def p_func_return_param(p):
             print("ERROR > Return espera un int.", p[2], "no es int")   ## Obtengo int
             quad = ('RETURN', None, p[2], 'Error')
             quadList.append(quad)
-            # sys.exit(0)
+            sys.exit(0)
 
     elif tipo_func == 'float':
         if isinstance(p[2], float) is True:
@@ -1561,7 +1572,7 @@ def p_func_return_param(p):
                 quadList.append(quad)
         else:
             print("ERROR > Return espera un float.", p[2], "no es float")
-            # sys.exit(0)
+            sys.exit(0)
 
     elif vtf.__contains__(p[2]) is True:
         if list(vtf.__getitem__(p[2]).values())[1] == p[-10]:
@@ -1570,10 +1581,10 @@ def p_func_return_param(p):
             quadList.append(quad)
         else:
             print("ERROR > Return espera un", tipo_func, "." , p[2], "no es ", tipo_func)
-            # sys.exit(0)
+            sys.exit(0)
     else:
         print("ERROR > Return espera un", tipo_func, ".", p[2], "Variable no declarada")
-        # sys.exit(0)
+        sys.exit(0)
 
 
 def p_func_return_main(p):
@@ -1602,7 +1613,7 @@ def p_func_return_main(p):
             print("ERROR > Return espera un int.", p[2], "no es int")   ## Obtengo int
             quad = ('RETURN', None, p[2], 'Error')
             quadList.append(quad)
-            # sys.exit(0)
+            sys.exit(0)
 
     elif tipo_main == 'float':
         if isinstance(p[2], float) is True:
@@ -1616,7 +1627,7 @@ def p_func_return_main(p):
                 quadList.append(quad)
         else:
             print("ERROR > Return espera un float.", p[2], "no es float")
-            # sys.exit(0)
+            sys.exit(0)
 
     elif vtf.__contains__(p[2]) is True:
         if list(vtf.__getitem__(p[2]).values())[1] == tipo_main:
@@ -1626,10 +1637,10 @@ def p_func_return_main(p):
             quadList.append(quad)
         else:
             print("ERROR > Return espera un", tipo_main, "." , p[2], "no es ", tipo_main)
-            # sys.exit(0)
+            sys.exit(0)
     else:
         print("ERROR > Return espera un", tipo_main, ".", p[2], "Variable no declarada")
-        # sys.exit(0)
+        sys.exit(0)
 
 
 def p_end(p):
@@ -1653,7 +1664,7 @@ def p_var_row(p):
     """
     if len(p[7]) > tam_arreglo[0]:
         print("Error > Index out of bounds - Local.Arreglo.Row")
-        # sys.exit(0)
+        sys.exit(0)
     else:
         v1 = vars(v(p[3], p[2], p[7], scope, memory.local_mem(p[2])))
         if scope == 'local':
@@ -1675,7 +1686,7 @@ def p_var_rowG(p):
     """
     if len(p[7]) > tam_arreglo[0]:
         print("Error > Index out of bounds - Global.Arreglo.Row")
-        # sys.exit(0)
+        sys.exit(0)
     else:
         v1 = vars(v(p[3], p[2], p[7], scope_G, memory.global_mem(p[2])))
         if scope == 'local':
@@ -1731,10 +1742,10 @@ def p_var_matrix(p):
     """
     if len(p[6]) > tam_matrix_cols[0]:
         print("Error > Index out of bounds - Local.Matrix.Cols!")
-        # sys.exit(0)
+        sys.exit(0)
     if len(p[6]) > tam_arreglo[1]:
         print("Error > Index out of bounds - Local.Matrix.Rows!")
-        # sys.exit(0)
+        sys.exit(0)
     else:
         v1 = vars(v(p[3], p[2], p[6], scope, memory.local_mem(p[2])))
         if scope == 'local':
@@ -1755,10 +1766,10 @@ def p_var_matrixG(p):
     # print(len(tam_matrix_rows))
     if len(p[6]) > tam_matrix_cols[0]:
         print("Error > Index out of bounds - Global.Matrix.Cols!")
-        # sys.exit(0)
+        sys.exit(0)
     if len(p[6]) > tam_arreglo[1]:
         print("Error > Index out of bounds - Global.Matrix.Rows!")
-        # sys.exit(0)
+        sys.exit(0)
     else:
         v1 = vars(v(p[3], p[2], p[6], scope_G, memory.global_mem(p[2])))
         if scope == 'local':
@@ -1787,7 +1798,7 @@ def p_matrix3(p):
     p[0] = [p[2]] + [p[6]]
     # if len(p[2]) > tam_matrix_rows[0] or len(p[6]) > tam_matrix_rows[0]:
     #     print("Error > Index out of bounds - Matrix.Rows!")
-    #     # sys.exit(0)
+    #     sys.exit(0)
 
 
 def p_row_list(p):
@@ -1816,12 +1827,12 @@ def p_error(p):
         # print('p >> ', p)
         print(error_message + "Unexpected token '" + str(p.value) + "' at line " + str(p.lexer.lineno) + ".")
         error = True
-        # sys.exit(0)
+        sys.exit(0)
         # print('ptype', p.type)
     else:
         print(error_message + "Syntax error at EOF")
         error = True
-        #sys.exit(0)
+        sys.exit(0)
 
 def p_empty(p):
     """
@@ -1990,19 +2001,23 @@ def p_escritura(p):
 
     """
     temp = avail.next()
-    quad = ('=', p[4], None, temp)
-    quadList.append(quad)
+    # quad = ('=', p[4], None, temp)
+    # quadList.append(quad)
 
     quad = ('PRINT', None, None, temp)
     quadList.append(quad)
+    adidtg.__set__(temp, vars(adid(temp,p[4])))
 
 def p_escritura_var(p):
     """
     escritura_var : PRINT LP any_var RP SEMICOL
 
     """
-    quad = ('PRINT', None, None, p[3])
+    temp = avail.next()
+    quad = ('PRINT', None, None, temp)
     quadList.append(quad)
+    adidtg.__set__(temp, vars(adid(temp, p[3])))
+    # print("AASDASD", vars(adidtg))
 
 
 def p_any_var(p):
@@ -2011,13 +2026,13 @@ def p_any_var(p):
 
     """
     if vt.__contains__(p[1]) is True:
-        if scope == 'local':
-            p[0] = list(vtf.__getitem__(p[1]).values())[2]
-        else:
-            p[0] = list(vt.__getitem__(p[1]).values())[2]
+        p[0] = list(vt.__getitem__(p[1]).values())[2]
+    elif vtf.__contains__(p[1]) is True:
+        p[0] = list(vtf.__getitem__(p[1]).values())[2]
     else:
         print("ERROR > Variable no declarada!")
-        # sys.exit(0)
+        sys.exit(0)
+    print(p[0])
 
 
 def p_any(p):
@@ -2057,7 +2072,7 @@ def p_any_lectura(p):
         quadList.append(quad)
     except:
         print("ERROR > Archivo inexistente!")
-        # sys.exit(0)
+        sys.exit(0)
 
 
 ######## END ESCRITURA Y LECTURA #########################################################
@@ -2115,7 +2130,7 @@ def p_LT(p):
     res_tipo = semCube.checkResult('<', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, "<+>", tipo_der)
-        # sys.exit(0)
+        sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2129,6 +2144,10 @@ def p_LT(p):
     #     val_izq = adidt
 
     res = val_izq < val_der
+    if res is False:
+        print("Expresion < dio falso")
+        sys.exit(0)
+
 
     address_id = memory.temp_mem(res_tipo)
     # memory.guardar_memoria(address_id, res)
@@ -2182,7 +2201,7 @@ def p_GT(p):
     res_tipo = semCube.checkResult('>', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, ">", tipo_der)
-        # sys.exit(0)
+        sys.exit(0)
     # print("RES ", res_tipo)
 
 
@@ -2196,6 +2215,10 @@ def p_GT(p):
 
     address_id = memory.temp_mem(res_tipo)
     res = val_izq > val_der
+    if res is False:
+        print("Expresion > dio falso")
+        sys.exit(0)
+
     # memory.guardar_memoria(address_id, res)
     print(val_izq, val_der, res, address_id)
     quad = ('>', op_izq, op_der, address_id)
@@ -2242,7 +2265,7 @@ def p_LEQ(p):
     res_tipo = semCube.checkResult('<=', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, "<=>", tipo_der)
-        # sys.exit(0)
+        sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2255,6 +2278,10 @@ def p_LEQ(p):
 
     address_id = memory.temp_mem(res_tipo)
     res = val_izq <= val_der
+    if res is False:
+        print("Expresion <= dio falso")
+        sys.exit(0)
+
     # memory.guardar_memoria(address_id, res)
     quad = ('<=', op_izq, op_der, address_id)
     quadList.append(quad)
@@ -2300,7 +2327,7 @@ def p_GEQ(p):
     res_tipo = semCube.checkResult('>=', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, ">=", tipo_der)
-        # sys.exit(0)
+        sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2313,6 +2340,10 @@ def p_GEQ(p):
 
     address_id = memory.temp_mem(res_tipo)
     res = val_izq >= val_der
+    if res is False:
+        print("Expresion >= dio falso")
+        sys.exit(0)
+
     # memory.guardar_memoria(address_id, res)
     quad = ('>=', op_izq, op_der, address_id)
     quadList.append(quad)
@@ -2358,7 +2389,7 @@ def p_EQUAL(p):
     res_tipo = semCube.checkResult('==', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, "==", tipo_der)
-        # sys.exit(0)
+        sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2371,6 +2402,10 @@ def p_EQUAL(p):
 
     address_id = memory.temp_mem(res_tipo)
     res = val_izq == val_der
+    if res is False:
+        print("Expresion == dio falso")
+        sys.exit(0)
+
     # memory.guardar_memoria(address_id, res)
     quad = ('==', op_izq, op_der, address_id)
     quadList.append(quad)
@@ -2416,7 +2451,7 @@ def p_NEQ(p):
     res_tipo = semCube.checkResult('!=', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, "!=", tipo_der)
-        # sys.exit(0)
+        sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2430,6 +2465,10 @@ def p_NEQ(p):
 
     address_id = memory.temp_mem(res_tipo)
     res = val_izq != val_der
+    if res is False:
+        print("Expresion != dio falso")
+        sys.exit(0)
+
     # memory.guardar_memoria(address_id, res)
     quad = ('!=', op_izq, op_der, address_id)
     quadList.append(quad)
@@ -2522,7 +2561,7 @@ def p_expr(p):
         res_tipo = semCube.checkResult('+', tipo_izq, tipo_der)
         if res_tipo == 'Error':
             print("Type Mismatch!", tipo_izq, "+", tipo_der)
-            # sys.exit(0)
+            sys.exit(0)
         # print("RES ", res_tipo)
 
 
@@ -2564,7 +2603,7 @@ def p_expr(p):
         res_tipo = semCube.checkResult('-', tipo_izq, tipo_der)
         if res_tipo == 'Error':
             print("Type Mismatch!", tipo_izq, "-", tipo_der)
-            # sys.exit(0)
+            sys.exit(0)
         # print("RES ", res_tipo)
 
 
@@ -2607,7 +2646,7 @@ def p_expr(p):
         res_tipo = semCube.checkResult('*', tipo_izq, tipo_der)
         if res_tipo == 'Error':
             print("Type Mismatch!", tipo_izq, "*", tipo_der)
-            # sys.exit(0)
+            sys.exit(0)
         # print("RES ", res_tipo)
 
 
@@ -2650,7 +2689,7 @@ def p_expr(p):
         res_tipo = semCube.checkResult('/', tipo_izq, tipo_der)
         if res_tipo == 'Error':
             print("Type Mismatch!", tipo_izq, "/", tipo_der)
-            # sys.exit(0)
+            sys.exit(0)
         # print("RES ", res_tipo)
 
 
@@ -2723,7 +2762,7 @@ def p_check_bool(p):
             pass
     except:
         print("Expresion no es bool!", p[-2])
-        # sys.exit(0)
+        sys.exit(0)
 
 
 ######## END EXPRESIONES ##########################################################
@@ -2736,7 +2775,7 @@ def test():
     try:
         # nombre_archivo = input("Nombre de archivo >> ")
         # file = open("tests/" + nombre_archivo, 'r')
-        file = open("tests/func_calls1.txt", 'r')
+        file = open("tests/vmOper.txt", 'r')
         data = file.read()
         file.close()
         lexer.input(data)
@@ -2748,9 +2787,9 @@ def test():
         if (parser.parse(data, tracking=True) == 'Compilacion Exitosa'):
             print("No Syntax Error found")
             # print("VarTable >> ", vars(vt))
-            # print("Constantes >> ",  vars(tc))  # Constantes
+            print("Constantes >> ",  vars(tc))  # Constantes
             # print("Funciones >> ", vars(fd.__getitem__('func1')))
-            # print("Funciones >> ", vars(fd))
+            print("Funciones >> ", vars(fd))
             # print("PARAM >> ", param.__getitem__('func1'))
             print("ADIDT >> ", vars(adidtg))
             print("MEMORIA >> ", vars(memory))
@@ -2764,6 +2803,7 @@ def test():
             program.quads = quadList
             program.data = data
             program.vt = vt
+            program.adidtg = adidtg
             program.fd = fd
 
 

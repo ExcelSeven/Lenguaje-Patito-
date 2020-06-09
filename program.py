@@ -14,23 +14,24 @@ class Program:
         self.vt = VarTable()
         self.start_time = 0
         self.end_time = 0
-        self.adidt = AddressIdTable()
+        self.adidtg = AddressIdTable()
 
 
     def start(self):
         print("Programa inicializado")
         quad = self.quads
         vm = VirtualMachine()
-
+        vm.adidtg = self.adidtg
         # print(vars(self.memory))
         # print(vars(self.fd))
         vm.memory = self.memory
         vm.fd = self.fd
-        vm.start_vm()
+        # vm.start_vm()
 
 
         ip = 0
         while True:
+            global ip_ant
 
             if quad[ip][0] == '=':
                 vm.igual(quad[ip])
@@ -65,6 +66,10 @@ class Program:
             elif quad[ip][0] == '==':
                 vm.equal(quad[ip])
 
+            elif quad[ip][0] == 'GOTO' and quad[ip][3] == 'main':
+                ip = vm.main()
+                print("IP >> ", ip)
+
             elif quad[ip][0] == 'GOTO':
                 ip = vm.goto(quad[ip])
                 print("IP >> ", ip)
@@ -76,6 +81,22 @@ class Program:
             elif quad[ip][0] == 'ERA':
                 ip = vm.era(quad[ip])
                 print("IP >> ", ip)
+
+            elif quad[ip][0] == 'GOSUB':
+                ip_ant = ip
+                ip = vm.gosub(quad[ip])
+                print("IP >> ", ip)
+
+            elif quad[ip][0] == 'PARAM':
+                vm.param(quad[ip])
+
+            elif quad[ip][0] == 'ENDFUNC':
+                ip = ip_ant
+                print("IP >> ", ip)
+
+            elif quad[ip][0] == 'PRINT':
+                vm.print(quad[ip])
+
 
             if quad[ip][0] == 'END':
                 print("Programa finalizado exitosamente")

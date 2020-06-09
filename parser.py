@@ -26,6 +26,7 @@ from temporales import TemporalTable
 from jumps import Jump
 from cuadruplos import Quad
 from cuadruplos import QuadList
+from virtualMachine import VirtualMachine
 import sys
 
 
@@ -47,8 +48,8 @@ quad = list()
 quadList = list()
 
 ## GOTO Main
-quad = ('GOTO', None, None, '$')
-quadList.append(quad)
+# quad = ('GOTO', None, None, '$')
+# quadList.append(quad)
 
 avail = Avail()
 semCube = SemanticCube()
@@ -70,6 +71,7 @@ memory = Memory()
 
 adid = AddressId
 adidt = AddressIdTable()
+adidtg = AddressIdTable()
 
 pOpandos = QuadStack()
 pOpdores = QuadStack()
@@ -79,7 +81,11 @@ t = Temporales
 tt = TemporalTable()
 
 jump = Jump()
+jump_main = []
 # jump = list()
+
+vm = VirtualMachine()
+
 
 
 def p_programa(p):
@@ -90,31 +96,14 @@ def p_programa(p):
     print(p[0])
 
 
-# def p_programa2(p):
-#     """
-#     programa1 : vars funcion main funcion
-#               | funcion main funcion
-#               | funcion main
-#               | vars funcion main
-#               | vars funcion funcion main
-#               | vars funcion
-#               | vars main
-#               | vars main funcion
-#               | funcion
-#               | vars
-#               | main
-#               | empty
-#     """
-
-
 def p_programa1(p):
     """
-    programa1 : varsG funciones
-              | varsG funciones main funciones
-              | varsG main funciones
-              | varsG
-              | main
-              | funciones
+    programa1 : varsG quad_main funciones end
+              | varsG quad_main funciones main funciones end
+              | varsG quad_main main funciones end
+              | varsG end
+              | quad_main main end
+              | funciones end
 
     """
 
@@ -141,23 +130,34 @@ def p_funciones3(p):
 
 def p_main(p):
     """
-    main : tipo MAIN quad_main LP RP LB statement func_return_main RB end_main
-         | VOID MAIN quad_main LP RP LB statement RB
+    main : tipo MAIN quad_main2 LP RP LB statement func_return_main RB
+         | VOID MAIN quad_main2 LP RP LB statement RB
     """
     # print("VarTable >> ", p[2], vars(vtf))
     # print("Constantes >> ", p[2], vars(tc))
 
     vtf.clear()
-    memory.resetear_memoria()
+    # memory.resetear_memoria()
 
-    # print("MAIN ok")
 
 def p_quad_main(p):
     """
     quad_main :
 
     """
-    quadList[0] = ('GOTO', None, None, len(quadList)+1)
+
+    quad = ('GOTO', None, None, '$')
+    quadList.append((quad))
+    jump_main.append(len(quadList))
+
+
+def p_quad_main2(p):
+    """
+    quad_main2 :
+
+    """
+    quadList[jump_main.pop()-1] = ('GOTO', None, None, len(quadList)+1)
+
 
 def p_statement(p):
     """
@@ -195,12 +195,14 @@ def p_asignacion(p):
     if vt.__contains__(id) is True:
         tipo = list(vt.__getitem__(id).values())[1]
         address_id = memory.global_mem(tipo)
+        # memory.guardar_memoria(address_id, valor)
         v1 = vars(v(id, tipo, valor, scope, address_id))
         vt.set(id, v1)
 
     elif vtf.__contains__(id) is True:
         tipo = list(vt.__getitem__(id).values())[1]
         address_id = memory.global_mem(tipo)
+        # memory.guardar_memoria(address_id, valor)
         v1 = vars(v(id, tipo, valor, scope, address_id))
         vtf.set(id, v1)
 
@@ -246,6 +248,7 @@ def p_vars1(p):
     tipo_var = p[-1]
 
     address_id = memory.local_mem(tipo_var)
+    # memory.guardar_memoria(address_id, id)
     adidt.__set__(address_id, vars(adid(address_id, id)))
     v1 = vars(v(id, tipo_var, 'N', scope, address_id))
     vtf.__set__(id, v1)
@@ -277,11 +280,13 @@ def p_vars2(p):
         # sys.exit(0)
     elif tipo_var == ',':
         address_id = memory.local_mem(tipo)
+        # memory.guardar_memoria(address_id, valor)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, valor, scope, address_id))
         vtf.__set__(id, v1)
     else:
         address_id = memory.local_mem(tipo)
+        # memory.guardar_memoria(address_id, valor)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, valor, scope, address_id))
         vtf.__set__(id, v1)
@@ -318,24 +323,28 @@ def p_vars2_1(p):
     elif tipo_var == ',':
         if tc.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
 
         elif vtf.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
     else:
         if tc.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
 
         elif vtf.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             if vtf.__contains__(list(vtf.__getitem__(valor).values())[0]) is True:
                 valor = list(vtf.__getitem__(valor).values())[2]
 
@@ -378,24 +387,28 @@ def p_vars2_3(p):
     elif tipo_var == ',':
         if tc.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
 
         elif vtf.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
     else:
         if tc.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
 
         elif vtf.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             if vtf.__contains__(list(vtf.__getitem__(valor).values())[0]) is True:
                 valor = list(vtf.__getitem__(valor).values())[2]
 
@@ -443,24 +456,28 @@ def p_vars2_2(p):
     elif p[-1] == ',':
         if tc.__contains__(id) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
 
         elif vtf.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
     else:
         if tc.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             adidt.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope, address_id))
             vtf.__set__(id, v1)
 
         elif vtf.__contains__(valor) is True:
             address_id = memory.local_mem(tipo)
+            # memory.guardar_memoria(address_id, valor)
             if vtf.__contains__(list(vtf.__getitem__(valor).values())[0]) is True:
                 valor = list(vtf.__getitem__(valor).values())[2]
 
@@ -486,17 +503,20 @@ def p_vars3(p):
     global tipo_var
     global id
     id = p[2]
+    tipo_var = p[-1]
 
 
     if p[-1] == ',':
         tipo_var = 'int'
         address_id = memory.local_mem(tipo_var)
+        # memory.guardar_memoria(address_id, id)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope, address_id))
         vtf.__set__(id, v1)
     else:
         tipo_var = p[-1]
         address_id = memory.local_mem(tipo_var)
+        # memory.guardar_memoria(address_id, id)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope, address_id))
         vtf.__set__(id, v1)
@@ -519,11 +539,13 @@ def p_vars3_1(p):
     if tipo_var == ',':
         tipo_var = 'int'
         address_id = memory.local_mem(tipo_var)
+        # memory.guardar_memoria(address_id, id)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope, address_id))
         vtf.__set__(id, v1)
     else:
         address_id = memory.local_mem(tipo_var)
+        # memory.guardar_memoria(address_id, id)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope, address_id))
         vtf.__set__(id, v1)
@@ -544,11 +566,13 @@ def p_vars3_3(p):
     if tipo_var == ',':
         tipo_var = 'int'
         address_id = memory.local_mem(tipo_var)
+        # memory.guardar_memoria(address_id, valor)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope, address_id))
         vtf.__set__(id, v1)
     else:
         address_id = memory.local_mem(tipo_var)
+        # memory.guardar_memoria(address_id, valor)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope, address_id))
         vtf.__set__(id, v1)
@@ -562,16 +586,19 @@ def p_vars3_2(p):
     global tipo_var
     global id
     id = p[1]
+    tipo_var = p[-1]
 
     if p[-1] == ',':
         tipo_var = 'int'
         address_id = memory.local_mem(tipo_var)
+        # memory.guardar_memoria(address_id, id)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope, address_id))
         vtf.__set__(id, v1)
     else:
         tipo_var = p[-1]
         address_id = memory.local_mem(tipo_var)
+        # memory.guardar_memoria(address_id, id)
         adidt.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope, address_id))
         vtf.__set__(id, v1)
@@ -621,7 +648,8 @@ def p_vars1G(p):
     id = p[1]
 
     address_id = memory.global_mem(tipo_var)
-    adidt.__set__(address_id, vars(adid(address_id, id)))
+    memory.guardar_memoria(address_id, '')
+    adidtg.__set__(address_id, vars(adid(address_id, id)))
     v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
     vt.__set__(id, v1)
 
@@ -652,12 +680,14 @@ def p_vars2G(p):
         # sys.exit(0)
     elif tipo_var == ',':
         address_id = memory.global_mem(tipo)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, valor)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, valor, scope_G, address_id))
         vt.__set__(id, v1)
     else:
         address_id = memory.global_mem(tipo)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, valor)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, valor, scope_G, address_id))
         vt.__set__(id, v1)
     # print(vars(vtf))
@@ -693,29 +723,33 @@ def p_vars2_1G(p):
     elif tipo_var == ',':
         if tc.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
 
         elif vt.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
     else:
         if tc.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
 
         elif vt.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
+            memory.guardar_memoria(address_id, valor)
             if vt.__contains__(list(vt.__getitem__(valor).values())[0]) is True:
                 valor = list(vt.__getitem__(valor).values())[2]
 
             # print("Valuee >> ", list(vt.__getitem__(valor).values())[0])
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
 
@@ -754,28 +788,32 @@ def p_vars2_3G(p):
     elif tipo_var == ',':
         if tc.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
 
         elif vt.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
     else:
         if tc.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
 
         elif vt.__contains__(valor) is True:
             address_id = memory.global_mem(tipo)
+            memory.guardar_memoria(address_id, valor)
             if vt.__contains__(list(vt.__getitem__(valor).values())[0]) is True:
                 valor = list(vt.__getitem__(valor).values())[2]
 
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             # print("Valuee >> ", list(vt.__getitem__(valor).values())[0])
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
@@ -817,31 +855,35 @@ def p_vars2_2G(p):
         # sys.exit(0)
     elif p[-1] == ',':
         if tc.__contains__(id) is True:
-            address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            address_id = memory.global_mem(tipo_var)
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
 
         elif vt.__contains__(valor) is True:
-            address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            address_id = memory.global_mem(tipo_var)
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
     else:
         if tc.__contains__(valor) is True:
-            address_id = memory.global_mem(tipo)
-            adidt.__set__(address_id, vars(adid(address_id,id)))
+            address_id = memory.global_mem(tipo_var)
+            memory.guardar_memoria(address_id, valor)
+            adidtg.__set__(address_id, vars(adid(address_id,id)))
             # print("aaaaa", list(vars(adidt.__getitem__(address_id)).values())[1]) ## Obtengo el id del address_id
 
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
 
         elif vt.__contains__(valor) is True:
-            address_id = memory.global_mem(tipo)
+            address_id = memory.global_mem(tipo_var)
+            memory.guardar_memoria(address_id, valor)
             if vt.__contains__(list(vt.__getitem__(valor).values())[0]) is True:
                 valor = list(vt.__getitem__(valor).values())[2]
 
-            adidt.__set__(address_id, vars(adid(address_id, id)))
+            adidtg.__set__(address_id, vars(adid(address_id, id)))
             v1 = vars(v(id, tipo, valor, scope_G, address_id))
             vt.__set__(id, v1)
 
@@ -866,13 +908,15 @@ def p_vars3G(p):
     if p[-1] == ',':
         tipo_var = 'int'
         address_id = memory.global_mem(tipo_var)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, id)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
         vtf.__set__(id, v1)
     else:
         tipo_var = p[-1]
         address_id = memory.global_mem(tipo_var)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, id)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
         vtf.__set__(id, v1)
 
@@ -894,12 +938,14 @@ def p_vars3_1G(p):
     if tipo_var == ',':
         tipo_var = 'int'
         address_id = memory.global_mem(tipo_var)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, id)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
         vt.__set__(id, v1)
     else:
         address_id = memory.global_mem(tipo_var)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, id)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
         vt.__set__(id, v1)
 
@@ -919,12 +965,14 @@ def p_vars3_3G(p):
     if tipo_var == ',':
         tipo_var = 'int'
         address_id = memory.global_mem(tipo_var)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, id)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
         vt.__set__(id, v1)
     else:
         address_id = memory.global_mem(tipo_var)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, id)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
         vt.__set__(id, v1)
 
@@ -941,13 +989,15 @@ def p_vars3_2G(p):
     if p[-1] == ',':
         tipo_var = 'int'
         address_id = memory.global_mem(tipo_var)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, id)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
         vt.__set__(id, v1)
     else:
         tipo_var = p[-1]
         address_id = memory.global_mem(tipo_var)
-        adidt.__set__(address_id, vars(adid(address_id, id)))
+        memory.guardar_memoria(address_id, id)
+        adidtg.__set__(address_id, vars(adid(address_id, id)))
         v1 = vars(v(id, tipo_var, 'N', scope_G, address_id))
         vt.__set__(id, v1)
 
@@ -992,11 +1042,13 @@ def p_value_constantes(p):
             c1 = vars(c('int', p[1], memory.cte_mem('int')))
             tc.__set__(id, c1)
             address_id = memory.cte_mem(tipo)
+            memory.guardar_memoria(address_id, id)
             adidt.__set__(address_id, vars(adid(address_id, id)))
         elif isinstance(p[1], float):
             c1 = vars(c('float', id, memory.cte_mem('float')))
             tc.__set__(id, c1)
             address_id = memory.cte_mem(tipo)
+            memory.guardar_memoria(address_id, id)
             adidt.__set__(address_id, vars(adid(address_id, id)))
         # print(vars(tc))
 
@@ -1036,40 +1088,62 @@ def p_check_type(p):
 ####### Funciones ##########################################################
 
 
+def p_add_func(p):
+    """
+    add_fun :
+
+    """
+    global id
+    id = p[-1]
+
+    adidtg.__set__(id, vars(adid(id, len(quadList))))
+    # print(len(quadList) - 1)
+
 def p_funcion(p):
     """
-    funcion : VOID ID LP param RP verificar LB var_func statement RB end_func
+    funcion :  VOID ID add_fun LP param RP verificar LB var_func statement RB end_func
 
     """
     p[0] = p[2]
+    global id
+    id = p[2]
+
+
     # print("VarTable >> ", vars(vtf))
     # print("Funciones >> ", vars(fd.__getitem__(p[2])))
     # print("FUNC", p[2], "ok.")
     # print("VarTable >> ", p[2], vars(vtf))
 
     vtf.clear()
-    memory.resetear_memoria()
+    # memory.resetear_memoria()
 
 
 def p_funcion2(p):
     """
-    funcion : VOID ID LP RP verificar2 LB var_func statement RB end_func
+    funcion :  VOID ID add_fun LP RP verificar2 LB var_func statement RB end_func
 
     """
     p[0] = p[2]
+    global id
+    id = p[2]
+
     # print("Funciones >> ", vars(fd.__getitem__(p[2])))
     # print("FUNC", p[2], "ok.")
     # print("VarTable >> ", p[2], vars(vtf))
 
     vtf.clear()
-    memory.resetear_memoria()
+    # memory.resetear_memoria()
 
 def p_funcion4(p):
     """
-    funcion : tipo ID LP RP verificar2 LB var_func statement add_func_dir2 func_return RB end_func
+    funcion :  tipo ID add_fun LP RP verificar2 LB var_func statement add_func_dir2 func_return RB end_func
 
     """
     p[0] = p[2]
+    global id
+    id = p[2]
+
+
     # print("Funciones >> ", vars(fd.__getitem__(p[2])))
     # print("FUNC", p[2], "ok.")
     # print("VarTable >> ", p[2], vars(vtf))
@@ -1077,29 +1151,35 @@ def p_funcion4(p):
     # print(list(vtf.__getitem__('a').values())[5])
 
     vtf.clear()
-    memory.resetear_memoria()
+    # memory.resetear_memoria()
 
 
 def p_funcion3(p):
     """
-    funcion :  tipo ID LP param RP verificar LB var_func statement add_func_dir func_return_param RB end_func
+    funcion :   tipo ID add_fun LP param RP verificar LB var_func statement add_func_dir func_return_param RB end_func
 
     """
     p[0] = p[2]
+    global id
+    id = p[2]
+
+
     # print("FUNC", p[2], "ok.")
     # print("VarTable >> ", p[2] ,vars(vtf))
     # print("Funciones >> ", vars(fd.__getitem__(p[2])))
 
     vtf.clear()
-    memory.resetear_memoria()
+    # memory.resetear_memoria()
+
+
 
 def p_verificar(p):
     """
     verificar :
     """
     global id, tipo_func
-    tipo_func = p[-5]
-    id = p[-4]
+    tipo_func = p[-6]
+    id = p[-5]
 
     if fd.__contains__(id) is False:
         print("ERROR > Funcion", id, "no declarada!")
@@ -1123,8 +1203,8 @@ def p_verificar2(p):
 
     """
     global id, tipo_func
-    tipo_func = p[-4]
-    id = p[-3]
+    tipo_func = p[-5]
+    id = p[-4]
 
     if fd.__contains__(id) is False:
         print("ERROR > Funcion", id, "no declarada!")
@@ -1136,7 +1216,7 @@ def p_add_func_dir(p):
     add_func_dir :
     """
     global id, tipo_func
-    tipo_func = p[-9]
+    tipo_func = p[-10]
     id = p[-8]
 
     if fd.__contains__(id) is True:
@@ -1151,7 +1231,7 @@ def p_add_func_dir2(p):
 
     """
     global id, tipo_func
-    tipo_func = p[-8]
+    tipo_func = p[-9]
     id = p[-7]
 
     if fd.__contains__(id) is True:
@@ -1200,9 +1280,10 @@ def p_declarar_func(p):
     tipo_func = p[2]
 
     address_id = memory.funciones_mem()
+    memory.guardar_memoria(address_id, id)
     f1 = vars(f(id, tipo_func, "", address_id))
     fd.__set__(id, f1)
-    adidt.__set__(address_id, vars(adid(address_id, id)))
+    # adidtg.__set__(address_id, vars(adid(id, '')))
     # print(vars(fd.__getitem__(p[3])))
 
 
@@ -1219,9 +1300,11 @@ def p_declarar_func2(p):
     lista = p[5]
     lista.pop()
     address_id = memory.funciones_mem()
+    memory.guardar_memoria(address_id, id)
     param.__set__(id, p[5])
     f1 = vars(f(id, tipo_func, "", address_id))
     fd.__set__(id, f1)
+    # adidtg.__set__(address_id, vars(adid(address_id, id)))
 
 
 ### Para comparar los params
@@ -1277,7 +1360,7 @@ def p_func_call(p):
 
         except:
             address_id = list(fd.__getitem__(id).values())[3]
-            quad = ('ERA', None, None, address_id)
+            quad = ('ERA', None, None, id)
             quadList.append(quad)
 
             quad = ('GOSUB', None, None, address_id)
@@ -1363,7 +1446,7 @@ def p_func_era(p):
     global id
     id = p[-2]
     address_id = list(fd.__getitem__(id).values())[3]
-    quad = ('ERA', None, None, address_id)
+    quad = ('ERA', None, None, id)
     quadList.append(quad)
 
 def p_func_call_param2(p):
@@ -1392,7 +1475,7 @@ def p_func_return(p):
     """
     global expr
     global tipo_func
-    tipo_func = p[-9]
+    tipo_func = p[-10]
     expr = p[2]
 
 
@@ -1447,7 +1530,7 @@ def p_func_return_param(p):
     """
     global expr
     global tipo_func
-    tipo_func = p[-10]
+    tipo_func = p[-11]
     expr = p[2]
 
     if tipo_func == 'int':
@@ -1486,10 +1569,10 @@ def p_func_return_param(p):
             quad = ('RETURN', None, None, expr_dir)
             quadList.append(quad)
         else:
-            print("ERROR > Return espera un", p[-10], "." , p[2], "no es ", p[-10])
+            print("ERROR > Return espera un", tipo_func, "." , p[2], "no es ", tipo_func)
             # sys.exit(0)
     else:
-        print("ERROR > Return espera un", p[-10], ".", p[2], "Variable no declarada")
+        print("ERROR > Return espera un", tipo_func, ".", p[2], "Variable no declarada")
         # sys.exit(0)
 
 
@@ -1499,16 +1582,18 @@ def p_func_return_main(p):
 
     """
     global expr
+    global tipo_main
+    tipo_main = p[-7]
     expr = p[2]
 
-    if p[-6] == 'int':
+    if tipo_main == 'int':
         if isinstance(p[2], int) is True:
             expr_dir = list(tc.__getitem__(expr).values())[2]
             quad = ('RETURN', None, None, expr_dir)
             quadList.append(quad)
 
         elif vtf.__contains__(p[2]) is True:
-            if list(vtf.__getitem__(p[2]).values())[1] == p[-6]:
+            if list(vtf.__getitem__(p[2]).values())[1] == tipo_main:
                 expr_dir = list(vtf.__getitem__(expr).values())[5]
                 quad = ('RETURN', None, None, expr_dir)
                 quadList.append(quad)
@@ -1519,13 +1604,13 @@ def p_func_return_main(p):
             quadList.append(quad)
             # sys.exit(0)
 
-    elif p[-6] == 'float':
+    elif tipo_main == 'float':
         if isinstance(p[2], float) is True:
             expr_dir = list(tc.__getitem__(expr).values())[2]
             quad = ('RETURN', None, None, expr_dir)
             quadList.append(quad)
         elif vtf.__contains__(p[2]) is True:
-            if list(vtf.__getitem__(p[2]).values())[1] == p[-6]:
+            if list(vtf.__getitem__(p[2]).values())[1] == tipo_main:
                 expr_dir = list(vtf.__getitem__(expr).values())[5]
                 quad = ('RETURN', None, None, expr_dir)
                 quadList.append(quad)
@@ -1534,22 +1619,22 @@ def p_func_return_main(p):
             # sys.exit(0)
 
     elif vtf.__contains__(p[2]) is True:
-        if list(vtf.__getitem__(p[2]).values())[1] == p[-6]:
+        if list(vtf.__getitem__(p[2]).values())[1] == tipo_main:
             vtf.__contains__(list(vtf.__getitem__(expr).values())[0])
             expr_dir = list(vtf.__getitem__(expr).values())[5]
             quad = ('RETURN', None, None, expr_dir)
             quadList.append(quad)
         else:
-            print("ERROR > Return espera un", p[-6], "." , p[2], "no es ", p[-6])
+            print("ERROR > Return espera un", tipo_main, "." , p[2], "no es ", tipo_main)
             # sys.exit(0)
     else:
-        print("ERROR > Return espera un", p[-6], ".", p[2], "Variable no declarada")
+        print("ERROR > Return espera un", tipo_main, ".", p[2], "Variable no declarada")
         # sys.exit(0)
 
 
-def p_end_main(p):
+def p_end(p):
     """
-    end_main :
+    end :
     """
     quad = ('END', None, None, None)
     quadList.append(quad)
@@ -1752,7 +1837,6 @@ def p_empty(p):
 def p_if(p):
     """
     if : IF LP expression RP check_bool gotof LB statement RB fill_if
-
         | IF LP expression RP check_bool gotof LB statement RB goto fill_gotof else
     """
     # print("IF ok. Expresion >> ", p[3])
@@ -1778,7 +1862,7 @@ def p_goto(p): ########
     goto :
 
     """
-    print(len(quadList))
+    # print(len(quadList))
     quad = ('GOTO', None, None, '$')
     quadList.append(quad)
 
@@ -1788,7 +1872,7 @@ def p_gotof(p): ########
     gotof :
 
     """
-    print(len(quadList)+1)  ## +1
+    # print(len(quadList)+1)  ## +1
     jump.push(len(quadList)+1)
     # print(len(quadList)+1)
     # print(quadList)
@@ -1802,8 +1886,8 @@ def p_fill_goto_else(p): ########
 
     """
     jump.push(len(quadList)+1)
-    print(len(quadList)+1)
-    print(jump.top_ant())
+    # print(len(quadList)+1)
+    # print(jump.top_ant())
     quadList[jump.top_ant()-1] = ('GOTO', None, None, len(quadList)+1)
 
 def p_fill_gotof(p): ##########
@@ -1811,11 +1895,11 @@ def p_fill_gotof(p): ##########
     fill_gotof :
 
     """
-    print(len(quadList)+1)  ## +1
+    # print(len(quadList)+1)  ## +1
     jump.push(len(quadList))
     # print(len(quadList) + 1)
     # print(quadList[jump.top_ant()])
-    quadList[jump.top_ant()-1] = ('GOTOF', None, None, jump.top_act())
+    quadList[jump.top_ant()-1] = ('GOTOF', None, None, jump.top_act()+1)
 
 
 def p_fill_gotof2(p): ##########
@@ -1823,7 +1907,7 @@ def p_fill_gotof2(p): ##########
     fill_gotof2 :
 
     """
-    print(len(quadList)+1)  ## +1
+    # print(len(quadList)+1)  ## +1
     jump.push(len(quadList))
     # print(len(quadList) + 1)
     # print(quadList[jump.top_ant()])
@@ -1836,7 +1920,7 @@ def p_fill_if(p): ########
     fill_if :
 
     """
-    print(len(quadList))
+    # print(len(quadList))
     # print(len(quadList))
     # print(quadList[jump.top_ant()-1])
     quadList[jump.pop()-1] = ('GOTOF', None, None, len(quadList)+1)
@@ -2005,10 +2089,12 @@ def p_LT(p):
     var_lt : expr LT expr
     """
     global op_izq, op_der, tipo_izq, tipo_der
-    global address_id, res_tipo
+    global address_id, res_tipo, val_izq, val_der
     global temp
     op_izq = p[1]
     op_der = p[3]
+    val_izq = op_izq
+    val_der = op_der
 
     # temp = avail.next()
 
@@ -2039,11 +2125,21 @@ def p_LT(p):
         op_der = list(tc.__getitem__(op_der).values())[2]
 
 
+    # if adidt.__contains__(op_izq) is True:
+    #     val_izq = adidt
+
+    res = val_izq < val_der
+
     address_id = memory.temp_mem(res_tipo)
+    # memory.guardar_memoria(address_id, res)
     quad = ('<', op_izq, op_der, address_id)
     quadList.append(quad)
     p[0] = address_id
 
+## FALTA : Agregar los temporales al adidt.
+##         Separar adidt y adidtG
+##         Sera como lo estoy haciendo? Memoria tambien?
+##         Tengo que guardar en memoria en el parser? todo?
 
 
 def p_GT(p):
@@ -2056,6 +2152,10 @@ def p_GT(p):
     global temp
     op_izq = p[1]
     op_der = p[3]
+    global val_izq, val_der
+    val_izq = op_izq
+    val_der = op_der
+
 
     # temp = avail.next()
 
@@ -2089,18 +2189,15 @@ def p_GT(p):
     if tc.__contains__(op_izq) is True:
         op_izq = list(tc.__getitem__(op_izq).values())[2]
 
-    # elif vtf.__contains__(list(vtf.__getitem__(op_izq).values())[0]):
-    #     op_izq = list(vtf.__getitem__(op_izq).values())[5]
-
 
     if tc.__contains__(op_der) is True:
         op_der = list(tc.__getitem__(op_der).values())[2]
 
-    # elif vtf.__contains__(list(vtf.__getitem__(op_der).values())[0]):
-    #     op_der = list(vtf.__getitem__(op_der).values())[5]
-
 
     address_id = memory.temp_mem(res_tipo)
+    res = val_izq > val_der
+    # memory.guardar_memoria(address_id, res)
+    print(val_izq, val_der, res, address_id)
     quad = ('>', op_izq, op_der, address_id)
     quadList.append(quad)
     p[0] = address_id
@@ -2115,6 +2212,9 @@ def p_LEQ(p):
     global temp
     op_izq = p[1]
     op_der = p[3]
+    global val_izq, val_der
+    val_izq = op_izq
+    val_der = op_der
 
     # temp = avail.next()
 
@@ -2146,12 +2246,16 @@ def p_LEQ(p):
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
+        val_izq = op_izq
         op_izq = list(tc.__getitem__(op_izq).values())[2]
 
     if tc.__contains__(op_der) is True:
+        val_der = op_der
         op_der = list(tc.__getitem__(op_der).values())[2]
 
     address_id = memory.temp_mem(res_tipo)
+    res = val_izq <= val_der
+    # memory.guardar_memoria(address_id, res)
     quad = ('<=', op_izq, op_der, address_id)
     quadList.append(quad)
     p[0] = address_id
@@ -2166,6 +2270,9 @@ def p_GEQ(p):
     global temp
     op_izq = p[1]
     op_der = p[3]
+    global val_izq, val_der
+    val_izq = op_izq
+    val_der = op_der
 
     # temp = avail.next()
 
@@ -2197,12 +2304,16 @@ def p_GEQ(p):
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
+        val_izq = op_izq
         op_izq = list(tc.__getitem__(op_izq).values())[2]
 
     if tc.__contains__(op_der) is True:
+        val_der = op_der
         op_der = list(tc.__getitem__(op_der).values())[2]
 
     address_id = memory.temp_mem(res_tipo)
+    res = val_izq >= val_der
+    # memory.guardar_memoria(address_id, res)
     quad = ('>=', op_izq, op_der, address_id)
     quadList.append(quad)
     p[0] = address_id
@@ -2217,6 +2328,9 @@ def p_EQUAL(p):
     global temp
     op_izq = p[1]
     op_der = p[3]
+    global val_izq, val_der
+    val_izq = op_izq
+    val_der = op_der
 
     # temp = avail.next()
 
@@ -2248,12 +2362,16 @@ def p_EQUAL(p):
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
+        val_izq = op_izq
         op_izq = list(tc.__getitem__(op_izq).values())[2]
 
     if tc.__contains__(op_der) is True:
+        val_der = op_der
         op_der = list(tc.__getitem__(op_der).values())[2]
 
     address_id = memory.temp_mem(res_tipo)
+    res = val_izq == val_der
+    # memory.guardar_memoria(address_id, res)
     quad = ('==', op_izq, op_der, address_id)
     quadList.append(quad)
     p[0] = address_id
@@ -2268,6 +2386,9 @@ def p_NEQ(p):
     global temp
     op_izq = p[1]
     op_der = p[3]
+    global val_izq, val_der
+    val_izq = op_izq
+    val_der = op_der
 
     # temp = avail.next()
 
@@ -2299,12 +2420,17 @@ def p_NEQ(p):
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
+        val_izq = op_izq
         op_izq = list(tc.__getitem__(op_izq).values())[2]
 
     if tc.__contains__(op_der) is True:
+        val_der = op_der
         op_der = list(tc.__getitem__(op_der).values())[2]
 
+
     address_id = memory.temp_mem(res_tipo)
+    res = val_izq != val_der
+    # memory.guardar_memoria(address_id, res)
     quad = ('!=', op_izq, op_der, address_id)
     quadList.append(quad)
     p[0] = address_id
@@ -2557,12 +2683,14 @@ def p_expression_int_float(p):
             c1 = vars(c('int', p[1], address_id))
             tc.__set__(p[1], c1)
             adidt.__set__(address_id, vars(adid(address_id, p[1])))
+            memory.guardar_memoria(address_id, p[1])
 
         elif isinstance(p[1], float):
             address_id = memory.cte_mem('float')
             c1 = vars(c('float', p[1], address_id))
             tc.__set__(p[1], c1)
             adidt.__set__(address_id, vars(adid(address_id, p[1])))
+            memory.guardar_memoria(address_id, p[1])
 
     # print(vars(tc))
     p[0] = p[1]
@@ -2606,7 +2734,9 @@ lexer = lex.lexer
 
 def test():
     try:
-        file = open("tests/if.txt", 'r')
+        # nombre_archivo = input("Nombre de archivo >> ")
+        # file = open("tests/" + nombre_archivo, 'r')
+        file = open("tests/func_calls1.txt", 'r')
         data = file.read()
         file.close()
         lexer.input(data)
@@ -2622,11 +2752,24 @@ def test():
             # print("Funciones >> ", vars(fd.__getitem__('func1')))
             # print("Funciones >> ", vars(fd))
             # print("PARAM >> ", param.__getitem__('func1'))
-            print("ADIDT >> ", vars(adidt))
+            print("ADIDT >> ", vars(adidtg))
+            print("MEMORIA >> ", vars(memory))
             i = 1
             for ln in quadList:
-                print("Cuadruplo ", i ," ", ln)
+                print("Cuadruplo ", i," ", ln)
                 i += 1
+
+            # print(vars(memory))
+            program.memory = memory
+            program.quads = quadList
+            program.data = data
+            program.vt = vt
+            program.fd = fd
+
+
+            # print(vars(fd))
+            program.start()
+
         else:
             print("Syntax Error")
     except EOFError:

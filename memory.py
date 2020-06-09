@@ -3,34 +3,80 @@ import sys
 class Memory:
 
     def __init__(self):
-            # Funciones
-            self.f = 0
 
-            # Globales
-            self.gi = 1000 - 1
-            self.gf = 4000 - 1
-            self.gc = 7000 - 1
-            self.gb = 10000 - 1
+        self.globales = {}
+        self.locales = {}
+        self.constantes = {}
+        self.temporales = {}
+        self.funciones = {}
 
-            # Locales
-            self.li = 13000 - 1
-            self.lf = 16000 - 1
-            self.lc = 19000 - 1
-            self.lb = 22000 - 1
+        # Funciones
+        self.f = 0
 
-            # Temporales
-            self.ti = 25000 - 1
-            self.tf = 28000 - 1
-            self.tc = 31000 - 1
-            self.tb = 34000 - 1
+        # Globales
+        self.gi = 1000                                                                                                                                                                                                                                                                                                                                                               - 1
+        self.gf = 4000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.gc = 7000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.gb = 10000                                                                                                                                                                                                                                                                                                                                             - 1
 
-            # Constantes
-            self.ci = 37000 - 1
-            self.cf = 40000 - 1
-            self.cc = 43000 - 1
+        # Locales
+        self.li = 13000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.lf = 16000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.lc = 19000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.lb = 22000                                                                                                                                                                                                                                                                                                                                             - 1
 
-            # Pointer
-            self.p = 46000 - 1
+        # Temporales
+        self.ti = 25000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.tf = 28000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.tc = 31000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.tb = 34000                                                                                                                                                                                                                                                                                                                                             - 1
+
+        # Constantes
+        self.ci = 37000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.cf = 40000                                                                                                                                                                                                                                                                                                                                             - 1
+        self.cc = 43000                                                                                                                                                                                                                                                                                                                                             - 1
+
+        # Pointer
+        self.p = 46000                                                                                                                                                                                                                                                                                                                                             - 1
+
+
+######## GUARDAR MEMORIA ###########################
+
+    def guardar_memoria(self, address, id_val):
+        if address >= 0 and address < 1000:
+            self.funciones[address] = id_val
+
+        elif address >= 1000 and address < 13000:
+            self.globales[address] = id_val
+
+        elif address >= 13000 and address < 25000:
+            self.locales[address] = id_val
+
+        elif address >= 25000 and address < 37000:
+            self.temporales[address] = id_val
+
+        elif address >= 37000 and address < 46000:
+            self.constantes[address] = id_val
+
+
+######## GET MEMORIA ###############################
+
+    def get_memoria(self, address):
+        if address >= 0 and address < 1000:
+            print(self.funciones)
+            return self.funciones[address]
+
+        elif address >= 1000 and address < 13000:
+            return self.globales[address]
+
+        elif address >= 13000 and address < 25000:
+            return self.locales[address]
+
+        elif address >= 25000 and address < 37000:
+            return self.temporales[address]
+
+        elif address >= 37000 and address < 46000:
+            return self.constantes[address]
 
 
 ######## POINTER ###################################
@@ -43,8 +89,8 @@ class Memory:
         else:
             return self.p
 
-    def get_mem_pointer(self):
-        return self.p
+    # def get_mem_pointer(self):
+    #     return self.p
 
 
 ######## FUNCIONES ###################################
@@ -57,8 +103,6 @@ class Memory:
         else:
             return self.f
 
-    def get_mem_funciones(self):
-        return self.f
 
 ######## GLOBALES ###################################
 
@@ -94,11 +138,6 @@ class Memory:
                 # sys.exit(0)
             else:
                 return self.gb
-
-
-    # def get_mem_globales(self, t):
-    #     if type
-
 
 
 ######## LOCALES ###################################
@@ -202,14 +241,17 @@ class Memory:
 
     def resetear_memoria(self):
         # Locales
-        self.li = 13000 - 1
-        self.lf = 16000 - 1
-        self.lc = 19000 - 1
-        self.lb = 22000 - 1
+        self.li = 13000                                                                                                                                                                                                                                                                                                                                              - 1
+        self.lf = 16000                                                                                                                                                                                                                                                                                                                                              - 1
+        self.lc = 19000                                                                                                                                                                                                                                                                                                                                              - 1
+        self.lb = 22000                                                                                                                                                                                                                                                                                                                                              - 1
 
         # Temporales
-        self.ti = 25000 - 1
-        self.tf = 28000 - 1
-        self.tc = 31000 - 1
-        self.tb = 34000 - 1
+        self.ti = 25000                                                                                                                                                                                                                                                                                                                                              - 1
+        self.tf = 28000                                                                                                                                                                                                                                                                                                                                              - 1
+        self.tc = 31000                                                                                                                                                                                                                                                                                                                                              - 1
+        self.tb = 34000                                                                                                                                                                                                                                                                                                                                              - 1
+
+        self.locales.clear()
+        self.temporales.clear()
 

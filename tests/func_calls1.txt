@@ -2,9 +2,10 @@ program patito;
 
 var{
     var int Mouse = 500;
-    func int func1(int, float, char);
+    func int func1(int, float, int);
     #func void func2(int, char);
     func int func3();
+    var int globbb;
 
 }
 
@@ -22,7 +23,7 @@ int func1(int pas, float pac, char man){
 	if(33<66){
 	}
 
-	return 1; #Marca error por el t11 int
+	return 1;
 }
 
 
@@ -35,10 +36,10 @@ int func3(){
 
 int main(){
     var int casa = 10;
-    func1(77,107.5, c); # casa
+    func1(77,107.5, 2335); # casa
     #func2(10,as);
     func3();
     #func4();
 
-    return 1;
+    return 2;
 }

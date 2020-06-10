@@ -1,0 +1,37 @@
+program patito;
+
+var{
+    var int Mouse = 500;
+    #func int func1(int, float, int);
+    func int func2(int, float);
+    func int func3();
+    var int globbb;
+
+}
+
+
+int func3(){
+    var int wer = 31 + Mouse;
+    var int werty = 321 + wer;
+    print(wer);
+    print(werty);
+    return 12;
+}
+
+int func2(int power, float head){
+    var int vaso = 53 + power;
+    var float plato = 5.4 + head;
+    print(vaso);
+    print(plato);
+    return 2;
+}
+
+int main(){
+    var int casa = 10;
+    #func1(77,107.5, casa);
+    func2(4023, 20.5);
+    func3();
+    #func4();
+
+    return 3;
+}

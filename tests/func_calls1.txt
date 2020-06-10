@@ -2,14 +2,15 @@ program patito;
 
 var{
     var int Mouse = 500;
-    func int func1(int, float, char);
-    #func void func2(int, char);
-    func int func3();
+    func int func1(int, float, int);
+    func int func2(int);
+    func void func3();
+    var int globbb;
 
 }
 
 
-int func1(int pas, float pac, char man){
+int func1(int pas, float pac, int man){
 	var int a=4+5+1*6+2/5-10;
 	#var int a=4+5+3;
 	var int b=2;
@@ -17,26 +18,43 @@ int func1(int pas, float pac, char man){
 	var float c= 3.3;
 	#var float d=8;
 
+    #var int prueba = man + 1;
+
 	if(4>3){
+        var int uno = 111 + pas;
+        print(uno);
 	}
-	if(33<66){
+	if(33>66){
+        var float dos = 222.5 + pac;
+        print(dos);
+	}
+	else{
+	    var int tres = 333 + man;
+	    print(tres);
 	}
 
-	return 1; #Marca error por el t11 int
+	return 11;
 }
 
 
-int func3(){
+void func3(){
     var int wer = 31;
     var int werty = 321;
-    return 12;
+    #return 12;
 }
 
+int func2(int power){
+    var int agua = power + 1;
+    print(agua);
+    return 22;
+}
 
 int main(){
     var int casa = 10;
-    func1(77,107.5, c); # casa
-    #func2(10,as);
+    var int aur = func1(77, 107.5, casa);
+    var int rem = func2(4023);
+    var int calculo = rem + aur - 4 * 5 / 2 + 5;
+    print(calculo);
     func3();
     #func4();
 

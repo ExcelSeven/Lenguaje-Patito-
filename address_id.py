@@ -5,10 +5,13 @@ class AddressId:
 
 class AddressIdTable:
     def __init__(self):
-        self.directyory = dict()
+        self.directory = dict()
 
     def __set__(self, address, id):
-        self.directyory[address] = id
+        self.directory[address] = id
 
     def __getitem__(self, address):
-        return self.directyory[address]
+        return self.directory[address]
+
+    def __contains__(self, key):
+        return key in self.directory

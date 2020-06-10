@@ -1,85 +1,132 @@
-from varTable import Var
-from varTable import VarTable
+import sys
+from memory import Memory
+from virtualMachine import VirtualMachine
 from functionDirectory import FunctionDirectory
-from functionDirectory import Function
-from semanticCube import SemanticCube
-# from memory import MemoryMap
-from copy import deepcopy
-from patType import PatType
+from varTable import VarTable
+from address_id import AddressIdTable
+from funcionAux import FuncionAux
 
 class Program:
     def __init__(self):
-        self.BASE                   = 0  # Starting location for Quadruples //list starts with empty so its -1
-        self.Quads                  = []
-        # self.globalMemory           = MemoryMap("program")
-        # self.ConsMemory             = MemoryMap("Constant")
-        self.varTable               = VarTable()
-        self.funDir                 = FunctionDirectory()
-        # self.ClassDir               = ClassTable()
-        self.semanticCube           = SemanticCube()
-        self.pJumps                 = []  #
-        self.VP                     = []  # Polish vector
-        self.pOper                  = []
-        self.pType                  = []
-        self.pArray                 = []
-        self.pIDs                   = []
-        self.pEras                  = []
-        self.pendingQuads           = []
-        self.current_quad           = ()
-        self.current_param_num      = 0
-        # self.current_var            = Var('','','','')
-        # self.current_function       = Function()
-        self.current_params         = VarTable()
-        self.current_type           = PatType()
-        self.local_class_func       = FunctionDirectory()
-        # self.local_func             = Function()
-        self.local_type             = PatType()
-        self.current_value          = 0
-        self.current_class_name     = ""
-        self.current_var_name       = ""
-        self.current_function_name  = ""
-        # self.called_function        = Function()
-        self.current_scope          = ""   # Working inside the global program
-        self.class_stage            = False  # Working either in a class or a function
-        self.current_id_is_func     = False
+        self.quads = []
+        self.data = 0
+        self.fd = FunctionDirectory()
+        self.memory = Memory()
+        self.vt = VarTable()
+        self.start_time = 0
+        self.end_time = 0
+        self.adidtg = AddressIdTable()
+        self.faux = FuncionAux()
 
-# IF current_stage == True then Program
-# ELSE IF class_stage == True then Class
-# ELSE function
-    def add_quad(self):
-        self.Quads.append(deepcopy(self.current_quad))
-        self.current_quad = ()
-        self.BASE += 1
 
-    def add_pJump(self):
-        self.pJumps.append(self.BASE)
+    def start(self):
+        print("Programa inicializado")
+        quad = self.quads
+        vm = VirtualMachine()
+        vm.adidtg = self.adidtg
+        # print(vars(self.memory))
+        # print(vars(self.fd))
+        vm.memory = self.memory
+        vm.memory2 = self.memory
+        vm.fd = self.fd
+        vm.faux = self.faux
+        # vm.start_vm()
 
-    def new_type(self):
-        self.current_type = PatType()
+        global funcion
+        ip = 0
+        while True:
+            global ip_ant, func_act, func_ant, otra_func
+            otra_func = False
+            func_act = 'main'
 
-    def new_var(self):
-        self.current_var = Var()
+            if quad[ip][0] == '=':
+                vm.igual(quad[ip], otra_func)
 
-    def new_function(self):
-        self.current_function = Function()
+            elif quad[ip][0] == '+':
+                vm.suma(quad[ip], otra_func)
 
-    def new_params(self):
-        self.current_params = VarTable()
+            elif quad[ip][0] == '-':
+                vm.resta(quad[ip], otra_func)
 
-    def print_quads(self):
-        for idx, quad in enumerate(self.Quads):
-            print(idx, quad)
-        #for quad in self.Quads:
-            #print(quad)
+            elif quad[ip][0] == '*':
+                vm.mult(quad[ip], otra_func)
 
-    def get_param_key(self):
-        param_key = ""
-        for var in self.current_params.directory:
-            param_key = param_key + var.s_type.type_key()
-        return param_key
+            elif quad[ip][0] == '/':
+                vm.div(quad[ip], otra_func)
 
-    def fill_quad(self, missing):
-        quad_num = self.pJumps.pop()
-        quad     = self.Quads[quad_num]
-        new_quad = quad[:3]+(missing,)
-        self.Quads[quad_num] = new_quad
+            elif quad[ip][0] == '<':
+                vm.lt(quad[ip], otra_func)
+
+            elif quad[ip][0] == '>':
+                vm.gt(quad[ip], otra_func)
+
+            elif quad[ip][0] == '<=':
+                vm.leq(quad[ip], otra_func)
+
+            elif quad[ip][0] == '>=':
+                vm.geq(quad[ip], otra_func)
+
+            elif quad[ip][0] == '!=':
+                vm.neq(quad[ip], otra_func)
+
+            elif quad[ip][0] == '==':
+                vm.equal(quad[ip], otra_func)
+
+            elif quad[ip][0] == 'GOTO' and quad[ip][3] == 'main':
+                ip = vm.main()
+                # print("GOTO MAIN IP >> ", ip)
+
+            elif quad[ip][0] == 'GOTO':
+                ip = vm.goto(quad[ip], otra_func)
+                # print("GOTO IP >> ", ip)
+
+            elif quad[ip][0] == 'GOTOF':
+                ip = vm.gotof(quad[ip], ip, otra_func)
+                # print("GOTOF IP >> ", ip)
+
+            elif quad[ip][0] == 'ERA':
+                funcion = vm.era(quad[ip], otra_func)
+                otra_func = False
+
+
+            elif quad[ip][0] == 'GOSUB':
+                func_ant = func_act
+                func_act = quad[ip][3]
+                # print("FUNC se va ", func_act)
+                ip_ant = ip
+                ip = vm.gosub(quad[ip], otra_func)
+
+                # print("GOSUB IP >> ", ip)
+                # print("GOSUB IP_ANT >> ", ip_ant)
+
+            elif quad[ip][0] == 'PARAM':
+                vm.param(quad[ip], funcion, otra_func)
+
+            elif quad[ip][0] == 'ENDFUNC':
+                # print("ENDFUNC IP >> ", ip)
+                vm.end_func(quad[ip], otra_func)
+                ip = ip_ant
+                func_act = func_ant
+                otra_func = False
+                # print("FUNC ACTUAL ", func_act)
+                # print("ENDFUNC IP_ANT >> ", ip_ant)
+
+            elif quad[ip][0] == 'PRINT':
+                vm.print(quad[ip], otra_func)
+
+            elif quad[ip][0] == 'RETURN':
+                vm.retorno(quad[ip], otra_func)
+
+
+            if quad[ip][0] == 'END':
+                print("Programa finalizado exitosamente")
+                break
+                # sys.exit(0)
+
+            ip += 1
+
+        vm.end_vm()
+
+
+
+

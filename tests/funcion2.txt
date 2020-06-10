@@ -2,6 +2,7 @@ program patito;
 
 var{
     func int func1();
+    var int asdf = 12;
 }
 
 int func1(){
@@ -10,7 +11,7 @@ int func1(){
 	var float c= 3.3;
 	#var float d=8;
 
-	
+
 	if(4>3){
 	    var int b=55;
 	}
@@ -18,5 +19,14 @@ int func1(){
 	var int comp = 22;
 
 	return 1;
+}
+
+int main(){
+    var int elmain = 1991;
+    func1();
+
+    var int mouse = elmain + 10;
+
+    return 1;
 }
 

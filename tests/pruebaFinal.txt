@@ -1,0 +1,56 @@
+program patito;
+
+var{
+    var int Mouse = 500;
+    func int func1(int, float);
+    func int func2(int);
+    func void func3();
+}
+
+
+int func1(int pac, float man){
+	var int Mano = 4+5+1*6+2/5-10;   # 5.4
+	var float Pie = 3.3;
+
+    var int Manos = Mano + pac;
+    var float Pies = 32 + man;
+    print(Manos);
+    print(Pies);
+
+	if(33<66){
+        var float dos = 222.4 + man;
+        print(dos);
+	}
+	else{
+	    var int tres = 333 + pac;
+	    print(tres);
+	}
+	var int i = 0;
+
+	return 1;
+}
+
+
+void func3(){
+    var int wer = 31;
+    var int werty = 321;
+    #return 12;
+}
+
+#int func2(int power){
+#    var int agua = power + 1;
+#    print(agua);
+#    return 22;
+#}
+
+int main(){
+    var int casa = 11;
+    var int aur = func1(casa, 100.5);
+    #var int rem = func2(4023);
+    var int calculo = aur - 4 * 5 / 2 + 5;
+    print(calculo);
+    func3();
+    #func4();
+
+    return 1;
+}

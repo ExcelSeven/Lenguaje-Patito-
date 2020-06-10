@@ -10,7 +10,7 @@ int main(){
 	while(2<4){
 	    var int DIC = 21;
 
-	    while(2+4 > 3){     #에이 플러스 비 하면 안됌
+	    while(2+4 > 3){
             var int DIC = 25;
 	    }
 	}

@@ -255,3 +255,11 @@ class Memory:
         self.locales.clear()
         self.temporales.clear()
 
+
+
+
+
+
+
+    def set_memory(self):
+        pass

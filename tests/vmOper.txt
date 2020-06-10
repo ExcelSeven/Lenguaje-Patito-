@@ -10,7 +10,7 @@ void main(){
     print(calc);
 
     if(4>2){
-        print("SI");
+
     }
 
     print("asdf");

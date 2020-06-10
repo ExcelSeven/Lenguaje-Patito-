@@ -22,8 +22,10 @@ int func1(){
 }
 
 int main(){
-    #var int elmain = 1991;
+    var int elmain = 1991;
     func1();
+
+    var int mouse = elmain + 10;
 
     return 1;
 }

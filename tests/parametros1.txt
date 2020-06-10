@@ -15,14 +15,14 @@ int func1(int pas, float pac, char man){
 	#var float d=8;
 
 
-	if(4>5){
+	if(4<5){
 	}
 
 	return 1;
 }
 
 void func2(int as, char ad){
-	var char ch = 'Va';
+	var char ch = 'V';
 	var char cha = "v";
 }
 

@@ -13,7 +13,9 @@ int main(){
 	    while(2+4 > 3){
             var int DIC = 25;
 	    }
+	    var int APR = 20 + 2;
 	}
+	var int JUN = 40;
 
 	return 1;
 }

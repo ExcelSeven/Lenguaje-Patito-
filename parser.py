@@ -70,6 +70,7 @@ param = Param()
 cont = ContadorParam()
 
 memory = Memory()
+memory2 = Memory()
 
 adid = AddressId
 adidt = AddressIdTable()
@@ -83,6 +84,7 @@ t = Temporales
 tt = TemporalTable()
 
 jump = Jump()
+jumpw = Jump()
 jump_main = []
 # jump = list()
 
@@ -90,6 +92,9 @@ vm = VirtualMachine()
 parametros = list()
 retorno = list()
 
+class Pars:
+    def __init__(self):
+        self.retvm = 0
 
 def p_programa(p):
     """
@@ -1598,13 +1603,25 @@ def p_func_call_con_param_return(p):
         for ln in retorno:
             if ln[0] == id:
                 ret = ln[1]
+                print(ret)
 
                 address_id = memory.global_mem(p[2])
-                addr_var = list(tc.__getitem__(ret).values())[2]
-                adidtg.__set__(addr_var, vars(adid(addr_var, address_id)))
-                v1 = vars(v(p[3], p[2], ret, 'global', address_id))
-                vt.set(p[3], v1)
-                # print(ret, addr_var, address_id)
+
+                try:
+                    addr_var = list(tc.__getitem__(ret).values())[2]
+                    adidtg.__set__(addr_var, vars(adid(addr_var, address_id)))
+                    v1 = vars(v(p[3], p[2], ret, 'global', address_id))
+                    vt.__set__(p[3], v1)
+                    memory.guardar_memoria(address_id, ret)
+                    print(ret, addr_var, address_id)
+
+                except:
+                    print("EXCEPT", ret, address_id)
+                    valor = 0
+                    adidtg.__set__(ret, vars(adid(ret, valor))) ########### FALTA Valor
+                    print(vars(vt))
+                    print(vars(vtf))
+                    pass
 
     else:
         print("ERROR > Tipo de retorno!")
@@ -1725,6 +1742,17 @@ def p_func_return_param(p):
                 quad = ('RETURN', None, None, expr_dir)
                 quadList.append(quad)
                 adidtg.__set__(expr_dir, vars(adid(expr_dir, expr)))
+                expr_valor = list(vtf.__getitem__(expr).values())[2]
+                adidtg.__set__(expr, vars(adid(expr, expr_valor)))
+                # print(vars(memory))
+                # a = memory.get_memoria(expr_valor)
+                print("RETTT", vtf.__getitem__(expr))
+                print(expr, expr_valor, expr_dir)
+                print(vars(vtf))
+                print(vars(adidtg))
+                print(vars(adidt))
+                print(vars(memory))
+
         else:
             print("ERROR > Return espera un int.", p[2], "no es int")   ## Obtengo int
             quad = ('RETURN', None, p[2], 'Error')
@@ -1743,6 +1771,9 @@ def p_func_return_param(p):
                 quad = ('RETURN', None, None, expr_dir)
                 quadList.append(quad)
                 adidtg.__set__(expr_dir, vars(adid(expr_dir, expr)))
+                expr_valor = list(vtf.__getitem__(expr).values())[2]
+                adidtg.__set__(expr, vars(adid(expr, expr_valor)))
+                print("RETTT", expr_valor)
         else:
             print("ERROR > Return espera un float.", p[2], "no es float")
             sys.exit(0)
@@ -1753,9 +1784,13 @@ def p_func_return_param(p):
             quad = ('RETURN', None, None, expr_dir)
             quadList.append(quad)
             adidtg.__set__(expr_dir, vars(adid(expr_dir, expr)))
+            expr_valor = list(vtf.__getitem__(expr).values())[2]
+            adidtg.__set__(expr, vars(adid(expr, expr_valor)))
+            print("RETTT", expr_valor)
         else:
             print("ERROR > Return espera un", tipo_func, "." , p[2], "no es ", tipo_func)
             sys.exit(0)
+
     else:
         print("ERROR > Return espera un", tipo_func, ".", p[2], "Variable no declarada")
         sys.exit(0)
@@ -2047,7 +2082,7 @@ def p_if(p):
 
 def p_else(p):
     """
-    else : ELSE guarda_num_salto LB statement RB fill_goto_else
+    else : ELSE LB statement RB fill_goto_else
 
     """
 
@@ -2121,17 +2156,6 @@ def p_fill_if(p): ########
     quadList[jump.pop()-1] = ('GOTOF', p[-7], None, len(quadList)+1)
 
 
-def p_guarda_num_salto(p):
-    """
-    guarda_num_salto :
-
-    """
-    # print("Num Salto >> ", len(quadList))
-    # jump.push(len(quadList))
-    # print(vars(jump))
-    # print(vars(jump.top()))
-
-
 
 ######## END IF ############################################################
 
@@ -2141,9 +2165,57 @@ def p_guarda_num_salto(p):
 
 def p_while(p):
     """
-    while : WHILE guarda_num_salto LP expression RP check_bool gotof LB statement RB goto
+    while : WHILE guarda_num_salto LP expression RP check_bool gotofw LB statement RB fill_gotofw fill_gotow
 
     """
+
+
+def p_guarda_num_salto(p):
+    """
+    guarda_num_salto :
+
+    """
+    jumpw.push(len(quadList)+1)
+    print("QUADD ", len(quadList)+1)
+    # print("Num Salto >> ", len(quadList))
+    # jump.push(len(quadList))
+    # print(vars(jump))
+    # print(vars(jump.top()))
+
+def p_gotofw(p): ########
+    """
+    gotofw :
+
+    """
+    # print(len(quadList)+1)  ## +1
+    jumpw.push(len(quadList)+1)
+    # print(len(quadList)+1)
+    # print(quadList)
+    # print("gotofw ", len(quadList)-1, jumpw.top_ant() - 1)
+    quad = ('GOTOF', p[-3], None, "$")
+    quadList.append(quad)
+
+
+def p_fill_gotofw(p): ########
+    """
+    fill_gotofw :
+
+    """
+    # print(len(quadList))
+    # print("fill_gotofw ", len(quadList), jumpw.top_ant()-1)
+    # print(quadList[jump.top_ant()-1])
+    quadList[jumpw.pop()-1] = ('GOTOF', p[-7], None, len(quadList)+2)
+
+
+def p_goto_w(p):
+    """
+    fill_gotow :
+
+    """
+    # print("goto_w ", len(quadList)-1, jumpw.top_ant() - 1)
+    quad = ('GOTO', None, None, '$')
+    quadList.append(quad)
+    quadList[len(quadList)-1] = ('GOTO', None, None, jumpw.pop())
 
 
 def p_for(p):
@@ -2316,7 +2388,7 @@ def p_LT(p):
     res_tipo = semCube.checkResult('<', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, "<+>", tipo_der)
-        sys.exit(0)
+        # sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2387,7 +2459,7 @@ def p_GT(p):
     res_tipo = semCube.checkResult('>', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, ">", tipo_der)
-        sys.exit(0)
+        # sys.exit(0)
     # print("RES ", res_tipo)
 
 
@@ -2451,7 +2523,7 @@ def p_LEQ(p):
     res_tipo = semCube.checkResult('<=', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, "<=>", tipo_der)
-        sys.exit(0)
+        # sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2513,7 +2585,7 @@ def p_GEQ(p):
     res_tipo = semCube.checkResult('>=', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, ">=", tipo_der)
-        sys.exit(0)
+        # sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2575,7 +2647,7 @@ def p_EQUAL(p):
     res_tipo = semCube.checkResult('==', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, "==", tipo_der)
-        sys.exit(0)
+        # sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2637,7 +2709,7 @@ def p_NEQ(p):
     res_tipo = semCube.checkResult('!=', tipo_izq, tipo_der)
     if res_tipo == 'Error':
         print("Type Mismatch!", tipo_izq, "!=", tipo_der)
-        sys.exit(0)
+        # sys.exit(0)
     # print("RES ", res_tipo)
 
     if tc.__contains__(op_izq) is True:
@@ -2684,7 +2756,7 @@ def p_oper_aritmetica(p):
     tipo_var = p[-1]
     id = p[1]
     res_expr = p[3]
-
+    # print("OPER", p[1], p[3])
     address_id = memory.local_mem(tipo_var)
     adidt.__set__(address_id, vars(adid(address_id, id)))
     v1 = vars(v(id, tipo_var, p[3], scope, address_id))
@@ -2805,7 +2877,7 @@ def p_expr(p):
         res_tipo = semCube.checkResult('-', tipo_izq, tipo_der)
         if res_tipo == 'Error':
             print("Type Mismatch!", tipo_izq, "-", tipo_der)
-            sys.exit(0)
+            # sys.exit(0)
         # print("RES ", res_tipo)
 
 
@@ -2856,7 +2928,7 @@ def p_expr(p):
         res_tipo = semCube.checkResult('*', tipo_izq, tipo_der)
         if res_tipo == 'Error':
             print("Type Mismatch!", tipo_izq, "*", tipo_der)
-            sys.exit(0)
+            # sys.exit(0)
         # print("RES ", res_tipo)
 
 
@@ -2907,7 +2979,7 @@ def p_expr(p):
         res_tipo = semCube.checkResult('/', tipo_izq, tipo_der)
         if res_tipo == 'Error':
             print("Type Mismatch!", tipo_izq, "/", tipo_der)
-            sys.exit(0)
+            # sys.exit(0)
         # print("RES ", res_tipo)
 
 
@@ -2998,7 +3070,7 @@ def test():
     try:
         # nombre_archivo = input("Nombre de archivo >> ")
         # file = open("tests/" + nombre_archivo, 'r')
-        file = open("tests/func_calls1.txt", 'r')
+        file = open("tests/pruebaFinal.txt", 'r')
         data = file.read()
         file.close()
         lexer.input(data)

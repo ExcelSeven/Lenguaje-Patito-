@@ -6,6 +6,7 @@ from address_id import AddressIdTable
 from address_id import AddressId
 from funcionAux import FuncionAux
 from cont import Cont
+from parser import *
 
 
 
@@ -192,13 +193,27 @@ class VirtualMachine:
             # print("MEM 2", vars(self.memory2))
             id_var = list(self.adidtg.__getitem__(quad[3]).values())[1]
             self.adidtg.__set__(id_var, vars(self.adid(id_var, quad[3])))
+            # pp = Pars
+            retvm = self.memory.get_memoria(quad[3])
+            # print("RETVM", retvm)
+            # pp.retvm = retvm
+
             self.memory.resetear_memoria()
-            valor = self.memory.get_memoria(quad[3])
-            self.memory.guardar_memoria(id_var, valor)
+
+            # valor = self.memory.get_memoria(quad[3])
+            # self.memory.guardar_memoria(id_var, valor)
+            # except:
+            #     valor = 16.4
+            #     self.memory.guardar_memoria(id_var, valor)
+
         else:
             # print("MEM 1", vars(self.memory))
             # print("MEM 2", vars(self.memory2))
             id_var = list(self.adidtg.__getitem__(quad[3]).values())[1]
+            # pp = Pars
+            retvm = self.memory.get_memoria(id_var)
+            # print("RETVM", retvm)
+
             self.adidtg.__set__(id_var, vars(self.adid(id_var, quad[3])))
             self.memory2.resetear_memoria()
             self.memory.guardar_memoria(id_var, quad[3])

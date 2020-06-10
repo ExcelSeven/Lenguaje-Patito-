@@ -264,7 +264,7 @@ class Memory:
 
     def set_memory(self):
         pass
-=======
+
 class MemoryMap:
 
     def __init__(self, stage):
